@@ -14,8 +14,8 @@
     @vite('resources/css/app.css')
 </head>
 <body class="antialiased">
-<h1 class="text-3xl font-bold underline">
-    Hello world!
-</h1>
+<x-home.header-component></x-home.header-component>
+<x-home.main-component></x-home.main-component>
+<x-home.footer-component></x-home.footer-component>
 </body>
 </html>
