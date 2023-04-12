@@ -89,6 +89,9 @@ Complete guide in [appdividend](https://appdividend.com/2022/03/01/how-to-deploy
 * [Tailwind](https://tailwindcss.com/docs/installation) - Framework CSS
 * [Jenkins](https://www.jenkins.io) - Used for testing
 
+## Libraries
+* [simple-icons](https://github.com/ublabs/blade-simple-icons) - Icons
+
 ## Contributing 🖇️
 
 Please read the [CONTRIBUTING.md](https://github.com/Ivans51/octor-management/blob/main/CONTRIBUTING.md) for details of
