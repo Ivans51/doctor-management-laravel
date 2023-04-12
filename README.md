@@ -90,7 +90,7 @@ Complete guide in [appdividend](https://appdividend.com/2022/03/01/how-to-deploy
 * [Jenkins](https://www.jenkins.io) - Used for testing
 
 ## Libraries
-* [simple-icons](https://github.com/ublabs/blade-simple-icons) - Icons
+* [blade-icons](https://blade-ui-kit.com/blade-icons) - Icons Remix
 
 ## Contributing 🖇️
 
