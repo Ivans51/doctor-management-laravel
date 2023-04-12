@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Doctor Management</title>
+    <link rel="shortcut icon" href="{{ Vite::asset('resources/img/logo.png') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -12,6 +13,11 @@
 
     <!-- Styles -->
     @vite('resources/css/app.css')
+    @stack('styles')
+
+    <!-- Javascript -->
+    @vite('resources/js/app.js')
+    @stack('scripts')
 </head>
 <body class="antialiased">
 <x-home.header-component></x-home.header-component>
