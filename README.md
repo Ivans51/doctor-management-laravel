@@ -1,66 +1,122 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Ecommerce with Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+_This project is a sample doctor management base solution using the framework Laravel v10._
 
-## About Laravel
+## Start 🚀
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+_These instructions will allow you to get a working copy of the project on your local machine for development and
+testing purposes._
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+See [**Deployment**](#deployment-) to know how to deploy the project.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Pre-requirements 📋
 
-## Learning Laravel
+_What things do you need to install the software and how to install them_
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- node v16 or major
+- composer v2
+- php v8
+- mariadb v10
+- IDE or editor of you preference.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Installation 🔧
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Copy the content of the file .env.example and create a file with the name .env and modify it your way.
 
-## Laravel Sponsors
+Commands used:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```console
+git clone git@github.com:Ivans51/doctor-management.git 
+```
 
-### Premium Partners
+```console
+cd doctor-management
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```console
+composer install 
+```
 
-## Contributing
+```console
+npm install 
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+To run the project:
 
-## Code of Conduct
+```console
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```console
+npm run dev
+```
 
-## Security Vulnerabilities
+Complete PHPDocs, directly from the source:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```console
+php artisan ide-helper:generate
+```
 
-## License
+```console
+php artisan ide-helper:models
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Running the tests ⚙️
+
+_The steps to run the tests described below._
+
+### Analyze end-to-end tests 🔩
+
+```
+In developing
+```
+
+### Coding style tests ⌨️
+
+```
+In developing
+```
+
+## Deployment 📦
+
+_Deploy with Heroku_
+
+Complete guide in [appdividend](https://appdividend.com/2022/03/01/how-to-deploy-laravel-project-on-heroku/)
+
+## Built with 🛠️
+
+* [Laravel](https://laravel.com/docs/10.x) - Framework PHP
+* [Tailwind](https://tailwindcss.com/docs/installation) - Framework CSS
+* [Jenkins](https://www.jenkins.io) - Used for testing
+
+## Contributing 🖇️
+
+Please read the [CONTRIBUTING.md](https://github.com/Ivans51/octor-management/blob/main/CONTRIBUTING.md) for details of
+our code of conduct, and the process for sending us pull requests.
+
+## Wiki 📖
+
+You can find much more about how to use this project in our [Wiki](https://github.com/Ivans51/octor-management/wiki)
+
+## Versioned 📌
+
+For all available versions, see the [tags en este repositorio](https://github.com/Ivans51/octor-management/tags).
+
+## Authors ✒️
+
+* **Ivans Del Pino** - *Initial Work* - [Ivans](https://github.com/Ivans51)
+
+You can also look at the list of all [contributors](https://github.com/Ivans51/octor-management/contributors) who have
+participated in this project.
+
+## License 📄
+
+This project licensed under its MIT License, look at the
+file [LICENSE.md](https://github.com/Ivans51/octor-management/blob/main/LICENSE.md) for details.
+
+## Thanks for all 🎁
+
+* You can buy me a coffee ☕ in [ko-fi](https://ko-fi.com/ivans511).
+
+---
+⌨️ with ❤️ by [Ivans](https://github.com/Ivans51/octor-management/graphs/contributors) 😊
