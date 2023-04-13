@@ -1,3 +1,12 @@
 #head-info svg {
     @apply inline-block w-8;
 }
+
+#head-info .box-context {
+    @apply p-6 rounded-lg flex items-center;
+}
+
+#head-info .box-context .box-left {
+    border-radius: 50%;
+    @apply p-4 bg-white bg-opacity-50;
+}
