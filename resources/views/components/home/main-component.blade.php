@@ -47,7 +47,11 @@
         </div>
     </header>
 
-    <main class="p-6">
+    <main>
         @yield('content')
     </main>
+
+    <footer class="flex justify-end px-4 py-2 items-center">
+        <span>Develop by IvansDev</span>
+    </footer>
 </div>
