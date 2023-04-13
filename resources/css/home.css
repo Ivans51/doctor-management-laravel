@@ -1,0 +1,16 @@
+nav ul li svg {
+    @apply inline-block mr-2 w-4;
+}
+
+nav ul li a {
+    @apply px-4 py-2 block rounded flex;
+}
+
+nav ul li a.active, nav ul li a:hover {
+    @apply bg-black text-white;
+}
+
+main {
+    height: calc(100vh - 88px);
+    @apply p-6 overflow-y-auto;
+}
