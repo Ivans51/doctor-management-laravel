@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Faker\Factory as Faker;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('pages/main');
+    $files = [];
+
+    $faker = Faker::create();
+
+    for ($i = 0; $i <= 10; $i++) {
+        $files[] = $faker->imageUrl(200,200, 'people', false, true, 'lightblue');
+    }
+
+    return view('pages/main')->with([
+        'images' => $files,
+    ]);
 });
