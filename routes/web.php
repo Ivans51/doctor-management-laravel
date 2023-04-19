@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
-use Faker\Factory as Faker;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,21 +14,5 @@ use Faker\Factory as Faker;
 |
 */
 
-Route::get('/', function () {
-    $files = [];
-
-    $faker = Faker::create();
-
-    for ($i = 0; $i <= 10; $i++) {
-        $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-    }
-
-    $chart = new \App\Charts\HomeChart;
-    $chart->labels(['One', 'Two', 'Three', 'Four']);
-    $chart->dataset('My dataset', 'pie', [1, 2, 3, 4]);
-
-    return view('pages/main')->with([
-        'images' => $files,
-        'chart' => $chart,
-    ]);
-});
+Route::get('/', [ViewController::class, 'getDashBoard']);
+Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');

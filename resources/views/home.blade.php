@@ -25,5 +25,6 @@
 <x-home.header-component></x-home.header-component>
 <x-home.main-component></x-home.main-component>
 <x-home.footer-component></x-home.footer-component>
+@stack('scripts-bottom')
 </body>
 </html>
