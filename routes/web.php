@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages/dash');
-});
+Route::get('/', [ViewController::class, 'getDashBoard']);
+Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');

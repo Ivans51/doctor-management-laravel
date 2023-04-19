@@ -16,6 +16,8 @@
     @stack('styles')
 
     <!-- Javascript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     @vite('resources/js/app.js')
     @stack('scripts')
 </head>
@@ -23,5 +25,6 @@
 <x-home.header-component></x-home.header-component>
 <x-home.main-component></x-home.main-component>
 <x-home.footer-component></x-home.footer-component>
+@stack('scripts-bottom')
 </body>
 </html>

@@ -1,5 +1,6 @@
 @import "styles.css";
 @import "home.css";
+@import "main.css";
 
 input {
     @apply outline-none px-2 py-1;

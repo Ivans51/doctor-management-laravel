@@ -21,7 +21,7 @@
             </a>
         </li>
         <li>
-            <a href="/#">
+            <a href="{{route('schedule-timing')}}">
                 <x-ri-time-line />
                 Schedule Timing
             </a>
