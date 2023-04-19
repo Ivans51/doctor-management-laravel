@@ -20,10 +20,15 @@ Route::get('/', function () {
     $faker = Faker::create();
 
     for ($i = 0; $i <= 10; $i++) {
-        $files[] = $faker->imageUrl(200,200, 'people', false, true, 'lightblue');
+        $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
     }
+
+    $chart = new \App\Charts\HomeChart;
+    $chart->labels(['One', 'Two', 'Three', 'Four']);
+    $chart->dataset('My dataset', 'pie', [1, 2, 3, 4]);
 
     return view('pages/main')->with([
         'images' => $files,
+        'chart' => $chart,
     ]);
 });
