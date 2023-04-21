@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-start">
-        <div class="lg:w-2/5 w-full">
+        <div class="w-full">
             <h3 class="my-2 font-bold text-lg">Appointment Request</h3>
             <div class="px-4 py-2 bg-white rounded">
                 @foreach($images as $image)

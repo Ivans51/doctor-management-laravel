@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ViewController::class, 'getDashBoard']);
-Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');
+Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
 Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
+Route::get('/my-patients', [ViewController::class, 'getScheduleTiming'])->name('my-patients');
+Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');
+Route::get('/payments', [ViewController::class, 'getScheduleTiming'])->name('payments');
+Route::get('/messages', [ViewController::class, 'getScheduleTiming'])->name('messages');
+Route::get('/blog', [ViewController::class, 'getScheduleTiming'])->name('blog');
+Route::get('/settings', [ViewController::class, 'getScheduleTiming'])->name('settings');
