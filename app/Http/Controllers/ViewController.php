@@ -31,11 +31,6 @@ class ViewController extends Controller
         ]);
     }
 
-    public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        return view('pages/schedule-timing');
-    }
-
     public function getAppointments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $files = [];
@@ -49,5 +44,55 @@ class ViewController extends Controller
         return view('pages/appointments')->with([
             'images' => $files,
         ]);
+    }
+
+    public function getPatients(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/patients')->with([
+            'images' => $files,
+        ]);
+    }
+
+    public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/schedule-timing');
+    }
+
+    public function getPayments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/payments')->with([
+            'images' => $files,
+        ]);
+    }
+
+    public function getMessages(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/messages');
+    }
+
+    public function getBlog(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/blog');
+    }
+
+    public function getSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/settings');
     }
 }
