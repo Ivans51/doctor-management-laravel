@@ -3,5 +3,5 @@
 @import "main.css";
 
 input {
-    @apply outline-none px-2 py-1;
+    @apply px-2 py-1;
 }
