@@ -93,6 +93,7 @@ Complete guide in [appdividend](https://appdividend.com/2022/03/01/how-to-deploy
 * [blade-icons](https://blade-ui-kit.com/blade-icons) - Icons Remix
 * [charts](https://charts.erik.cat/) - Charts Erik
 * [sweet-alert](https://realrashid.github.io/sweet-alert/) - Sweet Alert
+* [input-tel](https://github.com/jackocnr/intl-tel-input#demo-and-examples) - Input tel
 
 ## Contributing 🖇️
 
