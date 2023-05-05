@@ -1,11 +1,39 @@
 @extends('home')
 
 @section('content')
-    <h1 class="font-bold text-2xl mb-1">Welcome, Dr. Stephen</h1>
-    <p class="text-sm">Have a nice day at great work</p>
-
     <section class="mt-10">
-        <h3 class="my-2 font-bold text-lg">Recent Patients</h3>
+        <div class="flex justify-between">
+            <h3 class="my-2 font-bold text-lg">Patient list</h3>
+            <button
+                id="modal-open"
+                class="rounded text-white bg-violet-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
+            >
+                <x-ri-heart-add-fill/>
+                <span>Add Patient</span>
+            </button>
+        </div>
+
+        <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
+            <label>Show
+                <select class="bg-white p-1 border ml-2" name="show" id="show">
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
+            <label class="w-full lg:w-2/3">
+                Search
+                <input class="w-full" type="search" placeholder="Patient name, status, type">
+            </label>
+            <label class="w-full lg:w-1/3">
+                Date
+                <input class="w-full" type="date">
+            </label>
+        </div>
+
         <table class="w-full table-auto" style="border-collapse: separate; border-spacing: 0 8px;">
             <tr class="bg-zinc-100">
                 <th class="px-4 py-1 text-left">Patient Name</th>
@@ -42,4 +70,67 @@
             @endforeach
         </table>
     </section>
+
+    <x-modal.create-patient-component
+        title="Add new patient"
+        modalClass="modal"
+    >
+        <x-slot name="content">
+            <form action="" method="post">
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-x-4">
+                        <div>
+                            <label for="first_name">First Name</label>
+                            <input class="border w-full" type="text" name="first_name" id="first_name">
+                        </div>
+
+                        <div>
+                            <label for="last_name">Last Name</label>
+                            <input class="border w-full" type="text" name="last_name" id="last_name">
+                        </div>
+                    </div>
+
+                    <div class="w-full">
+                        <label for="location">Location</label>
+                        <input class="border w-full" type="text" name="location" id="location">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-x-4">
+                        <div>
+                            <label for="email">Email</label>
+                            <input class="border w-full" type="email" name="email" id="email">
+                        </div>
+
+                        <div>
+                            <label for="phone_number">Phone Number</label>
+                            <input class="border w-full" type="text" name="phone_number" id="phone_number">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 mt-10">
+                    <button
+                        type="submit"
+                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
+                    >
+                        Save
+                    </button>
+                    <button
+                        type="button"
+                        class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </x-slot>
+    </x-modal.create-patient-component>
+
 @endsection
+
+@push('scripts-bottom')
+    <script src="{{ Vite::asset('resources/js/modal.js') }}"></script>
+    <script>
+        configModal('modal', 'modal-open')
+    </script>
+@endpush
