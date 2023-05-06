@@ -47,7 +47,9 @@
                 <tr class="bg-white rounded">
                     <td class="px-4 py-2 flex items-center">
                         <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
-                        Jenny Wilson
+                        <a href="{{ route('my-patients-detail') }}">
+                            Jenny Wilson
+                        </a>
                     </td>
                     <td class="px-4 py-2 text-center">
                         1
@@ -62,9 +64,18 @@
                         1
                     </td>
                     <td class="px-4 py-2 text-center">
-                        <button class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2">
-                            Options
-                        </button>
+                        <a
+                            href="{{ route('my-patients-monitoring') }}"
+                            class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
+                        >
+                            Log monitoring
+                        </a>
+                        <a
+                            href="{{ route('messages') }}"
+                            class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
+                        >
+                            Message
+                        </a>
                     </td>
                 </tr>
             @endforeach

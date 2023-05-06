@@ -56,9 +56,19 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/patients')->with([
+        return view('pages/patients/index')->with([
             'images' => $files,
         ]);
+    }
+
+    public function getPatientsDetail(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/patients/detail');
+    }
+
+    public function getMonitoringForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/patients/monitoring-form');
     }
 
     public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -83,7 +93,7 @@ class ViewController extends Controller
 
     public function getMessages(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/messages');
+        return view('pages/messages/index');
     }
 
     public function getBlog(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
