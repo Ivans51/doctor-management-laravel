@@ -63,7 +63,17 @@ class ViewController extends Controller
 
     public function getPatientsDetail(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/patients/detail');
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/patients/detail')->with([
+            'images' => $files,
+        ]);
     }
 
     public function getMonitoringForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -102,6 +112,11 @@ class ViewController extends Controller
     }
 
     public function getSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/settings');
+    }
+
+    public function postSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('pages/settings');
     }

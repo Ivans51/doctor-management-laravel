@@ -24,3 +24,5 @@ Route::get('/payments', [ViewController::class, 'getPayments'])->name('payments'
 Route::get('/messages', [ViewController::class, 'getMessages'])->name('messages');
 Route::get('/blog', [ViewController::class, 'getBlog'])->name('blog');
 Route::get('/settings', [ViewController::class, 'getSettings'])->name('settings');
+
+Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');

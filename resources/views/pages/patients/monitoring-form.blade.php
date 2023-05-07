@@ -1,40 +1,84 @@
 @extends('home')
 
 @section('content')
-    <h3 class="font-bold text-lg mb-10">Monitoring Plan</h3>
+    <h3 class="font-bold text-lg mb-10">Log New Consulting</h3>
 
     <div class="flex items-start space-x-0 md:space-x-4">
         <section class="w-3/5">
-            <form action="" method="post">
+            <form action="{{ route('my-patient-detail-post') }}" method="post">
+                @csrf <!-- add this to protect against CSRF attacks -->
                 <div class="space-y-6">
                     <div class="grid grid-cols-2 gap-x-4">
                         <div>
-                            <label for="first_name">First Name</label>
-                            <input class="border w-full" type="text" name="first_name" id="first_name">
+                            <label for="doctor_id">Healthcare Provider</label>
+                            <input class="border w-full bg-transparent" type="text" name="doctor_id" id="doctor_id">
                         </div>
 
                         <div>
-                            <label for="last_name">Last Name</label>
-                            <input class="border w-full" type="text" name="last_name" id="last_name">
+                            <label for="type">Type</label>
+                            <select name="type" id="type" class="border w-full p-2 bg-transparent">
+                                <option value="">Select</option>
+                                <option value="1">1</option>
+                            </select>
                         </div>
-                    </div>
-
-                    <div class="w-full">
-                        <label for="location">Location</label>
-                        <input class="border w-full" type="text" name="location" id="location">
                     </div>
 
                     <div class="grid grid-cols-2 gap-x-4">
                         <div>
-                            <label for="email">Email</label>
-                            <input class="border w-full" type="email" name="email" id="email">
+                            <label for="patient_id">Patient Name</label>
+                            <select name="patient_id" id="patient_id" class="border w-full p-2 bg-transparent">
+                                <option value="">Select</option>
+                                <option value="1">1</option>
+                            </select>
                         </div>
 
                         <div>
-                            <label for="phone_number">Phone Number</label>
-                            <input class="border w-full" type="tel" name="phone_number" id="phone_number">
+                            <label for="location_name">Location</label>
+                            <select name="location_name" id="location_name" class="border w-full p-2 bg-transparent">
+                                <option value="">Select</option>
+                                <option value="1">1</option>
+                            </select>
                         </div>
                     </div>
+
+                    <div class="grid grid-cols-2 gap-x-4">
+                        <div>
+                            <label for="start_time">Start Time</label>
+                            <input class="border w-full bg-transparent" type="time" name="start_time" id="start_time">
+                        </div>
+
+                        <div>
+                            <label for="date_consulting">Date of Consulting</label>
+                            <input
+                                class="border w-full bg-transparent"
+                                type="date"
+                                name="date_consulting"
+                                id="date_consulting"
+                            >
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="reason_consulting">Reason for Consulting</label>
+                        <textarea
+                            class="border w-full bg-transparent p-2"
+                            rows="5"
+                            name="reason_consulting"
+                            id="date_consulting"
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label for="review_notes">Review Notes</label>
+                        <textarea
+                            class="border w-full bg-transparent p-2"
+                            rows="5"
+                            name="review_notes"
+                            id="date_consulting"
+                        ></textarea>
+                    </div>
+
+                    <div class="dropzone" id="mydropzone"></div>
                 </div>
 
                 <div class="flex items-center space-x-2 mt-10">
@@ -92,3 +136,21 @@
     </div>
 
 @endsection
+
+@push('scripts-bottom')
+    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css"/>
+
+    <script>
+        Dropzone.autoDiscover = false;
+        const myDropzone = new Dropzone("div#mydropzone", {
+            url: "/file/post",
+            paramName: "file",
+            acceptedFiles: 'application/pdf',
+            maxFiles: 1,
+            success: function (file, response) {
+                console.log(response);
+            }
+        });
+    </script>
+@endpush
