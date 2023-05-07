@@ -1,56 +1,75 @@
 @extends('home')
 
 @section('content')
-    <h3 class="font-bold text-lg mb-10">Monitoring Plan</h3>
+    <h3 class="font-bold text-lg mb-10">Payment Info</h3>
 
     <div class="flex items-start space-x-0 md:space-x-4">
         <section class="w-3/5">
-            <form action="" method="post">
+            <form action="{{ route('my-patient-detail-post') }}" method="post">
+                @csrf <!-- add this to protect against CSRF attacks -->
                 <div class="space-y-6">
+                    <div class="w-full">
+                        <label for="full_name">Full Name</label>
+                        <input
+                            class="border w-full bg-transparent"
+                            type="text"
+                            name="full_name"
+                            id="full_name"
+                        >
+                    </div>
+
+                    <div class="w-full">
+                        <label for="credit_card_number">Credit Card Number</label>
+                        <input
+                            class="border w-full bg-transparent"
+                            type="text"
+                            name="credit_card_number"
+                            id="credit_card_number"
+                        >
+                    </div>
+
                     <div class="grid grid-cols-2 gap-x-4">
                         <div>
-                            <label for="first_name">First Name</label>
-                            <input class="border w-full" type="text" name="first_name" id="first_name">
+                            <label for="exp_date">Exp Date</label>
+                            <input
+                                class="border w-full bg-transparent"
+                                type="date"
+                                name="exp_date"
+                                id="exp_date"
+                            >
                         </div>
 
                         <div>
-                            <label for="last_name">Last Name</label>
-                            <input class="border w-full" type="text" name="last_name" id="last_name">
+                            <label for="cvv">CVV</label>
+                            <input class="border w-full bg-transparent" type="text" name="cvv" id="cvv">
                         </div>
                     </div>
 
                     <div class="w-full">
-                        <label for="location">Location</label>
-                        <input class="border w-full" type="text" name="location" id="location">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-x-4">
-                        <div>
-                            <label for="email">Email</label>
-                            <input class="border w-full" type="email" name="email" id="email">
-                        </div>
-
-                        <div>
-                            <label for="phone_number">Phone Number</label>
-                            <input class="border w-full" type="tel" name="phone_number" id="phone_number">
-                        </div>
+                        <label for="zip_code">Zip Code</label>
+                        <input
+                            class="border w-full bg-transparent"
+                            type="text"
+                            name="zip_code"
+                            id="zip_code"
+                        >
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-2 mt-10">
                     <button
                         type="submit"
-                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
+                        class="rounded text-white bg-sky-500 px-4 py-1 text-sm ml-2 flex items-center flex-row w-full justify-center"
                     >
-                        <x-ri-heart-add-fill/>
-                        Save
+                        <x-ri-heart-add-fill class="w-6 h-6 mr-2"/>
+                        Confirm Payment
                     </button>
-                    <button
-                        type="button"
-                        class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                    <a
+                        href="{{ route('my-patients-detail') }}"
+                        class="rounded bg-white-500 px-4 py-1 w-full border text-center"
                     >
                         Cancel
-                    </button>
+                    </a>
                 </div>
             </form>
         </section>

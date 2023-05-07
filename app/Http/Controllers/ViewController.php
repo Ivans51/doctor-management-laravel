@@ -81,6 +81,11 @@ class ViewController extends Controller
         return view('pages/patients/monitoring-form');
     }
 
+    public function getCheckoutForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/patients/checkout-form');
+    }
+
     public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('pages/schedule-timing');
@@ -116,8 +121,8 @@ class ViewController extends Controller
         return view('pages/settings');
     }
 
-    public function postSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function postSettings(): \Illuminate\Http\RedirectResponse
     {
-        return view('pages/settings');
+        return redirect()->route('my-patients-checkout');
     }
 }

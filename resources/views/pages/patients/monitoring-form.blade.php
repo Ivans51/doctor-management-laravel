@@ -89,12 +89,12 @@
                         <x-ri-heart-add-fill class="w-6 h-6 mr-2"/>
                         Set monitoring Plane
                     </button>
-                    <button
-                        type="button"
-                        class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                    <a
+                        href="{{ route('my-patients-detail') }}"
+                        class="rounded bg-white-500 px-4 py-1 w-full border text-center"
                     >
                         Cancel
-                    </button>
+                    </a>
                 </div>
             </form>
         </section>
