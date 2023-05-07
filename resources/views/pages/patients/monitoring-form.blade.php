@@ -84,9 +84,10 @@
                 <div class="flex items-center space-x-2 mt-10">
                     <button
                         type="submit"
-                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
+                        class="rounded text-white bg-sky-500 px-4 py-1 text-sm ml-2 flex items-center flex-row w-full justify-center"
                     >
-                        Save
+                        <x-ri-heart-add-fill class="w-6 h-6 mr-2"/>
+                        Set monitoring Plane
                     </button>
                     <button
                         type="button"

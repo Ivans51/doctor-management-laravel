@@ -42,6 +42,7 @@
                         type="submit"
                         class="rounded text-white bg-blue-500 px-4 py-1 w-full"
                     >
+                        <x-ri-heart-add-fill/>
                         Save
                     </button>
                     <button
