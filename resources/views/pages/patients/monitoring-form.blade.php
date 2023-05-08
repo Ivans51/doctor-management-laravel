@@ -33,11 +33,13 @@
                         </div>
 
                         <div>
-                            <label for="location_name">Location</label>
-                            <select name="location_name" id="location_name" class="border w-full p-2 bg-transparent">
-                                <option value="">Select</option>
-                                <option value="1">1</option>
-                            </select>
+                            <label for="location">Location</label>
+                            <input
+                                class="border w-full bg-transparent"
+                                name="location"
+                                type="text"
+                                autocomplete="shipping address-line1"
+                                id="location">
                         </div>
                     </div>
 
@@ -152,6 +154,24 @@
             success: function (file, response) {
                 console.log(response);
             }
+        });
+    </script>
+
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+
+    <script>
+        const script = document.getElementById('search-js');
+        script.onload = function () {
+            mapboxsearch.autofill({
+                accessToken: 'pk.eyJ1IjoiaXZhbnM1MSIsImEiOiJjbGhmY21kN3kxOGJyM2VrMXRveHFicDJ4In0.TrpXPqd_UM9tC66Tnq_hLQ',
+                options: {
+                    language: 'es',
+                },
+            })
+        };
+
+        document.querySelector('input[name="location"]').addEventListener('input', event => {
+            console.log(`${event.target.value}`);
         });
     </script>
 @endpush

@@ -29,7 +29,12 @@
 
                     <div class="w-full">
                         <label for="location">Location</label>
-                        <input class="border w-full" type="text" name="location" id="location">
+                        <input
+                            class="border w-full"
+                            name="location"
+                            type="text"
+                            autocomplete="shipping address-line1"
+                            id="location">
                     </div>
 
                     <div class="w-full">
@@ -61,3 +66,23 @@
         </section>
     </div>
 @endsection
+
+@push('scripts-bottom')
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+
+    <script>
+        const script = document.getElementById('search-js');
+        script.onload = function () {
+            mapboxsearch.autofill({
+                accessToken: 'pk.eyJ1IjoiaXZhbnM1MSIsImEiOiJjbGhmY21kN3kxOGJyM2VrMXRveHFicDJ4In0.TrpXPqd_UM9tC66Tnq_hLQ',
+                options: {
+                    language: 'es',
+                },
+            })
+        };
+
+        document.querySelector('input[name="location"]').addEventListener('input', event => {
+            console.log(`${event.target.value}`);
+        });
+    </script>
+@endpush
