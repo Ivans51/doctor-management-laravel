@@ -25,5 +25,8 @@ Route::get('/payments', [ViewController::class, 'getPayments'])->name('payments'
 Route::get('/messages', [ViewController::class, 'getMessages'])->name('messages');
 Route::get('/blog', [ViewController::class, 'getBlog'])->name('blog');
 Route::get('/settings', [ViewController::class, 'getSettings'])->name('settings');
+Route::get('/settings/change-password', [ViewController::class, 'getChangePassword'])->name('change-password');
+Route::get('/settings/notifications', [ViewController::class, 'getNotifications'])->name('notifications');
+Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
 
 Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');

@@ -128,7 +128,52 @@ class ViewController extends Controller
 
     public function getSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/settings');
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/settings/index')->with([
+            'images' => $files,
+        ]);
+    }
+
+    public function getChangePassword(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/settings/change-password');
+    }
+
+    public function getNotifications(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/settings/notifications')->with([
+            'images' => $files,
+        ]);
+    }
+
+    public function getReviews(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/settings/reviews')->with([
+            'images' => $files,
+        ]);
     }
 
     public function postSettings(): \Illuminate\Http\RedirectResponse
