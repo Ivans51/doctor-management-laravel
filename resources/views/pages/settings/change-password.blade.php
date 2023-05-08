@@ -3,15 +3,15 @@
 @section('content')
     <h3 class="font-bold text-lg mb-10">Notifications</h3>
 
-    <div class="flex flex-col md:flex-row items-start space-x-0 md:space-x-4">
+    <div id="settings" class="flex flex-col md:flex-row items-start space-x-0 md:space-x-4">
         <x-settings.profile-component></x-settings.profile-component>
 
         <section class="w-full md:w-3/5 mt-10 md:mt-0">
-            <ul class="bg-white px-2 py-2 flex space-x-5">
-                <li><a href="{{ route('settings') }}">My Profile</a></li>
-                <li><a href="{{ route('change-password') }}">Change Password</a></li>
-                <li><a href="{{ route('notifications') }}">Notifications</a></li>
-                <li><a href="{{ route('reviews') }}">Reviews</a></li>
+            <ul id="menu-setting" class="bg-white flex space-x-5">
+                <li class="px-2 py-2"><a href="{{ route('settings') }}">My Profile</a></li>
+                <li class="px-2 py-2"><a href="{{ route('change-password') }}">Change Password</a></li>
+                <li class="px-2 py-2"><a href="{{ route('notifications') }}">Notifications</a></li>
+                <li class="px-2 py-2"><a href="{{ route('reviews') }}">Reviews</a></li>
             </ul>
 
             <h2 class="font-bold mt-8">Change Password</h2>
@@ -46,3 +46,7 @@
         </section>
     </div>
 @endsection
+
+@push('scripts-bottom')
+    <script src="{{ Vite::asset('resources/js/settings-menu.js') }}"></script>
+@endpush

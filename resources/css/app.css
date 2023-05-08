@@ -5,3 +5,7 @@
 input {
     @apply px-2 py-1;
 }
+
+#settings .active {
+    @apply text-blue-400 border-b-2 border-blue-400 block;
+}
