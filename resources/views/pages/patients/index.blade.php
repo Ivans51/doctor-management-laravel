@@ -142,20 +142,7 @@
 @push('scripts-bottom')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
-    <script>
-        const input = document.querySelector("#phone_number");
-        window.intlTelInput(input, {
-            initialCountry: 'auto',
-            geoIpLookup: callback => {
-                fetch("https://ipapi.co/json")
-                    .then(res => res.json())
-                    .then(data => callback(data.country_code))
-                    .catch(() => callback("us"));
-            },
-        });
-    </script>
-
-    <script src="{{ Vite::asset('resources/js/modal.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
     <script>
         configModal('modal', 'modal-open')
     </script>

@@ -108,7 +108,17 @@ class ViewController extends Controller
 
     public function getMessages(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/messages/index');
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/messages/index')->with([
+            'images' => $files,
+        ]);
     }
 
     public function getBlog(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application

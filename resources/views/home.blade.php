@@ -22,10 +22,15 @@
     @stack('scripts-top')
 </head>
 <body class="antialiased flex">
+
 <x-home.header-component></x-home.header-component>
 <x-home.main-component></x-home.main-component>
 <x-home.footer-component></x-home.footer-component>
+
+<script src="{{ Vite::asset('resources/js/home.js') }}"></script>
+<script src="{{ Vite::asset('resources/js/modal.js') }}"></script>
 @include('sweetalert::alert')
 @stack('scripts-bottom')
+
 </body>
 </html>

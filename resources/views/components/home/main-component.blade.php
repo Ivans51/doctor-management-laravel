@@ -10,7 +10,7 @@
                 <x-ri-notification-2-line id="btn-notification" class="h-8 mr-4 cursor-pointer"/>
                 <div
                     id="content-notification"
-                    class="bg-white absolute border rounded-lg py-2 px-4 mt-3 hidden right-0"
+                    class="z-10 bg-white absolute border rounded-lg py-2 px-4 mt-3 hidden right-0"
                 >
                     <ul class="space-y-2 btn-link">
                         <li><a href="/#" class="whitespace-nowrap">My Profile</a></li>
@@ -35,7 +35,7 @@
                         <x-ri-arrow-drop-down-fill class="h-8 inline-block"/>
                     </div>
                 </div>
-                <div id="content-user" class="bg-white absolute border rounded-lg py-2 px-4 mt-3 hidden right-0">
+                <div id="content-user" class="z-10 bg-white absolute border rounded-lg py-2 px-4 mt-3 hidden right-0">
                     <ul class="space-y-2 btn-link">
                         <li><a href="/#" class="whitespace-nowrap">My Profile</a></li>
                         <li><a href="/#" class="whitespace-nowrap">Change Password</a></li>
