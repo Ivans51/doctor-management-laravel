@@ -56,7 +56,7 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/web/appointments')->with([
+        return view('pages/web/appointments/index')->with([
             'images' => $files,
         ]);
     }
@@ -103,7 +103,7 @@ class ViewController extends Controller
 
     public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/web/schedule-timing');
+        return view('pages/web/schedules/index');
     }
 
     public function getPayments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -116,7 +116,7 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/web/payments')->with([
+        return view('pages/web/payments/index')->with([
             'images' => $files,
         ]);
     }
@@ -138,7 +138,7 @@ class ViewController extends Controller
 
     public function getBlog(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/web/blog');
+        return view('pages/web/blog/index');
     }
 
     public function getSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
