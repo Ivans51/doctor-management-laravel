@@ -1,4 +1,4 @@
-@extends('home')
+@extends('layouts.home')
 
 @section('content')
     <section class="mt-10">

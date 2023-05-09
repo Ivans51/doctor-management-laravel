@@ -1,4 +1,4 @@
-@extends('home')
+@extends('layouts.home')
 
 @section('content')
     <h3 class="font-bold text-lg mb-10">Notifications</h3>

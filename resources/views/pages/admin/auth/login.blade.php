@@ -1,4 +1,4 @@
-@extends('layouts/auth')
+@extends('layouts.auth')
 
 @section('content')
     <section class="flex flex-col justify-center h-screen items-center">

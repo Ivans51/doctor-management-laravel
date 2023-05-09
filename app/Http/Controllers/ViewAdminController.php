@@ -25,7 +25,7 @@ class ViewAdminController extends Controller
         $chart->labels(['One', 'Two', 'Three', 'Four']);
         $chart->dataset('My dataset', 'pie', [1, 2, 3, 4]);
 
-        return view('pages/main')->with([
+        return view('pages/admin/main')->with([
             'images' => $files,
             'chart' => $chart,
         ]);
@@ -33,11 +33,11 @@ class ViewAdminController extends Controller
 
     public function getSignIn(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/auth/login');
+        return view('pages/admin/auth/login');
     }
 
     public function getSignUp(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/auth/register');
+        return view('pages/admin/auth/register');
     }
 }

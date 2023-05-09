@@ -1,4 +1,4 @@
-@extends('home')
+@extends('layouts.home')
 
 @section('content')
     <h3 class="font-bold text-lg mb-10">Monitoring Plan</h3>
@@ -39,10 +39,10 @@
         <section class="w-2/5 bg-white rounded p-6">
             <div class="flex flex-col items-center">
                 <img
-                    class="mb-2 w-24 h-24"
-                    src="{{ Vite::asset('resources/img/home/logo.png') }}"
-                    alt="patient profile image"
-                    style="border-radius: 50%"
+                        class="mb-2 w-24 h-24"
+                        src="{{ Vite::asset('resources/img/home/logo.png') }}"
+                        alt="patient profile image"
+                        style="border-radius: 50%"
                 >
                 <p class="font-bold">Mr. Jone Martin</p>
                 <p class="text-zinc-400">22 Years, Male</p>

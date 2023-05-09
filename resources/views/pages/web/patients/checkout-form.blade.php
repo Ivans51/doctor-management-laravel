@@ -1,4 +1,4 @@
-@extends('home')
+@extends('layouts.home')
 
 @section('content')
     <h3 class="font-bold text-lg mb-10">Payment Info</h3>
@@ -11,20 +11,20 @@
                     <div class="w-full">
                         <label for="full_name">Full Name</label>
                         <input
-                            class="border w-full bg-transparent"
-                            type="text"
-                            name="full_name"
-                            id="full_name"
+                                class="border w-full bg-transparent"
+                                type="text"
+                                name="full_name"
+                                id="full_name"
                         >
                     </div>
 
                     <div class="w-full">
                         <label for="credit_card_number">Credit Card Number</label>
                         <input
-                            class="border w-full bg-transparent"
-                            type="text"
-                            name="credit_card_number"
-                            id="credit_card_number"
+                                class="border w-full bg-transparent"
+                                type="text"
+                                name="credit_card_number"
+                                id="credit_card_number"
                         >
                     </div>
 
@@ -32,10 +32,10 @@
                         <div>
                             <label for="exp_date">Exp Date</label>
                             <input
-                                class="border w-full bg-transparent"
-                                type="date"
-                                name="exp_date"
-                                id="exp_date"
+                                    class="border w-full bg-transparent"
+                                    type="date"
+                                    name="exp_date"
+                                    id="exp_date"
                             >
                         </div>
 
@@ -48,25 +48,25 @@
                     <div class="w-full">
                         <label for="zip_code">Zip Code</label>
                         <input
-                            class="border w-full bg-transparent"
-                            type="text"
-                            name="zip_code"
-                            id="zip_code"
+                                class="border w-full bg-transparent"
+                                type="text"
+                                name="zip_code"
+                                id="zip_code"
                         >
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-2 mt-10">
                     <button
-                        type="submit"
-                        class="rounded text-white bg-sky-500 px-4 py-1 text-sm ml-2 flex items-center flex-row w-full justify-center"
+                            type="submit"
+                            class="rounded text-white bg-sky-500 px-4 py-1 text-sm ml-2 flex items-center flex-row w-full justify-center"
                     >
                         <x-ri-heart-add-fill class="w-6 h-6 mr-2"/>
                         Confirm Payment
                     </button>
                     <a
-                        href="{{ route('my-patients-detail') }}"
-                        class="rounded bg-white-500 px-4 py-1 w-full border text-center"
+                            href="{{ route('my-patients-detail') }}"
+                            class="rounded bg-white-500 px-4 py-1 w-full border text-center"
                     >
                         Cancel
                     </a>
@@ -77,10 +77,10 @@
         <section class="w-2/5 bg-white rounded p-6">
             <div class="flex flex-col items-center">
                 <img
-                    class="mb-2 w-24 h-24"
-                    src="{{ Vite::asset('resources/img/home/logo.png') }}"
-                    alt="patient profile image"
-                    style="border-radius: 50%"
+                        class="mb-2 w-24 h-24"
+                        src="{{ Vite::asset('resources/img/home/logo.png') }}"
+                        alt="patient profile image"
+                        style="border-radius: 50%"
                 >
                 <p class="font-bold">Mr. Jone Martin</p>
                 <p class="text-zinc-400">22 Years, Male</p>

@@ -1,4 +1,4 @@
-@extends('home')
+@extends('layouts.home')
 
 @section('content')
     <section class="flex items-start">
@@ -8,9 +8,9 @@
 
                 <label>
                     <input
-                        class="bg-transparent border w-full my-6 outline-0"
-                        type="search"
-                        placeholder="Search for message"
+                            class="bg-transparent border w-full my-6 outline-0"
+                            type="search"
+                            placeholder="Search for message"
                     >
                 </label>
             </div>
@@ -34,8 +34,8 @@
         </div>
 
         <div
-            class="w-3/5 bg-white border grid"
-            style="height: calc(100vh - 136px); grid-template-rows: 70px 1fr 70px"
+                class="w-3/5 bg-white border grid"
+                style="height: calc(100vh - 136px); grid-template-rows: 70px 1fr 70px"
         >
             <div class="flex justify-between items-center bg-white p-4">
                 <div class="flex items-center">
@@ -43,8 +43,8 @@
                     <p>Jenny Wilson</p>
                 </div>
                 <x-ri-information-line
-                    id="modal-open"
-                    class="w-6 h-6 cursor-pointer"
+                        id="modal-open"
+                        class="w-6 h-6 cursor-pointer"
                 />
             </div>
 
@@ -59,12 +59,12 @@
                             </div>
                             <div class="relative">
                                 <x-lineawesome-comment-dots
-                                    id="btn-message-{{ $index + 1 }}"
-                                    class="w-6 h-6 mt-2 ml-2 cursor-pointer"
+                                        id="btn-message-{{ $index + 1 }}"
+                                        class="w-6 h-6 mt-2 ml-2 cursor-pointer"
                                 />
                                 <div
-                                    id="content-message-{{ $index + 1 }}"
-                                    class="bg-white z-10 absolute border rounded-lg hidden py-2 px-4 right-0"
+                                        id="content-message-{{ $index + 1 }}"
+                                        class="bg-white z-10 absolute border rounded-lg hidden py-2 px-4 right-0"
                                 >
                                     <ul class="space-y-2 btn-link">
                                         <li><a href="/#" class="whitespace-nowrap">Reply</a></li>
@@ -78,12 +78,12 @@
                         <div class="flex items-start bg-white px-2 py-2 justify-end text-right">
                             <div class="relative">
                                 <x-lineawesome-comment-dots
-                                    id="btn-message-{{ $index + 1 }}"
-                                    class="w-6 h-6 mt-2 mr-2 cursor-pointer"
+                                        id="btn-message-{{ $index + 1 }}"
+                                        class="w-6 h-6 mt-2 mr-2 cursor-pointer"
                                 />
                                 <div
-                                    id="content-message-{{ $index + 1 }}"
-                                    class="bg-white z-10 absolute border rounded-lg hidden py-2 px-4 right-0"
+                                        id="content-message-{{ $index + 1 }}"
+                                        class="bg-white z-10 absolute border rounded-lg hidden py-2 px-4 right-0"
                                 >
                                     <ul class="space-y-2 btn-link">
                                         <li><a href="/#" class="whitespace-nowrap">Reply</a></li>
@@ -116,21 +116,21 @@
     </section>
 
     <x-modal.create-patient-component
-        title="¿Desea reportar al usuario?"
-        modalClass="modal"
+            title="¿Desea reportar al usuario?"
+            modalClass="modal"
     >
         <x-slot name="content">
             <form action="" method="post">
                 <div class="flex items-center space-x-8 my-6">
                     <button
-                        type="submit"
-                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
+                            type="submit"
+                            class="rounded text-white bg-blue-500 px-4 py-1 w-full"
                     >
                         Yes
                     </button>
                     <button
-                        type="button"
-                        class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                            type="button"
+                            class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
                     >
                         No
                     </button>
@@ -162,17 +162,17 @@
 
     {{-- Emoji --}}
     <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css"
-        integrity="sha512-vEia6TQGr3FqC6h55/NdU3QSM5XR6HSl5fW71QTKrgeER98LIMGwymBVM867C1XHIkYD9nMTfWK2A0xcodKHNA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css"
+            integrity="sha512-vEia6TQGr3FqC6h55/NdU3QSM5XR6HSl5fW71QTKrgeER98LIMGwymBVM867C1XHIkYD9nMTfWK2A0xcodKHNA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
     />
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"
-        integrity="sha512-hkvXFLlESjeYENO4CNi69z3A1puvONQV5Uh+G4TUDayZxSLyic5Kba9hhuiNLbHqdnKNMk2PxXKm0v7KDnWkYA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
+            src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"
+            integrity="sha512-hkvXFLlESjeYENO4CNi69z3A1puvONQV5Uh+G4TUDayZxSLyic5Kba9hhuiNLbHqdnKNMk2PxXKm0v7KDnWkYA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
     >
     </script>
 

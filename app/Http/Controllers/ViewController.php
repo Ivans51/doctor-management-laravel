@@ -25,7 +25,7 @@ class ViewController extends Controller
         $chart->labels(['One', 'Two', 'Three', 'Four']);
         $chart->dataset('My dataset', 'pie', [1, 2, 3, 4]);
 
-        return view('pages/main')->with([
+        return view('pages/web/main')->with([
             'images' => $files,
             'chart' => $chart,
         ]);
@@ -33,17 +33,17 @@ class ViewController extends Controller
 
     public function getLogin(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/auth/login');
+        return view('pages/web/auth/login');
     }
 
     public function getRegister(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/auth/register');
+        return view('pages/web/auth/register');
     }
 
     public function getForgot(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/auth/forgot');
+        return view('pages/web/auth/forgot');
     }
 
     public function getAppointments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -56,7 +56,7 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/appointments')->with([
+        return view('pages/web/appointments')->with([
             'images' => $files,
         ]);
     }
@@ -71,7 +71,7 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/patients/index')->with([
+        return view('pages/web/patients/index')->with([
             'images' => $files,
         ]);
     }
@@ -86,24 +86,24 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/patients/detail')->with([
+        return view('pages/web/patients/detail')->with([
             'images' => $files,
         ]);
     }
 
     public function getMonitoringForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/patients/monitoring-form');
+        return view('pages/web/patients/monitoring-form');
     }
 
     public function getCheckoutForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/patients/checkout-form');
+        return view('pages/web/patients/checkout-form');
     }
 
     public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/schedule-timing');
+        return view('pages/web/schedule-timing');
     }
 
     public function getPayments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -116,7 +116,7 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/payments')->with([
+        return view('pages/web/payments')->with([
             'images' => $files,
         ]);
     }
@@ -131,14 +131,14 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/messages/index')->with([
+        return view('pages/web/messages/index')->with([
             'images' => $files,
         ]);
     }
 
     public function getBlog(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/blog');
+        return view('pages/web/blog');
     }
 
     public function getSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -151,14 +151,14 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/settings/index')->with([
+        return view('pages/web/settings/index')->with([
             'images' => $files,
         ]);
     }
 
     public function getChangePassword(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/settings/change-password');
+        return view('pages/web/settings/change-password');
     }
 
     public function getNotifications(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -171,7 +171,7 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/settings/notifications')->with([
+        return view('pages/web/settings/notifications')->with([
             'images' => $files,
         ]);
     }
@@ -186,7 +186,7 @@ class ViewController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
-        return view('pages/settings/reviews')->with([
+        return view('pages/web/settings/reviews')->with([
             'images' => $files,
         ]);
     }
