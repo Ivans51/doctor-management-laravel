@@ -1,4 +1,4 @@
-@extends('home')
+@extends('layouts.home')
 
 @section('content')
     <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-start">

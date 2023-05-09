@@ -1,4 +1,4 @@
-@extends('home')
+@extends('layouts.home')
 
 @section('content')
     <h1 class="font-bold text-2xl mb-1">Welcome, Dr. Stephen</h1>
@@ -163,8 +163,3 @@
 
     {!! $chart->script() !!}
 @endsection
-
-@push('styles')
-    <style>
-    </style>
-@endpush

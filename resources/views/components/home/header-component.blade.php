@@ -80,6 +80,5 @@
         if (siteBaseURL === 'settings') {
             $($('#menu-vertical li a')[7]).addClass('active')
         }
-        console.log(siteBaseURL)
     </script>
 @endpush

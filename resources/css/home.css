@@ -10,7 +10,7 @@ nav ul li a.active, nav ul li a:hover {
     @apply bg-black text-white;
 }
 
-main {
+#main-content {
     height: calc(100vh - 88px);
     @apply p-6 overflow-y-auto;
 }

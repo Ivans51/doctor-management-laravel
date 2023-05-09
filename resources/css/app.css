@@ -3,5 +3,9 @@
 @import "main.css";
 
 input {
-    @apply outline-none px-2 py-1;
+    @apply px-2 py-1;
+}
+
+#settings .active {
+    @apply text-blue-400 border-b-2 border-blue-400 block;
 }

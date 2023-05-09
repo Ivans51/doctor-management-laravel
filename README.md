@@ -90,7 +90,11 @@ Complete guide in [appdividend](https://appdividend.com/2022/03/01/how-to-deploy
 * [Jenkins](https://www.jenkins.io) - Used for testing
 
 ## Libraries
-* [blade-icons](https://blade-ui-kit.com/blade-icons) - Icons Remix
+* [blade-icons](https://blade-ui-kit.com/blade-icons) - Icons Remix - Line-awesome
+* [charts](https://charts.erik.cat/) - Charts Erik
+* [sweet-alert](https://realrashid.github.io/sweet-alert/) - Sweet Alert
+* [input-tel](https://github.com/jackocnr/intl-tel-input#demo-and-examples) - Input tel
+* [emojis](https://github.com/mervick/emojionearea) - Emoji area
 
 ## Contributing 🖇️
 
