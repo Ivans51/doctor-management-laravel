@@ -31,14 +31,19 @@ class ViewController extends Controller
         ]);
     }
 
-    public function getSignIn(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function getLogin(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('pages/auth/login');
     }
 
-    public function getSignUp(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function getRegister(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('pages/auth/register');
+    }
+
+    public function getForgot(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/auth/forgot');
     }
 
     public function getAppointments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application

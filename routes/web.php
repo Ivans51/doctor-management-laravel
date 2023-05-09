@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
-Route::get('/login', [ViewController::class, 'getSignIn'])->name('sign-in');
-Route::get('/register', [ViewController::class, 'getSignUp'])->name('sign-up');
+Route::get('/login', [ViewController::class, 'getLogin'])->name('login');
+Route::get('/register', [ViewController::class, 'getRegister'])->name('register');
+Route::get('/forgot', [ViewController::class, 'getForgot'])->name('forgot');
 Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
 Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
 Route::get('/my-patients/detail', [ViewController::class, 'getPatientsDetail'])->name('my-patients-detail');

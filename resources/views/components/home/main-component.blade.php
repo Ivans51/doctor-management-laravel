@@ -47,7 +47,7 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         @yield('content')
     </main>
 
