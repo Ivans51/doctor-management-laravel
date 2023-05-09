@@ -31,6 +31,16 @@ class ViewController extends Controller
         ]);
     }
 
+    public function getSignIn(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/auth/login');
+    }
+
+    public function getSignUp(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/auth/register');
+    }
+
     public function getAppointments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $files = [];

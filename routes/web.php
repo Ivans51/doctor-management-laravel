@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ViewAdminController;
 use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
+Route::get('/login', [ViewController::class, 'getSignIn'])->name('sign-in');
+Route::get('/register', [ViewController::class, 'getSignUp'])->name('sign-up');
 Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
 Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
 Route::get('/my-patients/detail', [ViewController::class, 'getPatientsDetail'])->name('my-patients-detail');
@@ -30,3 +33,9 @@ Route::get('/settings/notifications', [ViewController::class, 'getNotifications'
 Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
 
 Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', [ViewAdminController::class, 'getDashBoard'])->name('admin-home');
+    Route::get('/login', [ViewAdminController::class, 'getSignIn'])->name('admin-sign-in');
+    Route::get('/register', [ViewAdminController::class, 'getSignUp'])->name('admin-sign-up');
+});
