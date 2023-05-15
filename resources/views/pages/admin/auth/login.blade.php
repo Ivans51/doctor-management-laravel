@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="text-right text-blue-500 my-5">
-                    <a href="{{ route('forgot') }}">Forgot Password?</a>
+                    <a href="{{ route('admin-forgot') }}">Forgot Password?</a>
                 </div>
             </form>
 

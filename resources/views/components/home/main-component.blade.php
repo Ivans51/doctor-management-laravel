@@ -41,6 +41,7 @@
                         <li><a href="/#" class="whitespace-nowrap">Change Password</a></li>
                         <li><a href="/#" class="whitespace-nowrap">Notifications</a></li>
                         <li><a href="/#" class="whitespace-nowrap">Reviews</a></li>
+                        <li><a href="/#" class="whitespace-nowrap">Logout</a></li>
                     </ul>
                 </div>
             </div>

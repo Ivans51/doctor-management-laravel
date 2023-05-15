@@ -23,9 +23,9 @@
 </head>
 <body class="antialiased flex">
 
-<x-home.header-component></x-home.header-component>
-<x-home.main-component></x-home.main-component>
-<x-home.footer-component></x-home.footer-component>
+<x-admin.header-component></x-admin.header-component>
+<x-admin.main-component></x-admin.main-component>
+<x-admin.footer-component></x-admin.footer-component>
 
 <script src="{{ Vite::asset('resources/js/home.js') }}"></script>
 <script src="{{ Vite::asset('resources/js/modal.js') }}"></script>

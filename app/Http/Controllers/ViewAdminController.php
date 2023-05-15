@@ -40,4 +40,54 @@ class ViewAdminController extends Controller
     {
         return view('pages/admin/auth/register');
     }
+
+    public function getForgot(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('pages/admin/auth/forgot');
+    }
+
+    public function getAdmins(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/admin/admins/index')->with([
+            'images' => $files,
+        ]);
+    }
+
+    public function getPatients(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/admin/patients/index')->with([
+            'images' => $files,
+        ]);
+    }
+
+    public function getDoctors(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/admin/doctors/index')->with([
+            'images' => $files,
+        ]);
+    }
 }

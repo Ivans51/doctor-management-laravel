@@ -39,4 +39,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [ViewAdminController::class, 'getDashBoard'])->name('admin-home');
     Route::get('/login', [ViewAdminController::class, 'getSignIn'])->name('admin-sign-in');
     Route::get('/register', [ViewAdminController::class, 'getSignUp'])->name('admin-sign-up');
+    Route::get('/forgot', [ViewAdminController::class, 'getForgot'])->name('admin-forgot');
+    Route::get('/admins', [ViewAdminController::class, 'getAdmins'])->name('admin-admins');
+    Route::get('/doctors', [ViewAdminController::class, 'getDoctors'])->name('admin-doctors');
+    Route::get('/patients', [ViewAdminController::class, 'getPatients'])->name('admin-patients');
 });
