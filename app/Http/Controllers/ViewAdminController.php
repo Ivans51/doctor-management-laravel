@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Charts\HomeChart;
+use App\Models\User;
 use Faker\Factory as Faker;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ViewAdminController extends Controller
 {
@@ -56,6 +57,10 @@ class ViewAdminController extends Controller
             $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
         }
 
+        $title = 'Delete User!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+
         return view('pages/admin/admins/index')->with([
             'images' => $files,
         ]);
@@ -89,5 +94,11 @@ class ViewAdminController extends Controller
         return view('pages/admin/doctors/index')->with([
             'images' => $files,
         ]);
+    }
+
+    function deleteUser(User $user)
+    {
+        $user->delete();
+        return redirect()->back();
     }
 }

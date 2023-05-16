@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="mt-10">
-        <div class="flex justify-between">
+        <div class="flex justify-between items-center">
             <h3 class="my-2 font-bold text-lg">Patient list</h3>
             <button
                 id="modal-open"
@@ -82,7 +82,7 @@
         </table>
     </section>
 
-    <x-modal.create-patient-component
+    <x-modal.modal-component
         title="Add new patient"
         modalClass="modal"
     >
@@ -140,7 +140,7 @@
                 </div>
             </form>
         </x-slot>
-    </x-modal.create-patient-component>
+    </x-modal.modal-component>
 
 @endsection
 

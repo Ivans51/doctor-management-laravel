@@ -115,7 +115,7 @@
         </div>
     </section>
 
-    <x-modal.create-patient-component
+    <x-modal.modal-component
             title="¿Desea reportar al usuario?"
             modalClass="modal"
     >
@@ -137,7 +137,7 @@
                 </div>
             </form>
         </x-slot>
-    </x-modal.create-patient-component>
+    </x-modal.modal-component>
 @endsection
 
 @push('scripts-bottom')

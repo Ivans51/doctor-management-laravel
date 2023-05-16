@@ -25,6 +25,6 @@ class CreatePatientComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.modal.create-patient-component');
+        return view('components.modal.modal-component');
     }
 }
