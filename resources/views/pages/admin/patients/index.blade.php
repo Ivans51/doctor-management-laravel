@@ -3,7 +3,7 @@
 @section('content')
     <section class="mt-10">
         <div class="flex justify-between items-center">
-            <h3 class="my-2 font-bold text-lg">Admins list</h3>
+            <h3 class="my-2 font-bold text-lg">Doctors list</h3>
             <button
                 onclick="openModal()"
                 class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
@@ -39,7 +39,7 @@
             <tr class="bg-zinc-100">
                 <th class="px-4 py-1 text-left">Name</th>
                 <th class="px-4 py-1">Email</th>
-                <th class="px-4 py-1">Role</th>
+                <th class="px-4 py-1">Data</th>
                 <th class="px-4 py-1">Actions</th>
             </tr>
             @foreach($images as $image)
@@ -54,7 +54,12 @@
                         1
                     </td>
                     <td class="px-4 py-2 text-center">
-                        1
+                        <a
+                            href="{{ route('admin-payments') }}"
+                            class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
+                        >
+                            Payments
+                        </a>
                     </td>
                     <td class="px-4 py-2 text-center">
                         <a
@@ -81,39 +86,38 @@
         modalClass="modal"
     >
         <x-slot name="content">
-            <form action="" method="post">
+            <form action="" method="post" class="p-10">
                 <div class="space-y-6">
                     <div class="grid grid-cols-2 gap-x-4">
                         <div>
-                            <label for="name">Name</label>
-                            <input class="border w-full" type="text" name="name" id="name">
+                            <label for="first_name">First Name</label>
+                            <input class="border w-full" type="text" name="first_name" id="first_name">
                         </div>
                         <div>
-                            <label for="email">Email</label>
-                            <input class="border w-full" type="email" name="email" id="email">
+                            <label for="last_name">Last Name</label>
+                            <input class="border w-full" type="text" name="last_name" id="last_name">
                         </div>
+                    </div>
+
+                    <div class="w-full">
+                        <label for="location">Location</label>
+                        <input
+                            class="border w-full"
+                            name="location"
+                            type="text"
+                            autocomplete="shipping address-line1"
+                            id="location">
                     </div>
 
                     <div class="grid grid-cols-2 gap-x-4">
                         <div>
-                            <label for="password">Password</label>
-                            <input
-                                class="border w-full"
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="*********"
-                            >
+                            <label for="email">Email</label>
+                            <input class="border w-full" type="email" name="email" id="email">
                         </div>
+
                         <div>
-                            <label for="confirm_password">Confirm Password</label>
-                            <input
-                                class="border w-full"
-                                type="password"
-                                name="confirm_password"
-                                id="confirm_password"
-                                placeholder="*********"
-                            >
+                            <label for="phone_number">Phone Number</label>
+                            <input class="border w-full" type="tel" name="phone_number" id="phone_number">
                         </div>
                     </div>
                 </div>
@@ -156,5 +160,30 @@
             }
             document.getElementById('modal-open').click();
         }
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+    <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
+    <script>
+        configModal('modal', 'modal-open')
+    </script>
+
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+
+    <script>
+        const script = document.getElementById('search-js');
+        script.onload = function () {
+            mapboxsearch.autofill({
+                accessToken: 'pk.eyJ1IjoiaXZhbnM1MSIsImEiOiJjbGhmY21kN3kxOGJyM2VrMXRveHFicDJ4In0.TrpXPqd_UM9tC66Tnq_hLQ',
+                options: {
+                    language: 'es',
+                },
+            })
+        };
+
+        document.querySelector('input[name="location"]').addEventListener('input', event => {
+            console.log(`${event.target.value}`);
+        });
     </script>
 @endpush

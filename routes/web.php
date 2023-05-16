@@ -42,7 +42,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/forgot', [ViewAdminController::class, 'getForgot'])->name('admin-forgot');
     Route::get('/admins', [ViewAdminController::class, 'getAdmins'])->name('admin-admins');
     Route::get('/doctors', [ViewAdminController::class, 'getDoctors'])->name('admin-doctors');
-    Route::get('/patients', [ViewAdminController::class, 'getPatients'])->name('admin-patients');
+    Route::get('/patients/{doctor?}', [ViewAdminController::class, 'getPatients'])->name('admin-patients');
+    Route::get('/payments', [ViewAdminController::class, 'getPayments'])->name('admin-payments');
 
     Route::delete('/admins/{user}', [ViewAdminController::class, 'deleteUser'])->name('delete-user');
 });

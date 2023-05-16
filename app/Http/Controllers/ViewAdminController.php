@@ -81,6 +81,21 @@ class ViewAdminController extends Controller
         ]);
     }
 
+    public function getPayments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $files = [];
+
+        $faker = Faker::create();
+
+        for ($i = 0; $i <= 10; $i++) {
+            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        }
+
+        return view('pages/admin/payments/index')->with([
+            'images' => $files,
+        ]);
+    }
+
     public function getDoctors(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $files = [];
