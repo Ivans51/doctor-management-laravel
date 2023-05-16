@@ -10,7 +10,21 @@
             >
             <h1 class="font-bold text-xl mb-4 text-center">Sign In</h1>
 
-            <form action="" method="post">
+            @error('captcha')
+            <span class="text-red-500 text-xs italic">{{ $message }}</span>
+            @enderror
+
+            @if(session('auth_message'))
+                <div class="text-green-500">
+                    {{ session('auth_message') }}
+                </div>
+            @endif
+
+            <form action="{{ route('web-login') }}" method="post">
+                @csrf
+
+                <input type="hidden" name="recaptcha" id="recaptcha">
+
                 <div class="space-y-6">
                     <div class="w-full">
                         <label for="email">Email</label>
@@ -56,3 +70,16 @@
         </div>
     </section>
 @endsection
+
+@push('scripts-bottom')
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function (token) {
+                if (token) {
+                    document.getElementById('recaptcha').value = token;
+                }
+            });
+        });
+    </script>
+@endpush

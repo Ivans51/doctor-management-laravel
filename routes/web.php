@@ -33,6 +33,10 @@ Route::get('/settings/change-password', [ViewController::class, 'getChangePasswo
 Route::get('/settings/notifications', [ViewController::class, 'getNotifications'])->name('notifications');
 Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
 
+Route::post('/login', [ViewAdminController::class, 'login'])->name('web-login');
+Route::post('/register', [ViewAdminController::class, 'register'])->name('web-register');
+Route::post('/forgot', [ViewAdminController::class, 'forgot'])->name('web-form-forgot');
+
 Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');
 
 Route::group(['prefix' => 'admin'], function () {
@@ -45,5 +49,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/patients/{doctor?}', [ViewAdminController::class, 'getPatients'])->name('admin-patients');
     Route::get('/payments', [ViewAdminController::class, 'getPayments'])->name('admin-payments');
 
+    Route::post('/login', [ViewAdminController::class, 'login'])->name('admin-login');
+    Route::post('/register', [ViewAdminController::class, 'register'])->name('admin-register');
+    Route::post('/forgot', [ViewAdminController::class, 'forgot'])->name('admin-form-forgot');
     Route::delete('/admins/{user}', [ViewAdminController::class, 'deleteUser'])->name('delete-user');
 });
