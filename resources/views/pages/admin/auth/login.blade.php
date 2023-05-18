@@ -25,6 +25,7 @@
                             type="email"
                             name="email"
                             id="email"
+                            value="test@example.com"
                             placeholder="josh@gmail.com"
                         >
                     </div>
@@ -35,6 +36,7 @@
                             type="password"
                             name="password"
                             id="password"
+                            value="password"
                             placeholder="*********"
                         >
                     </div>

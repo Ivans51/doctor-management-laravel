@@ -3,30 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
-use App\Models\User;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     public function login(AuthRequest $request): RedirectResponse
     {
-        // Get the user's email and password from the request
-        $email = $request->input('email');
-        $password = $request->input('password');
-
-        // Get the user from the database
-        $user = User::query()->where('email', $email)->first();
+        $credentials = $request->only('email', 'password');
+        $isSuccess = Auth::attempt($credentials);
 
         // Check if the user exists
-        if (!$user) {
-            return back()->withErrors(['login' => 'User not found']);
-        }
-
-        // Check if the password matches the hash
-        if (!Hash::check($password, $user->password)) {
-            return back()->withErrors(['login' => 'Incorrect password']);
+        if (!$isSuccess) {
+            return back()->withErrors(['login' => 'User or password Incorrect']);
         }
 
         $isSuccessCaptcha = $this->validateRecaptcha($request);
@@ -92,5 +84,17 @@ class AuthController extends Controller
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
+     */
+    public function logout(Request $request): Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/admin/login');
     }
 }
