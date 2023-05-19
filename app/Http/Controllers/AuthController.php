@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
+use App\Mail\MailClass;
+use App\Models\Role;
+use App\Models\User;
+use App\Utils\Constants;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,6 +36,18 @@ class AuthController extends Controller
 
     public function register(AuthRequest $request): RedirectResponse
     {
+        $user = new User();
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+
+        // Hash password
+        $user->password = bcrypt($request->get('password'));
+        $user->role_id = Role::query()->where('name', Constants::$ADMIN)->first()->id;
+        $user->save();
+
+        // Login user
+        Auth::login($user);
+
         $isSuccessCaptcha = $this->validateRecaptcha($request);
 
         if ($isSuccessCaptcha) {
@@ -43,13 +59,36 @@ class AuthController extends Controller
 
     public function forgot(AuthRequest $request): RedirectResponse
     {
+        // check email exists
+        $user = User::query()->where('email', $request->get('email'))->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => 'Email not found']);
+        }
+
         $isSuccessCaptcha = $this->validateRecaptcha($request);
 
         if ($isSuccessCaptcha) {
-            return back()->with('auth_message', 'Thanks for your login!');
+            $this->sendEmail($request->get('email'));
+
+            return back()->with('auth_message', 'Thanks for your message!');
         } else {
             return back()->withErrors(['captcha' => 'ReCaptcha Error']);
         }
+    }
+
+    /**
+     * @param $email
+     * @return void
+     */
+    private function sendEmail($email): void
+    {
+        $data = [
+            'name' => 'Recovery Password',
+            'message' => 'This is a test email from Laravel 10.'
+        ];
+
+        \Mail::to($email)->send(new MailClass($data));
     }
 
     /**

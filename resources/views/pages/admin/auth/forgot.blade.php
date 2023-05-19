@@ -11,16 +11,7 @@
             <h1 class="font-bold text-xl mb-4 mb-0">Forgot Password</h1>
             <p class="text-zinc-300 mb-8">Enter your email, and we will send you a reset link</p>
 
-
-            @error('captcha')
-            <span class="text-red-500 text-xs italic">{{ $message }}</span>
-            @enderror
-
-            @if(session('auth_message'))
-                <div class="text-green-500">
-                    {{ session('auth_message') }}
-                </div>
-            @endif
+            <x-utils.message-component/>
 
             <form action="{{ route('admin-form-forgot') }}" method="post">
                 @csrf
@@ -35,6 +26,7 @@
                             type="email"
                             name="email"
                             id="email"
+                            value="test@example.com"
                             placeholder="josh@gmail.com"
                         >
                     </div>

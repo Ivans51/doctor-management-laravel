@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
-
 Route::middleware('admin')->group(function () {
+    Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
     Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
     Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
     Route::get('/my-patients/detail', [ViewController::class, 'getPatientsDetail'])->name('my-patients-detail');
@@ -33,6 +32,8 @@ Route::middleware('admin')->group(function () {
     Route::get('/settings/notifications', [ViewController::class, 'getNotifications'])->name('notifications');
     Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
     Route::get('/logout', [AuthController::class, 'logout'])->name('web-logout');
+
+    Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');
 });
 
 Route::middleware('admin.auth')->group(function () {
@@ -44,8 +45,6 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('web-register');
     Route::post('/forgot', [AuthController::class, 'forgot'])->name('web-form-forgot');
 });
-
-Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::middleware('admin')->group(function () {

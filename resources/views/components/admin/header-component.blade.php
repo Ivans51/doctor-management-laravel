@@ -1,5 +1,7 @@
 <nav class="w-1/4 mx-4">
-    <img class="mt-4 mb-8 mx-2" src="{{ Vite::asset('resources/img/home/logo.png') }}" alt="logo">
+    <a href="{{ route('admin-home') }}">
+        <img class="mt-4 mb-8 mx-2" src="{{ Vite::asset('resources/img/home/logo.png') }}" alt="logo">
+    </a>
 
     <ul id="menu-vertical">
         <li>

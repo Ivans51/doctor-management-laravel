@@ -10,15 +10,7 @@
             >
             <h1 class="font-bold text-xl mb-4 text-center">Sign In</h1>
 
-            @error('captcha')
-            <span class="text-red-500 text-xs italic">{{ $message }}</span>
-            @enderror
-
-            @if(session('auth_message'))
-                <div class="text-green-500">
-                    {{ session('auth_message') }}
-                </div>
-            @endif
+            <x-utils.message-component/>
 
             <form action="{{ route('web-login') }}" method="post">
                 @csrf

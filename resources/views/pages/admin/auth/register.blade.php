@@ -10,15 +10,7 @@
             >
             <h1 class="font-bold text-xl mb-4 text-center">Sign Up</h1>
 
-            @error('captcha')
-            <span class="text-red-500 text-xs italic">{{ $message }}</span>
-            @enderror
-
-            @if(session('auth_message'))
-                <div class="text-green-500">
-                    {{ session('auth_message') }}
-                </div>
-            @endif
+            <x-utils.message-component/>
 
             <form action="{{ route('admin-register') }}" method="post">
                 @csrf
@@ -33,6 +25,7 @@
                             type="text"
                             name="name"
                             id="name"
+                            value="Josh"
                             placeholder="Josh"
                         >
                     </div>
@@ -44,6 +37,7 @@
                             type="email"
                             name="email"
                             id="email"
+                            value="josh@gmail.com"
                             placeholder="josh@gmail.com"
                         >
                     </div>
@@ -56,17 +50,19 @@
                                 type="password"
                                 name="password"
                                 id="password"
+                                value="12345678"
                                 placeholder="*********"
                             >
                         </div>
 
                         <div class="w-full">
-                            <label for="confirm_password">Confirm Password</label>
+                            <label for="password_confirmation">Confirm Password</label>
                             <input
                                 class="border w-full rounded"
                                 type="password"
-                                name="confirm_password"
-                                id="confirm_password"
+                                name="password_confirmation"
+                                id="password_confirmation"
+                                value="12345678"
                                 placeholder="*********"
                             >
                         </div>
