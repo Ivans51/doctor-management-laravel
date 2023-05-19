@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewAdminController;
 use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
@@ -55,7 +56,10 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/payments', [ViewAdminController::class, 'getPayments'])->name('admin-payments');
         Route::get('/logout', [AuthController::class, 'logout'])->name('admin-logout');
 
+        Route::post('/admins', [UserController::class, 'store'])->name('create-user');
+        Route::put('/admins/{user}', [UserController::class, 'update'])->name('update-user');
         Route::delete('/admins/{user}', [ViewAdminController::class, 'deleteUser'])->name('delete-user');
+        Route::get('/admins/search', [UserController::class, 'searchUser'])->name('search-user');
     });
 
     Route::middleware('admin.auth')->group(function () {

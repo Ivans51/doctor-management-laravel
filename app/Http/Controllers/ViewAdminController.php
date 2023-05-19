@@ -49,20 +49,13 @@ class ViewAdminController extends Controller
 
     public function getAdmins(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $files = [];
-
-        $faker = Faker::create();
-
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
-
-        $title = 'Delete User!';
-        $text = "Are you sure you want to delete?";
-        confirmDelete($title, $text);
+        // list roles with name admin
+        $admins = User::whereHas('roles', function ($query) {
+            $query->where('name', 'admin');
+        })->orderBy('created_at', 'DESC')->get();
 
         return view('pages/admin/admins/index')->with([
-            'images' => $files,
+            'admins' => $admins,
         ]);
     }
 

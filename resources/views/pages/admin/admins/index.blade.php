@@ -27,7 +27,7 @@
         <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
             <label class="w-full lg:w-2/3">
                 Search
-                <input class="w-full" type="search" placeholder="Name, email">
+                <input class="w-full" type="search" id="search_field" placeholder="Name, email">
             </label>
             <label class="w-full lg:w-1/3">
                 Date
@@ -42,23 +42,22 @@
                 <th class="px-4 py-1">Role</th>
                 <th class="px-4 py-1">Actions</th>
             </tr>
-            @foreach($images as $image)
+            @foreach($admins as $admin)
                 <tr class="bg-white rounded">
                     <td class="px-4 py-2 flex items-center">
-                        <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
                         <a href="{{ route('my-patients-detail') }}">
-                            Jenny Wilson
+                            {{ $admin->name }}
                         </a>
                     </td>
                     <td class="px-4 py-2 text-center">
-                        1
+                        {{ $admin->email }}
                     </td>
                     <td class="px-4 py-2 text-center">
-                        1
+                        {{ $admin->roles->first()->name }}
                     </td>
                     <td class="px-4 py-2 text-center">
                         <a
-                            onclick="openModal('{{ $image }}')"
+                            onclick="openModal({{ $admin }})"
                             class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
                         >
                             Edit
@@ -82,6 +81,8 @@
     >
         <x-slot name="content">
             <form action="" method="post">
+                @csrf
+
                 <div class="space-y-6">
                     <div class="grid grid-cols-2 gap-x-4">
                         <div>
@@ -144,17 +145,38 @@
 
         function openModal(data) {
             if (data) {
-                $('#name').val(data)
-                $('#email').val(data)
-                $('#password').val(data)
-                $('#confirm_password').val(data)
+                $('#name').val(data.name)
+                $('#email').val(data.email)
+                $('#password').val(data.password)
+                $('#confirm_password').val(data.password)
+                $('form').attr('action', '/admin/admins/' + data.id)
             } else {
                 $('#name').val('')
                 $('#email').val('')
                 $('#password').val('')
                 $('#confirm_password').val('')
+                $('form').attr('action', '/admin/admins')
             }
             document.getElementById('modal-open').click();
         }
+
+        // search user with ajax
+        $('#search_field').on('keyup', function () {
+            let search = $(this).val()
+            let url = '/admin/admins/search'
+            let token = $('meta[name="csrf-token"]').attr('content')
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    search: search,
+                    _token: token
+                },
+                success: function (data) {
+                    $('tbody').html(data)
+                }
+            })
+        })
     </script>
 @endpush
