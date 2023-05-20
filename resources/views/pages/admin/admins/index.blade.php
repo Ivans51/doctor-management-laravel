@@ -42,6 +42,7 @@
                 <th class="px-4 py-1">Role</th>
                 <th class="px-4 py-1">Actions</th>
             </tr>
+            <tbody id="tbody">
             @foreach($admins as $admin)
                 <tr class="bg-white rounded">
                     <td class="px-4 py-2 flex items-center">
@@ -72,6 +73,7 @@
                     </td>
                 </tr>
             @endforeach
+            </tbody>
         </table>
     </section>
 
@@ -173,8 +175,33 @@
                     search: search,
                     _token: token
                 },
-                success: function (data) {
-                    $('tbody').html(data)
+                success: function (response) {
+                    let html = ''
+
+                    response.data.forEach(function (item) {
+                        html += `<tr class="bg-white rounded">
+                            <td class="px-4 py-2 text-center">${item.name}</td>
+                            <td class="px-4 py-2 text-center">${item.email}</td>
+                            <td class="px-4 py-2 text-center">${item.email}</td>
+                            <td class="px-4 py-2 text-center">
+                                <a
+                                    onclick="openModal(${item})"
+                                    class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
+                                >
+                                    Edit
+                                </a>
+                                <a
+                                    href="admin/admins/delete-user/${item.id}"
+                                    class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
+                                    data-confirm-delete="true"
+                                >
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>`
+                    })
+
+                    $('#tbody').html(html)
                 }
             })
         })

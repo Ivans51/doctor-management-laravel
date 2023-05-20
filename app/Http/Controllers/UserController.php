@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -62,18 +63,20 @@ class UserController extends Controller
     /**
      * Search user with parameter email and name
      * @param Request $request
-     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     * @return JsonResponse
      */
-    public function searchUser(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function searchUser(Request $request): JsonResponse
     {
-        $request->validate([
-            'search' => 'required',
-        ]);
         $users = User::query()
             ->where('name', 'LIKE', "%{$request->search}%")
             ->orWhere('email', 'LIKE', "%{$request->search}%")
             ->get();
-        return view('admin.admins', compact('users'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data retrieved successfully',
+            'data' => $users
+        ]);
     }
 
 }

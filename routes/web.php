@@ -57,9 +57,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/logout', [AuthController::class, 'logout'])->name('admin-logout');
 
         Route::post('/admins', [UserController::class, 'store'])->name('create-user');
+        Route::post('/admins/search', [UserController::class, 'searchUser'])->name('search-user');
         Route::put('/admins/{user}', [UserController::class, 'update'])->name('update-user');
         Route::delete('/admins/{user}', [ViewAdminController::class, 'deleteUser'])->name('delete-user');
-        Route::get('/admins/search', [UserController::class, 'searchUser'])->name('search-user');
     });
 
     Route::middleware('admin.auth')->group(function () {
