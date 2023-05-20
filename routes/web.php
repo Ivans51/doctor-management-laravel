@@ -19,9 +19,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
-
 Route::middleware('admin')->group(function () {
+    Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
     Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
     Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
     Route::get('/my-patients/detail', [ViewController::class, 'getPatientsDetail'])->name('my-patients-detail');
