@@ -26,6 +26,8 @@
     @yield('content')
 </main>
 
+<script src="{{ Vite::asset('resources/js/response-management.js') }}"></script>
 @stack('scripts-bottom')
+
 </body>
 </html>

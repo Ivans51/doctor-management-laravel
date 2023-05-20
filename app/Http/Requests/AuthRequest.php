@@ -18,7 +18,7 @@ class AuthRequest extends FormRequest
         $method = $arr[1];  // The controller method
 
         return match ($method) {
-            'login' => [
+            'loginApi', 'login' => [
                 'email' => 'required|email',
                 'password' => 'required|min:8',
             ],

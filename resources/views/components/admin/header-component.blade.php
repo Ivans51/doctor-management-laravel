@@ -5,19 +5,19 @@
 
     <ul id="menu-vertical">
         <li>
-            <a href="{{ route('admin-admins') }}">
+            <a href="{{ route('admins.index') }}">
                 <x-ri-dashboard-line/>
                 Admins
             </a>
         </li>
         <li>
-            <a href="{{ route('admin-doctors') }}">
+            <a href="{{ route('doctors.index') }}">
                 <x-ri-dashboard-line/>
                 Doctors
             </a>
         </li>
         <li>
-            <a href="{{ route('admin-patients') }}">
+            <a href="{{ route('patients.index') }}">
                 <x-ri-dashboard-line/>
                 Patients
             </a>

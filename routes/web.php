@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DoctorsController;
+use App\Http\Controllers\PatientsController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewAdminController;
 use App\Http\Controllers\ViewController;
@@ -48,18 +51,19 @@ Route::middleware('admin.auth')->group(function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::middleware('admin')->group(function () {
+    Route::middleware(['auth'])->group(function () {
         Route::get('/', [ViewAdminController::class, 'getDashBoard'])->name('admin-home');
-        Route::get('/admins', [ViewAdminController::class, 'getAdmins'])->name('admin-admins');
-        Route::get('/doctors', [ViewAdminController::class, 'getDoctors'])->name('admin-doctors');
-        Route::get('/patients/{doctor?}', [ViewAdminController::class, 'getPatients'])->name('admin-patients');
-        Route::get('/payments', [ViewAdminController::class, 'getPayments'])->name('admin-payments');
         Route::get('/logout', [AuthController::class, 'logout'])->name('admin-logout');
 
-        Route::post('/admins', [UserController::class, 'store'])->name('create-user');
+        Route::resource('admins', UserController::class);
         Route::post('/admins/search', [UserController::class, 'searchUser'])->name('search-user');
-        Route::put('/admins/{user}', [UserController::class, 'update'])->name('update-user');
-        Route::delete('/admins/{user}', [ViewAdminController::class, 'deleteUser'])->name('delete-user');
+
+        Route::resource('patients', PatientsController::class);
+        Route::get('/patients/{doctor?}', [PatientsController::class, 'getPatients'])->name('admin-patients');
+
+        Route::resource('doctors', DoctorsController::class);
+
+        Route::resource('payments', PaymentsController::class);
     });
 
     Route::middleware('admin.auth')->group(function () {

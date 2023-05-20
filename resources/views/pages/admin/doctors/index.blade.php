@@ -59,13 +59,13 @@
                     </td>
                     <td class="px-4 py-2 text-center">
                         <a
-                            href="{{ route('admin-patients', 1) }}"
+                            href="{{ route('patients.show', 1) }}"
                             class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
                         >
                             Patients
                         </a>
                         <a
-                            href="{{ route('admin-payments') }}"
+                            href="{{ route('payments.index') }}"
                             class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
                         >
                             Payments
@@ -79,7 +79,7 @@
                             Edit
                         </a>
                         <a
-                            href="{{ route('delete-user', 1) }}"
+                            href="{{ route('doctors.destroy', $image) }}"
                             class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
                             data-confirm-delete="true"
                         >

@@ -14,3 +14,9 @@
         {{ session('auth_message') }}
     </div>
 @endif
+
+@if(session('success'))
+    <div class="text-green-500">
+        {{ session('success') }}
+    </div>
+@endif

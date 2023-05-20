@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/js/modal.js',
                 'resources/js/phone-input.js',
                 'resources/js/settings-menu.js',
+                'resources/js/response-management.js',
             ],
             refresh: true,
         }),

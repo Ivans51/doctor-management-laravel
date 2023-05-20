@@ -3,7 +3,7 @@
 @section('content')
     <section class="mt-10">
         <div class="flex justify-between items-center">
-            <h3 class="my-2 font-bold text-lg">Doctors list</h3>
+            <h3 class="my-2 font-bold text-lg">Patients list</h3>
             <button
                 onclick="openModal()"
                 class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
@@ -55,7 +55,7 @@
                     </td>
                     <td class="px-4 py-2 text-center">
                         <a
-                            href="{{ route('admin-payments') }}"
+                            href="{{ route('payments.index') }}"
                             class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
                         >
                             Payments
@@ -69,7 +69,7 @@
                             Edit
                         </a>
                         <a
-                            href="{{ route('delete-user', 1) }}"
+                            href="{{ route('payments.destroy', $image) }}"
                             class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
                             data-confirm-delete="true"
                         >

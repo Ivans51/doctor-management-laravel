@@ -30,6 +30,7 @@
 
 <script src="{{ Vite::asset('resources/js/home.js') }}"></script>
 <script src="{{ Vite::asset('resources/js/modal.js') }}"></script>
+<script src="{{ Vite::asset('resources/js/response-management.js') }}"></script>
 @include('sweetalert::alert')
 @stack('scripts-bottom')
 

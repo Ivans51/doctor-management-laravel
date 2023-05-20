@@ -4,12 +4,12 @@
     <section class="mt-10">
         <div class="flex justify-between items-center">
             <h3 class="my-2 font-bold text-lg">Admins list</h3>
-            <button
-                onclick="openModal()"
+            <a
+                href="{{ route('admins.create') }}"
                 class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
             >
                 <span>Add</span>
-            </button>
+            </a>
         </div>
 
         <button id="modal-open" class="hidden"></button>
@@ -58,13 +58,13 @@
                     </td>
                     <td class="px-4 py-2 text-center">
                         <a
-                            onclick="openModal({{ $admin }})"
+                            href="{{ route('admins.edit', $admin->id) }}"
                             class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
                         >
                             Edit
                         </a>
                         <a
-                            href="{{ route('delete-user', 1) }}"
+                            href="{{ route('admins.destroy', $admin->id) }}"
                             class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
                             data-confirm-delete="true"
                         >
@@ -77,91 +77,10 @@
         </table>
     </section>
 
-    <x-modal.modal-component
-        title="Form"
-        modalClass="modal"
-    >
-        <x-slot name="content">
-            <form action="" method="post">
-                @csrf
-
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-x-4">
-                        <div>
-                            <label for="name">Name</label>
-                            <input class="border w-full" type="text" name="name" id="name">
-                        </div>
-                        <div>
-                            <label for="email">Email</label>
-                            <input class="border w-full" type="email" name="email" id="email">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-x-4">
-                        <div>
-                            <label for="password">Password</label>
-                            <input
-                                class="border w-full"
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="*********"
-                            >
-                        </div>
-                        <div>
-                            <label for="confirm_password">Confirm Password</label>
-                            <input
-                                class="border w-full"
-                                type="password"
-                                name="confirm_password"
-                                id="confirm_password"
-                                placeholder="*********"
-                            >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-2 mt-10">
-                    <button
-                        type="submit"
-                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
-                    >
-                        Save
-                    </button>
-                    <button
-                        type="button"
-                        class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </x-slot>
-    </x-modal.modal-component>
-
 @endsection
 
 @push('scripts-bottom')
     <script>
-        configModal('modal', 'modal-open')
-
-        function openModal(data) {
-            if (data) {
-                $('#name').val(data.name)
-                $('#email').val(data.email)
-                $('#password').val(data.password)
-                $('#confirm_password').val(data.password)
-                $('form').attr('action', '/admin/admins/' + data.id)
-            } else {
-                $('#name').val('')
-                $('#email').val('')
-                $('#password').val('')
-                $('#confirm_password').val('')
-                $('form').attr('action', '/admin/admins')
-            }
-            document.getElementById('modal-open').click();
-        }
-
         // search user with ajax
         $('#search_field').on('keyup', function () {
             let search = $(this).val()

@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Utils\Constants;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -15,6 +16,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    /**
+     * Login user
+     * @param AuthRequest $request
+     * @return RedirectResponse
+     */
     public function login(AuthRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
@@ -34,7 +40,11 @@ class AuthController extends Controller
         }
     }
 
-    public function register(AuthRequest $request): RedirectResponse
+    /**
+     * @param AuthRequest $request
+     * @return JsonResponse
+     */
+    public function register(AuthRequest $request): JsonResponse
     {
         $user = new User();
         $user->name = $request->get('name');
@@ -51,19 +61,19 @@ class AuthController extends Controller
         $isSuccessCaptcha = $this->validateRecaptcha($request);
 
         if ($isSuccessCaptcha) {
-            return back()->with('auth_message', 'Thanks for your login!');
+            return response()->json(['message' => 'Thanks for your registration!']);
         } else {
-            return back()->withErrors(['captcha' => 'ReCaptcha Error']);
+            return response()->json(['message' => 'ReCaptcha Error'], 401);
         }
     }
 
-    public function forgot(AuthRequest $request): RedirectResponse
+    public function forgot(AuthRequest $request): JsonResponse
     {
         // check email exists
         $user = User::query()->where('email', $request->get('email'))->first();
 
         if (!$user) {
-            return back()->withErrors(['email' => 'Email not found']);
+            return response()->json(['message' => 'Email not found'], 401);
         }
 
         $isSuccessCaptcha = $this->validateRecaptcha($request);
@@ -71,9 +81,9 @@ class AuthController extends Controller
         if ($isSuccessCaptcha) {
             $this->sendEmail($request->get('email'));
 
-            return back()->with('auth_message', 'Thanks for your message!');
+            return response()->json(['message' => 'Thanks for your message!']);
         } else {
-            return back()->withErrors(['captcha' => 'ReCaptcha Error']);
+            return response()->json(['message' => 'ReCaptcha Error'], 401);
         }
     }
 
