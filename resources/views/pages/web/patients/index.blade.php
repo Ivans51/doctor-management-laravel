@@ -34,52 +34,54 @@
             </label>
         </div>
 
-        <table class="w-full table-auto" style="border-collapse: separate; border-spacing: 0 8px;">
-            <tr class="bg-zinc-100">
-                <th class="px-4 py-1 text-left">Patient Name</th>
-                <th class="px-4 py-1">Visit Id</th>
-                <th class="px-4 py-1">Date</th>
-                <th class="px-4 py-1">Gender</th>
-                <th class="px-4 py-1">Diseases</th>
-                <th class="px-4 py-1">Status</th>
-            </tr>
-            @foreach($images as $image)
-                <tr class="bg-white rounded">
-                    <td class="px-4 py-2 flex items-center">
-                        <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
-                        <a href="{{ route('my-patients-detail') }}">
-                            Jenny Wilson
-                        </a>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        1
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        1
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        1
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        1
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <a
-                            href="{{ route('my-patients-monitoring') }}"
-                            class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                        >
-                            Log monitoring
-                        </a>
-                        <a
-                            href="{{ route('messages') }}"
-                            class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                        >
-                            Message
-                        </a>
-                    </td>
+        <div class="overflow-x-auto">
+            <table class="table-auto border-separate w-full border-spacing-x-0 border-spacing-y-2">
+                <tr class="bg-zinc-100">
+                    <th class="px-4 py-1 text-left">Patient Name</th>
+                    <th class="px-4 py-1">Visit Id</th>
+                    <th class="px-4 py-1">Date</th>
+                    <th class="px-4 py-1">Gender</th>
+                    <th class="px-4 py-1">Diseases</th>
+                    <th class="px-4 py-1">Status</th>
                 </tr>
-            @endforeach
-        </table>
+                @foreach($images as $image)
+                    <tr class="bg-white rounded">
+                        <td class="px-4 py-2 flex items-center">
+                            <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
+                            <a href="{{ route('my-patients-detail') }}">
+                                Jenny Wilson
+                            </a>
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            1
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            1
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            1
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            1
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            <a
+                                href="{{ route('my-patients-monitoring') }}"
+                                class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
+                            >
+                                Log monitoring
+                            </a>
+                            <a
+                                href="{{ route('messages') }}"
+                                class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
+                            >
+                                Message
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
     </section>
 
     <x-modal.modal-component

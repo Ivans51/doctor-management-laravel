@@ -22,17 +22,54 @@ UserController extends Controller
      */
     public function index(): View|\Illuminate\Foundation\Application|Factory|Application
     {
+        return view('pages.admin.admins.index');
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function indexLimit(Request $request): JsonResponse
+    {
+        $limit = $request->limit ?? 10;
         $id = Role::query()->where('name', 'admin')->first()->id;
 
         $admins = User::query()
             ->where('role_id', $id)
-            ->get();
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit);
 
         $title = 'Delete User!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
 
-        return view('pages.admin.admins.index', compact('admins'));
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data retrieved successfully',
+            'data' => $admins
+        ]);
+    }
+
+    /**
+     * Search user with parameter email and name
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchUser(Request $request): JsonResponse
+    {
+        $limit = $request->limit ?? 10;
+
+        $users = User::query()
+            ->where('name', 'LIKE', "%{$request->search}%")
+            ->orWhere('email', 'LIKE', "%{$request->search}%")
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data retrieved successfully',
+            'data' => $users
+        ]);
     }
 
     /**
@@ -122,25 +159,6 @@ UserController extends Controller
         User::query()->where('id', $id)->delete();
 
         return redirect()->back()->with('success', 'User deleted successfully');
-    }
-
-    /**
-     * Search user with parameter email and name
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function searchUser(Request $request): JsonResponse
-    {
-        $users = User::query()
-            ->where('name', 'LIKE', "%{$request->search}%")
-            ->orWhere('email', 'LIKE', "%{$request->search}%")
-            ->get();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data retrieved successfully',
-            'data' => $users
-        ]);
     }
 
     /**ç

@@ -35,60 +35,62 @@
             </label>
         </div>
 
-        <table class="w-full table-auto" style="border-collapse: separate; border-spacing: 0 8px;">
-            <tr class="bg-zinc-100">
-                <th class="px-4 py-1 text-left">Name</th>
-                <th class="px-4 py-1">Email</th>
-                <th class="px-4 py-1">Speciality</th>
-                <th class="px-4 py-1">Data</th>
-                <th class="px-4 py-1">Actions</th>
-            </tr>
-            @foreach($images as $image)
-                <tr class="bg-white rounded">
-                    <td class="px-4 py-2 flex items-center">
-                        <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
-                        <a href="{{ route('my-patients-detail') }}">
-                            Jenny Wilson
-                        </a>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        1
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        1
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <a
-                            href="{{ route('patients.show', 1) }}"
-                            class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
-                        >
-                            Patients
-                        </a>
-                        <a
-                            href="{{ route('payments.index') }}"
-                            class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
-                        >
-                            Payments
-                        </a>
-                    </td>
-                    <td class="px-4 py-2 text-center">
-                        <a
-                            onclick="openModal('{{ $image }}')"
-                            class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
-                        >
-                            Edit
-                        </a>
-                        <a
-                            href="{{ route('doctors.destroy', $image) }}"
-                            class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                            data-confirm-delete="true"
-                        >
-                            Delete
-                        </a>
-                    </td>
+        <div class="overflow-x-auto">
+            <table class="table-auto border-separate w-full border-spacing-x-0 border-spacing-y-2">
+                <tr class="bg-zinc-100">
+                    <th class="px-4 py-1 text-left">Name</th>
+                    <th class="px-4 py-1">Email</th>
+                    <th class="px-4 py-1">Speciality</th>
+                    <th class="px-4 py-1">Data</th>
+                    <th class="px-4 py-1">Actions</th>
                 </tr>
-            @endforeach
-        </table>
+                @foreach($images as $image)
+                    <tr class="bg-white rounded">
+                        <td class="px-4 py-2 flex items-center">
+                            <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
+                            <a href="{{ route('my-patients-detail') }}">
+                                Jenny Wilson
+                            </a>
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            1
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            1
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            <a
+                                href="{{ route('patients.show', 1) }}"
+                                class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
+                            >
+                                Patients
+                            </a>
+                            <a
+                                href="{{ route('payments.index') }}"
+                                class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
+                            >
+                                Payments
+                            </a>
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            <a
+                                onclick="openModal('{{ $image }}')"
+                                class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
+                            >
+                                Edit
+                            </a>
+                            <a
+                                href="{{ route('doctors.destroy', $image) }}"
+                                class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
+                                data-confirm-delete="true"
+                            >
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
     </section>
 
     <x-modal.modal-component
