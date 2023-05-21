@@ -163,36 +163,42 @@ UserController extends Controller
 
     /**ç
      * Send push notification to user
-     * @param $fcmToken
-     * @param $title
-     * @param $body
-     * @return StreamInterface
-     * @throws GuzzleException
+     * @param Request $request
+     * @return string
      */
-    function sendPushNotification($fcmToken, $title, $body): StreamInterface
+    function sendPushNotification(Request $request): string
     {
-        $client = new Client();
-        $url = 'https://fcm.googleapis.com/fcm/send';
+        try {
+            $fcmToken = $request->fcm_token;
+            $title = $request->title;
+            $body = $request->body;
 
-        $headers = [
-            'Authorization' => 'key=BOCa32-4PYTqO-WGRzVnKFkBvwHRJNghBuaPezo1JtL47kYJGwhSFf-dJBA-1xkHcPudCBsLqQoUCtbjBsuczdw',
-            'Content-Type' => 'application/json',
-        ];
+            $client = new Client();
+            $url = 'https://fcm.googleapis.com/fcm/send';
 
-        $data = [
-            'to' => $fcmToken,
-            'notification' => [
-                'title' => $title,
-                'body' => $body,
-            ],
-        ];
+            $headers = [
+                'Authorization' => 'key=' . config('services.firebase.server_key'),
+                'Content-Type' => 'application/json',
+            ];
 
-        $response = $client->post($url, [
-            'headers' => $headers,
-            'json' => $data,
-        ]);
+            $data = [
+                'to' => $fcmToken,
+                'notification' => [
+                    'title' => $title,
+                    'body' => $body,
+                ],
+            ];
 
-        return $response->getBody();
+            $response = $client->post($url, [
+                'headers' => $headers,
+                'json' => $data,
+            ]);
+
+            return $response->getBody();
+
+        } catch (GuzzleException $e) {
+            return $e->getMessage();
+        }
     }
 
 }

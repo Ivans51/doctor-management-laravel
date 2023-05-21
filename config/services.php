@@ -36,4 +36,8 @@ return [
         'secret' => env('RECAPTCHA_SECRET_KEY'),
     ],
 
+    'firebase' => [
+        'server_key' => env('FIREBASE_KEY_SERVER'),
+    ],
+
 ];

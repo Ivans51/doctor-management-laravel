@@ -10,6 +10,12 @@
             >
                 <span>Add</span>
             </a>
+            <button
+                onclick="sendPushNotification()"
+                class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
+            >
+                <span>Send push</span>
+            </button>
         </div>
 
         <button id="modal-open" class="hidden"></button>
@@ -50,6 +56,25 @@
 
 @push('scripts-bottom')
     <script>
+        function sendPushNotification() {
+            let url = '/admin/admins/send/push'
+            let token = $('meta[name="csrf-token"]').attr('content')
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    _token: token,
+                    title: 'Test title',
+                    body: 'Test body',
+                    fcm_token: 'fcm_token'
+                },
+                success: function (response) {
+                    console.log(response)
+                }
+            })
+        }
+
         const selectShow = $('#select-show');
         let limit = selectShow.val();
 
