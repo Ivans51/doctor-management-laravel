@@ -2,21 +2,18 @@
 
 @section('content')
     <section class="mt-10">
-        <x-utils.message-component/>
-
-        <form action="{{ route('admins.update', $user->id) }}" method="post">
+        <form action="" method="post">
             @csrf
-            @method('PUT')
 
             <div class="space-y-6">
                 <div class="grid grid-cols-2 gap-x-4">
                     <div>
                         <label for="name">Name</label>
-                        <input class="border w-full" type="text" name="name" id="name" value="{{ $user->name }}">
+                        <input class="border w-full" type="text" name="name" id="name">
                     </div>
                     <div>
                         <label for="email">Email</label>
-                        <input class="border w-full" type="email" name="email" id="email" value="{{ $user->email }}">
+                        <input class="border w-full" type="email" name="email" id="email">
                     </div>
                 </div>
 
@@ -32,12 +29,12 @@
                         >
                     </div>
                     <div>
-                        <label for="password_confirmation">Confirm Password</label>
+                        <label for="confirm_password">Confirm Password</label>
                         <input
                             class="border w-full"
                             type="password"
-                            name="password_confirmation"
-                            id="password_confirmation"
+                            name="confirm_password"
+                            id="confirm_password"
                             placeholder="*********"
                         >
                     </div>
@@ -51,12 +48,12 @@
                 >
                     Save
                 </button>
-                <a
-                    href="{{ route('admins.index') }}"
-                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
+                <button
+                    type="button"
+                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
                 >
                     Cancel
-                </a>
+                </button>
             </div>
         </form>
     </section>

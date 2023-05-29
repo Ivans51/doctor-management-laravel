@@ -2,7 +2,9 @@
 
 @section('content')
     <section class="mt-10">
-        <form action="" method="post">
+        <x-utils.message-component/>
+
+        <form action="{{ route('admins.store') }}" method="post">
             @csrf
 
             <div class="space-y-6">
@@ -29,12 +31,12 @@
                         >
                     </div>
                     <div>
-                        <label for="confirm_password">Confirm Password</label>
+                        <label for="password_confirmation">Confirm Password</label>
                         <input
                             class="border w-full"
                             type="password"
-                            name="confirm_password"
-                            id="confirm_password"
+                            name="password_confirmation"
+                            id="password_confirmation"
                             placeholder="*********"
                         >
                     </div>
@@ -48,12 +50,12 @@
                 >
                     Save
                 </button>
-                <button
-                    type="button"
-                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                <a
+                    href="{{ route('admins.index') }}"
+                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
                 >
                     Cancel
-                </button>
+                </a>
             </div>
         </form>
     </section>
