@@ -57,7 +57,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::resource('admins', UserController::class);
         Route::post('/admins/search', [UserController::class, 'searchUser'])->name('search-user');
         Route::post('/admins/index/limit', [UserController::class, 'indexLimit'])->name('admins-limit');
-        Route::post('/admins/send/push', [UserController::class, 'sendPushNotification'])->name('send-push');
 
         Route::resource('patients', PatientsController::class);
         Route::get('/patients/{doctor?}', [PatientsController::class, 'getPatients'])->name('admin-patients');

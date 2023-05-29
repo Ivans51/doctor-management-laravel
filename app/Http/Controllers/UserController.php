@@ -161,44 +161,4 @@ UserController extends Controller
         return redirect()->back()->with('success', 'User deleted successfully');
     }
 
-    /**ç
-     * Send push notification to user
-     * @param Request $request
-     * @return string
-     */
-    function sendPushNotification(Request $request): string
-    {
-        try {
-            $fcmToken = $request->fcm_token;
-            $title = $request->title;
-            $body = $request->body;
-
-            $client = new Client();
-            $url = 'https://fcm.googleapis.com/fcm/send';
-
-            $headers = [
-                'Authorization' => 'key=' . config('services.firebase.server_key'),
-                'Content-Type' => 'application/json',
-            ];
-
-            $data = [
-                'to' => $fcmToken,
-                'notification' => [
-                    'title' => $title,
-                    'body' => $body,
-                ],
-            ];
-
-            $response = $client->post($url, [
-                'headers' => $headers,
-                'json' => $data,
-            ]);
-
-            return $response->getBody();
-
-        } catch (GuzzleException $e) {
-            return $e->getMessage();
-        }
-    }
-
 }

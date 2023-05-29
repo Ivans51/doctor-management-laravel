@@ -10,12 +10,6 @@
             >
                 <span>Add</span>
             </a>
-            <button
-                onclick="sendPushNotification()"
-                class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
-            >
-                <span>Send push</span>
-            </button>
         </div>
 
         <button id="modal-open" class="hidden"></button>
