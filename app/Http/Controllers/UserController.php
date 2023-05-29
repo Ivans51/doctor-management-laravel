@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use DB;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Psr\Http\Message\StreamInterface;
 
 class
 UserController extends Controller
@@ -38,10 +38,6 @@ UserController extends Controller
             ->where('role_id', $id)
             ->orderBy('created_at', 'desc')
             ->paginate($limit);
-
-        $title = 'Delete User!';
-        $text = "Are you sure you want to delete?";
-        confirmDelete($title, $text);
 
         return response()->json([
             'status' => 'success',
@@ -150,15 +146,29 @@ UserController extends Controller
     }
 
     /**
-     * Delete user by id and check is user exist
      * @param $id
      * @return RedirectResponse
+     * @throws \Throwable
      */
     function destroy($id): RedirectResponse
     {
-        User::query()->where('id', $id)->delete();
+        try {
+            DB::beginTransaction();
 
-        return redirect()->back()->with('success', 'User deleted successfully');
+            $user = User::query()->where('id', $id);
+
+            Doctor::query()->where('user_id', $id)->delete();
+            Patient::query()->where('user_id', $id)->delete();
+
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'User deleted successfully');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'User failed to delete');
+        }
     }
 
 }

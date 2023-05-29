@@ -59,7 +59,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/admins/index/limit', [UserController::class, 'indexLimit'])->name('admins-limit');
 
         Route::resource('patients', PatientsController::class);
-        Route::get('/patients/{doctor?}', [PatientsController::class, 'getPatients'])->name('admin-patients');
+        Route::post('/patients/search', [PatientsController::class, 'search'])->name('search-patient');
+        Route::post('/patients/index/limit', [PatientsController::class, 'indexLimit'])->name('patients-limit');
+        Route::get('/patients/{doctor?}', [PatientsController::class, 'getPatients'])->name('patient-doctor');
 
         Route::resource('doctors', DoctorsController::class);
 

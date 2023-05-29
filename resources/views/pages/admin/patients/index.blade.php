@@ -3,9 +3,9 @@
 @section('content')
     <section>
         <div class="flex justify-between items-center">
-            <h3 class="my-2 font-bold text-lg">Admins list</h3>
+            <h3 class="my-2 font-bold text-lg">Patient list</h3>
             <a
-                href="{{ route('admins.create') }}"
+                href="{{ route('patients.create') }}"
                 class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
             >
                 <span>Add</span>
@@ -36,9 +36,10 @@
                 <thead>
                 <tr class="bg-zinc-100">
                     <th class="px-4 py-1 text-left">Name</th>
-                    <th class="px-4 py-1">Email</th>
-                    <th class="px-4 py-1">Role</th>
-                    <th class="px-4 py-1">Actions</th>
+                    <th class="px-4 py-1">Teléfono</th>
+                    <th class="px-4 py-1">Dirección</th>
+                    <th class="px-4 py-1">Estatus</th>
+                    <th class="px-4 py-1">Acción</th>
                 </tr>
                 </thead>
                 <tbody id="tbody"></tbody>
@@ -50,25 +51,6 @@
 
 @push('scripts-bottom')
     <script>
-        function sendPushNotification() {
-            let url = '/admin/admins/send/push'
-            let token = $('meta[name="csrf-token"]').attr('content')
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    _token: token,
-                    title: 'Test title',
-                    body: 'Test body',
-                    fcm_token: 'fcm_token'
-                },
-                success: function (response) {
-                    console.log(response)
-                }
-            })
-        }
-
         const selectShow = $('#select-show');
         let limit = selectShow.val();
 
@@ -81,7 +63,7 @@
         })
 
         function getData() {
-            let url = '/admin/admins/index/limit'
+            let url = '/admin/patients/index/limit'
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
@@ -100,7 +82,7 @@
         // search user with ajax
         $('#search_field').on('keyup', function () {
             let search = $(this).val()
-            let url = '/admin/admins/search'
+            let url = '/admin/patients/search'
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
@@ -122,8 +104,11 @@
             response.data.data.forEach(function (item) {
                 html += `<tr class="bg-white rounded">
                             <td class="px-4 py-2 text-center">${item.name}</td>
-                            <td class="px-4 py-2 text-center">${item.email}</td>
-                            <td class="px-4 py-2 text-center">${item.email}</td>
+                            <td class="px-4 py-2 text-center">${item.phone}</td>
+                            <td class="px-4 py-2 text-center">${item.address}</td>
+                            <td class="px-4 py-2 text-center">
+                                ${item.status === 'active' ? 'Activo' : 'Inactivo'}
+                            </td>
                             <td class="px-4 py-2 text-center">
                                 <a
                                     onclick="openModal(${item})"
@@ -131,18 +116,41 @@
                                 >
                                     Edit
                                 </a>
-                                <a
-                                    href="admin/admins/delete-user/${item.id}"
+                                <button
+                                    onclick="deletePatient('${item.id}')"
                                     class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
                                     data-confirm-delete="true"
                                 >
                                     Delete
-                                </a>
+                                </button>
                             </td>
                         </tr>`
             })
 
             $('#tbody').html(html)
+        }
+
+        // delete with ajax
+        function deletePatient(id) {
+            let url = `/admin/patients/${id}`
+            let token = $('meta[name="csrf-token"]').attr('content')
+
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: {
+                    id: id,
+                    _token: token
+                },
+                success: function (response) {
+                    if (response.status === 'success') {
+                        getData();
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
         }
     </script>
 @endpush

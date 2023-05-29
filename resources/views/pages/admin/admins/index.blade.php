@@ -50,25 +50,6 @@
 
 @push('scripts-bottom')
     <script>
-        function sendPushNotification() {
-            let url = '/admin/admins/send/push'
-            let token = $('meta[name="csrf-token"]').attr('content')
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    _token: token,
-                    title: 'Test title',
-                    body: 'Test body',
-                    fcm_token: 'fcm_token'
-                },
-                success: function (response) {
-                    console.log(response)
-                }
-            })
-        }
-
         const selectShow = $('#select-show');
         let limit = selectShow.val();
 
@@ -131,18 +112,42 @@
                                 >
                                     Edit
                                 </a>
-                                <a
-                                    href="admin/admins/delete-user/${item.id}"
+                                <button
+                                    onclick="deleteUser('${item.id}')"
                                     class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
                                     data-confirm-delete="true"
                                 >
                                     Delete
-                                </a>
+                                </button>
                             </td>
                         </tr>`
             })
 
             $('#tbody').html(html)
+        }
+
+        // delete with ajax
+        function deleteUser(id) {
+            let url = `/admin/admins/${id}`
+            let token = $('meta[name="csrf-token"]').attr('content')
+            console.log(url)
+
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: {
+                    id: id,
+                    _token: token
+                },
+                success: function (response) {
+                    if (response.status === 'success') {
+                        getData();
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
         }
     </script>
 @endpush
