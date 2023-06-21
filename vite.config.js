@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/js/phone-input.js',
                 'resources/js/settings-menu.js',
                 'resources/js/response-management.js',
+                'resources/js/sweet-management.js',
             ],
             refresh: true,
         }),

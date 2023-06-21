@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
-    <section class="mt-10">
-        <x-utils.message-component/>
+    <x-utils.message-component/>
 
+    <section class="mt-10">
         <form action="{{ route('admins.store') }}" method="post">
             @csrf
 

@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
+use App\Utils\Constants;
 use DB;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -32,7 +33,7 @@ UserController extends Controller
     public function indexLimit(Request $request): JsonResponse
     {
         $limit = $request->limit ?? 10;
-        $id = Role::query()->where('name', 'admin')->first()->id;
+        $id = Role::query()->where('name', Constants::$ADMIN)->first()->id;
 
         $admins = User::query()
             ->where('role_id', $id)
@@ -54,12 +55,21 @@ UserController extends Controller
     public function searchUser(Request $request): JsonResponse
     {
         $limit = $request->limit ?? 10;
+        $id = Role::query()->where('name', Constants::$ADMIN)->first()->id;
 
-        $users = User::query()
-            ->where('name', 'LIKE', "%{$request->search}%")
-            ->orWhere('email', 'LIKE', "%{$request->search}%")
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
+        if ($request->search) {
+            $users = User::query()
+                ->where('role_id', $id)
+                ->where('name', 'LIKE', "%{$request->search}%")
+                ->orWhere('email', 'LIKE', "%{$request->search}%")
+                ->orderBy('created_at', 'desc')
+                ->paginate($limit);
+        } else {
+            $users = User::query()
+                ->where('role_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->paginate($limit);
+        }
 
         return response()->json([
             'status' => 'success',
@@ -147,10 +157,10 @@ UserController extends Controller
 
     /**
      * @param $id
-     * @return RedirectResponse
+     * @return JsonResponse
      * @throws \Throwable
      */
-    function destroy($id): RedirectResponse
+    function destroy($id): JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -164,10 +174,17 @@ UserController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'User deleted successfully');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User deleted successfully',
+            ]);
         } catch (\Throwable $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'User failed to delete');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User failed to delete',
+                'error' => $e->getMessage()
+            ], 400);
         }
     }
 

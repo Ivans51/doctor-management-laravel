@@ -24,6 +24,7 @@ return new class extends Migration
                 Constants::$INACTIVE
             ])->default(Constants::$ACTIVE);
             $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
         });

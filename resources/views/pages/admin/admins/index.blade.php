@@ -101,24 +101,31 @@
             let html = ''
 
             response.data.data.forEach(function (item) {
+                let btnDelete
+
+                if (item.id !== {{ auth()->user()->id }}) {
+                    btnDelete = `<button
+                                    onclick="deleteUser('${item.id}')"
+                                    class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2 cursor-pointer"
+                                >
+                                    Delete
+                                </button>`
+                } else {
+                    btnDelete = ''
+                }
+
                 html += `<tr class="bg-white rounded">
                             <td class="px-4 py-2 text-center">${item.name}</td>
                             <td class="px-4 py-2 text-center">${item.email}</td>
                             <td class="px-4 py-2 text-center">${item.email}</td>
                             <td class="px-4 py-2 text-center">
                                 <a
-                                    onclick="openModal(${item})"
+                                    href="/admin/admins/${item.id}/edit"
                                     class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
                                 >
                                     Edit
                                 </a>
-                                <button
-                                    onclick="deleteUser('${item.id}')"
-                                    class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                                    data-confirm-delete="true"
-                                >
-                                    Delete
-                                </button>
+                                ${btnDelete}
                             </td>
                         </tr>`
             })
@@ -128,25 +135,27 @@
 
         // delete with ajax
         function deleteUser(id) {
-            let url = `/admin/admins/${id}`
-            let token = $('meta[name="csrf-token"]').attr('content')
-            console.log(url)
+            deleteSwal().then((ok) => {
+                let url = `/admin/admins/${id}`
+                let token = $('meta[name="csrf-token"]').attr('content')
 
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                data: {
-                    id: id,
-                    _token: token
-                },
-                success: function (response) {
-                    if (response.status === 'success') {
-                        getData();
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    data: {
+                        _token: token
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            successSwal()
+                            getData();
+                        }
+                    },
+                    error: function (response) {
+                        errorSwal(response)
                     }
-                },
-                error: function (response) {
-                    console.log(response)
-                }
+                })
             })
         }
     </script>

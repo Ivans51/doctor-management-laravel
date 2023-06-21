@@ -1,19 +1,22 @@
 @extends('layouts.admin')
 
 @section('content')
+    <x-utils.message-component />
+
     <section class="mt-10">
-        <form action="" method="post">
+        <form action="{{ route('admins.update', $user->id) }}" method="post">
             @csrf
+            @method('PUT')
 
             <div class="space-y-6">
                 <div class="grid grid-cols-2 gap-x-4">
                     <div>
                         <label for="name">Name</label>
-                        <input class="border w-full" type="text" name="name" id="name">
+                        <input class="border w-full" type="text" name="name" id="name" value="{{ $user->name }}">
                     </div>
                     <div>
                         <label for="email">Email</label>
-                        <input class="border w-full" type="email" name="email" id="email">
+                        <input class="border w-full" type="email" name="email" id="email" value="{{ $user->email }}">
                     </div>
                 </div>
 
@@ -48,12 +51,12 @@
                 >
                     Save
                 </button>
-                <button
-                    type="button"
-                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                <a
+                    href="{{ route('admins.index') }}"
+                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
                 >
                     Cancel
-                </button>
+                </a>
             </div>
         </form>
     </section>

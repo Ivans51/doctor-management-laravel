@@ -19,6 +19,8 @@
     <!-- Javascript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     @vite('resources/js/app.js')
     @stack('scripts-top')
 </head>
@@ -31,7 +33,7 @@
 <script src="{{ Vite::asset('resources/js/home.js') }}"></script>
 <script src="{{ Vite::asset('resources/js/modal.js') }}"></script>
 <script src="{{ Vite::asset('resources/js/response-management.js') }}"></script>
-@include('sweetalert::alert')
+<script src="{{ Vite::asset('resources/js/sweet-management.js') }}"></script>
 @stack('scripts-bottom')
 
 </body>
