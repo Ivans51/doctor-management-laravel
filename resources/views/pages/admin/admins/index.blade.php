@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
+    <x-utils.loading-component/>
+
     <section>
         <div class="flex justify-between items-center">
             <h3 class="my-2 font-bold text-lg">Admins list</h3>
@@ -135,7 +137,8 @@
 
         // delete with ajax
         function deleteUser(id) {
-            deleteSwal().then((ok) => {
+            deleteSwal().then(() => {
+                showLoading()
                 let url = `/admin/admins/${id}`
                 let token = $('meta[name="csrf-token"]').attr('content')
 
@@ -148,11 +151,13 @@
                     },
                     success: function (response) {
                         if (response.status === 'success') {
+                            hideLoading()
                             successSwal()
                             getData();
                         }
                     },
                     error: function (response) {
+                        hideLoading()
                         errorSwal(response)
                     }
                 })
