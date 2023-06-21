@@ -1,7 +1,5 @@
 let siteBaseSetting = document.location.pathname.split("/")[2]
 
-console.log(siteBaseSetting)
-
 if (siteBaseSetting === undefined) {
     $($('#menu-setting li')[0]).addClass('active')
 }

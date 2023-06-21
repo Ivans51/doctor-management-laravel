@@ -121,7 +121,7 @@ UserController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'role_id' => Role::query()->where('name', 'admin')->first()->id,
+            'role_id' => Role::query()->where('name', Constants::$ADMIN)->first()->id,
             'password' => bcrypt($request->password),
         ]);
         return redirect()->back()->with('success', 'User created successfully');

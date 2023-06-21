@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
+    <x-utils.loading-component/>
+
     <section>
         <div class="flex justify-between items-center">
             <h3 class="my-2 font-bold text-lg">Patient list</h3>
@@ -111,7 +113,7 @@
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <a
-                                    onclick="openModal(${item})"
+                                    href="/admin/patients/${item.id}/edit"
                                     class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
                                 >
                                     Edit
@@ -132,24 +134,29 @@
 
         // delete with ajax
         function deletePatient(id) {
-            let url = `/admin/patients/${id}`
-            let token = $('meta[name="csrf-token"]').attr('content')
+            deleteSwal().then(() => {
+                showLoading()
+                let url = `/admin/patients/${id}`
+                let token = $('meta[name="csrf-token"]').attr('content')
 
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                data: {
-                    id: id,
-                    _token: token
-                },
-                success: function (response) {
-                    if (response.status === 'success') {
-                        getData();
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    data: {
+                        _token: token
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            hideLoading()
+                            successSwal()
+                            getData();
+                        }
+                    },
+                    error: function (response) {
+                        hideLoading()
+                        errorSwal(response)
                     }
-                },
-                error: function (response) {
-                    console.log(response)
-                }
+                })
             })
         }
     </script>

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Utils\Constants;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -12,8 +13,8 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::query()->create(['name' => 'admin']);
-        Role::query()->create(['name' => 'user']);
-        Role::query()->create(['name' => 'guest']);
+        Role::query()->create(['name' => Constants::$ADMIN]);
+        Role::query()->create(['name' => Constants::$PATIENT]);
+        Role::query()->create(['name' => Constants::$DOCTOR]);
     }
 }

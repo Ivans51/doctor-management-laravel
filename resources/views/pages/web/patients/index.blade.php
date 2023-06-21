@@ -160,7 +160,7 @@
         const script = document.getElementById('search-js');
         script.onload = function () {
             mapboxsearch.autofill({
-                accessToken: 'pk.eyJ1IjoiaXZhbnM1MSIsImEiOiJjbGhmY21kN3kxOGJyM2VrMXRveHFicDJ4In0.TrpXPqd_UM9tC66Tnq_hLQ',
+                accessToken: '{{ config('services.mapbox.token') }}',
                 options: {
                     language: 'es',
                 },
@@ -168,7 +168,7 @@
         };
 
         document.querySelector('input[name="location"]').addEventListener('input', event => {
-            console.log(`${event.target.value}`);
+            /*console.log(`${event.target.value}`);*/
         });
     </script>
 @endpush

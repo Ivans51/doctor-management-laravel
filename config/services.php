@@ -40,4 +40,8 @@ return [
         'server_key' => env('FIREBASE_KEY_SERVER'),
     ],
 
+    'mapbox' => [
+        'token' => env('MAPBOX_TOKEN'),
+    ],
+
 ];

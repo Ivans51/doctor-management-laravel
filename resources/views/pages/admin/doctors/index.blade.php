@@ -122,19 +122,6 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-x-4">
-                        <a
-                            href="{{ route('my-patients-monitoring') }}"
-                            class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                        >
-                            Log monitoring
-                        </a>
-                        <a
-                            href="{{ route('messages') }}"
-                            class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                        >
-                            Message
-                        </a>
-
                         <div>
                             <label for="email">Email</label>
                             <input class="border w-full" type="email" name="email" id="email">
@@ -168,6 +155,11 @@
 @endsection
 
 @push('scripts-bottom')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+    <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+
     <script>
         configModal('modal', 'modal-open')
 
@@ -185,22 +177,11 @@
             }
             document.getElementById('modal-open').click();
         }
-    </script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
-    <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
-    <script>
-        configModal('modal', 'modal-open')
-    </script>
-
-    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
-
-    <script>
         const script = document.getElementById('search-js');
         script.onload = function () {
             mapboxsearch.autofill({
-                accessToken: 'pk.eyJ1IjoiaXZhbnM1MSIsImEiOiJjbGhmY21kN3kxOGJyM2VrMXRveHFicDJ4In0.TrpXPqd_UM9tC66Tnq_hLQ',
+                accessToken: '{{ config('services.mapbox.token') }}',
                 options: {
                     language: 'es',
                 },
@@ -208,7 +189,7 @@
         };
 
         document.querySelector('input[name="location"]').addEventListener('input', event => {
-            console.log(`${event.target.value}`);
+            /*console.log(`${event.target.value}`);*/
         });
     </script>
 @endpush

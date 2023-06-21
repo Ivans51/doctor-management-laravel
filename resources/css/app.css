@@ -2,7 +2,7 @@
 @import "home.css";
 @import "main.css";
 
-input {
+input, select {
     @apply px-2 py-1;
 }
 
