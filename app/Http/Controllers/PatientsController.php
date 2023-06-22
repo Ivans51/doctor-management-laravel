@@ -19,11 +19,13 @@ class PatientsController extends Controller
 {
 
     /**
+     * @param string $id
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
-    function getPatients(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    function getPatients(string $id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $patients = Patient::query()
+            ->where('doctor_id', $id)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -37,13 +39,7 @@ class PatientsController extends Controller
      */
     public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $patients = Patient::query()
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('pages/admin/patients/index')->with([
-            'patients' => $patients,
-        ]);
+        return view('pages/admin/patients/index');
     }
 
     /**

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patient;
+use App\Models\Payment;
 use Faker\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
 class PaymentsController extends Controller
@@ -10,16 +14,22 @@ class PaymentsController extends Controller
 
     public function index()
     {
-        $files = [];
+        return view('pages/admin/payments/index');
+    }
 
-        $faker = Factory::create();
+    /**
+     * @param string $id
+     * @return View|Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+     */
+    function getPayments(string $id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $patients = Payment::query()
+            ->where('doctor_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
-
-        return view('pages/admin/payments/index')->with([
-            'images' => $files,
+        return view('pages/admin/patients/index')->with([
+            'patients' => $patients,
         ]);
     }
 

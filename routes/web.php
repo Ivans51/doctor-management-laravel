@@ -64,8 +64,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/patients/{doctor?}', [PatientsController::class, 'getPatients'])->name('patient-doctor');
 
         Route::resource('doctors', DoctorsController::class);
+        Route::post('/doctors/search', [DoctorsController::class, 'search'])->name('search-doctor');
+        Route::post('/doctors/index/limit', [DoctorsController::class, 'indexLimit'])->name('doctors-limit');
 
         Route::resource('payments', PaymentsController::class);
+        Route::get('/payments/{doctor?}', [PaymentsController::class, 'getPayments'])->name('payments-doctor');
     });
 
     Route::middleware('admin.auth')->group(function () {

@@ -2,18 +2,42 @@
 
 @section('content')
     <section class="mt-10">
-        <form action="" method="post">
+        <x-utils.message-component/>
+
+        <form action="{{ route('doctors.store') }}" method="post">
             @csrf
 
             <div class="space-y-6">
                 <div class="grid grid-cols-2 gap-x-4">
                     <div>
-                        <label for="name">Name</label>
+                        <label for="name">First Name</label>
                         <input class="border w-full" type="text" name="name" id="name">
                     </div>
                     <div>
                         <label for="email">Email</label>
                         <input class="border w-full" type="email" name="email" id="email">
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <label for="location">Location</label>
+                    <input
+                        class="border w-full"
+                        name="location"
+                        type="text"
+                        autocomplete="shipping address-line1"
+                        id="location">
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-4">
+                    <div>
+                        <label for="speciality">Speciality</label>
+                        <input class="border w-full" type="text" name="speciality" id="speciality">
+                    </div>
+
+                    <div>
+                        <label for="phone_number">Phone Number</label>
+                        <input class="border w-full" type="tel" name="phone_number" id="phone_number">
                     </div>
                 </div>
 
@@ -29,12 +53,12 @@
                         >
                     </div>
                     <div>
-                        <label for="confirm_password">Confirm Password</label>
+                        <label for="password_confirmation">Confirm Password</label>
                         <input
                             class="border w-full"
                             type="password"
-                            name="confirm_password"
-                            id="confirm_password"
+                            name="password_confirmation"
+                            id="password_confirmation"
                             placeholder="*********"
                         >
                     </div>
@@ -48,13 +72,37 @@
                 >
                     Save
                 </button>
-                <button
-                    type="button"
-                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                <a
+                    href="{{ route('doctors.index') }}"
+                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
                 >
                     Cancel
-                </button>
+                </a>
             </div>
         </form>
     </section>
 @endsection
+
+@push('scripts-bottom')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+    <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+
+    <script>
+        const script = document.getElementById('search-js');
+
+        script.onload = function () {
+            mapboxsearch.autofill({
+                accessToken: '{{ config('services.mapbox.token') }}',
+                options: {
+                    language: 'es',
+                },
+            })
+        };
+
+        document.querySelector('input[name="location"]').addEventListener('input', event => {
+            /*console.log(`${event.target.value}`);*/
+        });
+    </script>
+@endpush

@@ -109,7 +109,7 @@
                 </button>
                 <a
                     href="{{ route('patients.index') }}"
-                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
                 >
                     Cancel
                 </a>
