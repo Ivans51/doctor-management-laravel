@@ -14,8 +14,6 @@
             </a>
         </div>
 
-        <button id="modal-open" class="hidden"></button>
-
         <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
             <label>Show
                 <select class="bg-white p-1 border ml-2" name="select-show" id="select-show">

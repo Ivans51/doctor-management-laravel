@@ -14,8 +14,6 @@
             </a>
         </div>
 
-        <button id="modal-open" class="hidden"></button>
-
         <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
             <label>Show
                 <select class="bg-white p-1 border ml-2" name="select-show" id="select-show">
@@ -65,7 +63,10 @@
         })
 
         function getData() {
-            let url = '/admin/patients/index/limit'
+            const doctorId = '{{ $doctorId }}'
+            const query = doctorId ? `?doctorId=${doctorId}` : ''
+
+            let url = `/admin/patients/index/limit${query}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
@@ -83,8 +84,11 @@
 
         // search user with ajax
         $('#search_field').on('keyup', function () {
+            const doctorId = '{{ $doctorId }}'
+            const query = doctorId ? `?doctorId=${doctorId}` : ''
+
             let search = $(this).val()
-            let url = '/admin/patients/search'
+            let url = `/admin/patients/search${query}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({

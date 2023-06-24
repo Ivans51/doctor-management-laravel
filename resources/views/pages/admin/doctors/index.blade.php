@@ -14,8 +14,6 @@
             </a>
         </div>
 
-        <button id="modal-open" class="hidden"></button>
-
         <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
             <label>Show
                 <select class="bg-white p-1 border ml-2" name="show" id="show">
@@ -112,13 +110,13 @@
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <a
-                                    href="/admin/patients/${item.id}"
+                                    href="/admin/patients?doctorId=${item.id}"
                                     class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
                                 >
                                     Patients
                                 </a>
                                 <a
-                                    href="/admin/payments/${item.id}"
+                                    href="/admin/payments?doctorId=${item.id}"
                                     class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm ml-2"
                                 >
                                     Payments

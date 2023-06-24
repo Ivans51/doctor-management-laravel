@@ -22,6 +22,12 @@
                 Patients
             </a>
         </li>
+        <li>
+            <a href="{{ route('payments.index') }}">
+                <x-ri-dashboard-line/>
+                Payments
+            </a>
+        </li>
     </ul>
 </nav>
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
@@ -17,29 +16,14 @@ use Illuminate\Http\Request;
 
 class PatientsController extends Controller
 {
-
     /**
-     * @param string $id
+     * @param Request $request
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
-    function getPatients(string $id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $patients = Patient::query()
-            ->where('doctor_id', $id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('pages/admin/patients/index')->with([
-            'patients' => $patients,
-        ]);
-    }
-
-    /**
-     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-     */
-    public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        return view('pages/admin/patients/index');
+        $doctorId = $request->query('doctorId');
+        return view('pages/admin/patients/index', compact('doctorId'));
     }
 
     /**
@@ -48,9 +32,19 @@ class PatientsController extends Controller
      */
     public function indexLimit(Request $request): JsonResponse
     {
+        $doctorId = $request->query('doctorId');
         $limit = $request->limit ?? 10;
 
         $patients = Patient::query()
+            ->when($doctorId, function ($query, $doctorId) {
+                $query->whereHas('doctorPatient', function ($query) use ($doctorId) {
+                    $query->where('doctor_id', $doctorId);
+                });
+            })
+            ->with([
+                'doctorPatient',
+                'doctorPatient.doctor',
+            ])
             ->orderBy('created_at', 'desc')
             ->paginate($limit);
 
@@ -68,10 +62,20 @@ class PatientsController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
+        $doctorId = $request->query('doctorId');
         $limit = $request->limit ?? 10;
 
         if ($request->search) {
             $patients = Patient::query()
+                ->when($doctorId, function ($query, $doctorId) {
+                    $query->whereHas('doctorPatient', function ($query) use ($doctorId) {
+                        $query->where('doctor_id', $doctorId);
+                    });
+                })
+                ->with([
+                    'doctorPatient',
+                    'doctorPatient.doctor',
+                ])
                 ->where('name', 'LIKE', "%{$request->search}%")
                 ->orWhere('phone', 'LIKE', "%{$request->search}%")
                 ->orWhere('address', 'LIKE', "%{$request->search}%")
@@ -79,6 +83,15 @@ class PatientsController extends Controller
                 ->paginate($limit);
         } else {
             $patients = Patient::query()
+                ->when($doctorId, function ($query, $doctorId) {
+                    $query->whereHas('doctorPatient', function ($query) use ($doctorId) {
+                        $query->where('doctor_id', $doctorId);
+                    });
+                })
+                ->with([
+                    'doctorPatient',
+                    'doctorPatient.doctor',
+                ])
                 ->orderBy('created_at', 'desc')
                 ->paginate($limit);
         }
