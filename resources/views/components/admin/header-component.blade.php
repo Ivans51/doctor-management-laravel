@@ -33,17 +33,17 @@
 
 @push('scripts-bottom')
     <script>
-        let siteBaseURL = document.location.pathname.split("/")[1]
-        if (siteBaseURL === '') {
+        let siteBaseURL = document.location.pathname.split("/")[2]
+        if (siteBaseURL === 'admins') {
             $($('#menu-vertical li a')[0]).addClass('active')
         }
-        if (siteBaseURL === 'admins') {
+        if (siteBaseURL === 'doctors') {
             $($('#menu-vertical li a')[1]).addClass('active')
         }
-        if (siteBaseURL === 'doctors') {
+        if (siteBaseURL === 'patients') {
             $($('#menu-vertical li a')[2]).addClass('active')
         }
-        if (siteBaseURL === 'patients') {
+        if (siteBaseURL === 'payments') {
             $($('#menu-vertical li a')[3]).addClass('active')
         }
     </script>
