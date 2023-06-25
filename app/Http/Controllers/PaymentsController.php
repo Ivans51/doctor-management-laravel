@@ -26,29 +26,6 @@ class PaymentsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function indexLimit(Request $request): JsonResponse
-    {
-        $doctorId = $request->query('doctorId');
-        $limit = $request->limit ?? 10;
-
-        $payments = Payment::query()
-            ->when($doctorId, function ($query, $doctorId) {
-                return $query->where('doctor_id', $doctorId);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data retrieved successfully',
-            'data' => $payments
-        ]);
-    }
-
-    /**
      * Search user with parameter email and name
      * @param Request $request
      * @return JsonResponse

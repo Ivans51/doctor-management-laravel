@@ -45,6 +45,8 @@
                 <tbody id="tbody"></tbody>
             </table>
         </div>
+
+        <x-utils.pagination-component/>
     </section>
 
 @endsection
@@ -53,59 +55,44 @@
     <script>
         const selectShow = $('#select-show');
         let limit = selectShow.val();
+        let search = '';
 
-        getData();
+        searchData();
 
         // limit show with ajax
         selectShow.on('change', function () {
             limit = $(this).val()
-            getData();
+            searchData();
         })
 
-        function getData() {
-            const doctorId = '{{ $doctorId }}'
-            const query = doctorId ? `?doctorId=${doctorId}` : ''
-
-            let url = `/admin/patients/index/limit${query}`
+        // search data
+        function searchData(page = 1) {
+            showLoading()
+            let url = `/admin/patients/search?search=${search}&limit=${limit}&page=${page}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
                 url: url,
                 type: 'POST',
+                dataType: 'json',
                 data: {
-                    limit: limit,
                     _token: token
                 },
                 success: function (response) {
-                    setDataTable(response);
+                    setDataTable(response)
+                    hideLoading()
+                },
+                error: function (xhr) {
+                    console.log(xhr)
+                    hideLoading()
                 }
             })
         }
 
-        // search user with ajax
-        $('#search_field').on('keyup', function () {
-            const doctorId = '{{ $doctorId }}'
-            const query = doctorId ? `?doctorId=${doctorId}` : ''
-
-            let search = $(this).val()
-            let url = `/admin/patients/search${query}`
-            let token = $('meta[name="csrf-token"]').attr('content')
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    search: search,
-                    _token: token
-                },
-                success: function (response) {
-                    setDataTable(response);
-                }
-            })
-        })
-
         function setDataTable(response) {
             let html = ''
+
+            setPagination(response)
 
             response.data.data.forEach(function (item) {
                 html += `<tr class="bg-white rounded">

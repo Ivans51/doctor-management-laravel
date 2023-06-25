@@ -27,27 +27,6 @@ UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function indexLimit(Request $request): JsonResponse
-    {
-        $limit = $request->limit ?? 10;
-        $id = Role::query()->where('name', Constants::$ADMIN)->first()->id;
-
-        $admins = User::query()
-            ->where('role_id', $id)
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data retrieved successfully',
-            'data' => $admins
-        ]);
-    }
-
-    /**
      * Search user with parameter email and name
      * @param Request $request
      * @return JsonResponse

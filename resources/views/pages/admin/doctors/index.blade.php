@@ -16,7 +16,7 @@
 
         <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
             <label>Show
-                <select class="bg-white p-1 border ml-2" name="show" id="show">
+                <select class="bg-white p-1 border ml-2" name="show" id="select-show">
                     <option value="10">10</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
@@ -44,6 +44,8 @@
                 <tbody id="tbody">
             </table>
         </div>
+
+        <x-utils.pagination-component/>
     </section>
 
 @endsection
@@ -52,53 +54,54 @@
     <script>
         const selectShow = $('#select-show');
         let limit = selectShow.val();
+        let search = '';
 
-        getData();
+        searchData();
 
         // limit show with ajax
         selectShow.on('change', function () {
             limit = $(this).val()
-            getData();
+            searchData();
         })
 
-        function getData() {
-            let url = '/admin/doctors/index/limit'
+        // search user with ajax when after 5 seconds
+        let timeout = null;
+        $('#search_field').on('keyup', function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                search = $('#search_field').val()
+                searchData();
+            }, 500);
+        })
+
+        // search data
+        function searchData(page = 1) {
+            showLoading()
+            let url = `/admin/doctors/search?search=${search}&limit=${limit}&page=${page}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
                 url: url,
                 type: 'POST',
+                dataType: 'json',
                 data: {
-                    limit: limit,
                     _token: token
                 },
                 success: function (response) {
-                    setDataTable(response);
+                    setDataTable(response)
+                    hideLoading()
+                },
+                error: function (xhr) {
+                    console.log(xhr)
+                    hideLoading()
                 }
             })
         }
 
-        // search user with ajax
-        $('#search_field').on('keyup', function () {
-            let search = $(this).val()
-            let url = '/admin/doctors/search'
-            let token = $('meta[name="csrf-token"]').attr('content')
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    search: search,
-                    _token: token
-                },
-                success: function (response) {
-                    setDataTable(response);
-                }
-            })
-        })
-
         function setDataTable(response) {
             let html = ''
+
+            setPagination(response)
 
             response.data.data.forEach(function (item) {
                 html += `<tr class="bg-white rounded">

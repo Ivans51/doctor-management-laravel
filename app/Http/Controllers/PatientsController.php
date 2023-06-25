@@ -27,35 +27,6 @@ class PatientsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function indexLimit(Request $request): JsonResponse
-    {
-        $doctorId = $request->query('doctorId');
-        $limit = $request->limit ?? 10;
-
-        $patients = Patient::query()
-            ->when($doctorId, function ($query, $doctorId) {
-                $query->whereHas('doctorPatient', function ($query) use ($doctorId) {
-                    $query->where('doctor_id', $doctorId);
-                });
-            })
-            ->with([
-                'doctorPatient',
-                'doctorPatient.doctor',
-            ])
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data retrieved successfully',
-            'data' => $patients
-        ]);
-    }
-
-    /**
      * Search user with parameter email and name
      * @param Request $request
      * @return JsonResponse

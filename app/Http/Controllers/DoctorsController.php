@@ -23,26 +23,6 @@ class DoctorsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function indexLimit(Request $request): JsonResponse
-    {
-        $limit = $request->limit ?? 10;
-
-        $doctors = Doctor::query()
-            ->with(['user'])
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data retrieved successfully',
-            'data' => $doctors
-        ]);
-    }
-
-    /**
      * Search user with parameter email and name
      * @param Request $request
      * @return JsonResponse
