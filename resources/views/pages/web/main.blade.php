@@ -49,7 +49,7 @@
     </section>
 
     <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-start">
-        <div class="lg:w-2/5 w-full">
+        <div class="lg:w-3/6 w-full">
             <h3 class="my-2 font-bold text-lg">Appointment Request</h3>
             <div class="px-4 py-2 bg-white rounded">
                 @foreach($images as $image)
@@ -72,33 +72,7 @@
             </div>
         </div>
 
-        <div class="lg:w-1/5 w-full">
-            <h3 class="my-2 font-bold text-lg">Patients</h3>
-            <div class="px-4 py-2 bg-white rounded">
-                @foreach($images as $index => $image)
-                    @if($index <= 5)
-                        <div class="flex justify-between items-center my-4">
-                            <div class="flex items-start">
-                                <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
-                                <div>
-                                    <h3 class="font-bold text-xl">24.4 K</h3>
-                                    <p>Jenny Wilson</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-            </div>
-
-            <h3 class="my-2 font-bold text-lg">Gender</h3>
-            <div class="px-4 py-2 bg-white rounded">
-                <div class="h-44">
-                    {!! $chart->container() !!}
-                </div>
-            </div>
-        </div>
-
-        <div class="lg:w-2/5 w-full">
+        <div class="lg:w-3/6 w-full">
             <h3 class="my-2 font-bold text-lg">Today Appointments</h3>
             <div class="px-4 py-2 bg-white rounded">
                 @foreach($images as $image)
@@ -118,6 +92,36 @@
                         </button>--}}
                     </div>
                 @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-start">
+        <div class="lg:w-3/6 w-full">
+            <h3 class="my-2 font-bold text-lg">Patients</h3>
+            <div class="px-4 py-2 bg-white rounded">
+                @foreach($images as $index => $image)
+                    @if($index <= 5)
+                        <div class="flex justify-between items-center my-4">
+                            <div class="flex items-start">
+                                <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
+                                <div>
+                                    <h3 class="font-bold text-xl">24.4 K</h3>
+                                    <p>Jenny Wilson</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+
+        <div class="lg:w-3/6 w-full">
+            <h3 class="my-2 font-bold text-lg">Gender</h3>
+            <div class="px-4 py-2 bg-white rounded">
+                <div class="h-44">
+                    {!! $chart->container() !!}
+                </div>
             </div>
         </div>
     </section>
