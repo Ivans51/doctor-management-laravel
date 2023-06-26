@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::middleware('admin')->group(function () {
+Route::middleware('user')->group(function () {
     Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
     Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
     Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
@@ -39,7 +39,7 @@ Route::middleware('admin')->group(function () {
     Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');
 });
 
-Route::middleware('admin.auth')->group(function () {
+Route::middleware('user.auth')->group(function () {
     Route::get('/login', [ViewController::class, 'getLogin'])->name('login');
     Route::get('/register', [ViewController::class, 'getRegister'])->name('register');
     Route::get('/forgot', [ViewController::class, 'getForgot'])->name('forgot');
@@ -50,7 +50,7 @@ Route::middleware('admin.auth')->group(function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['admin'])->group(function () {
         Route::get('/', [ViewAdminController::class, 'getDashBoard'])->name('admin-home');
         Route::get('/logout', [AuthController::class, 'logout'])->name('admin-logout');
 

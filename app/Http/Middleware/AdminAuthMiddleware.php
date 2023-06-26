@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Utils\Constants;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class AdminAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == 'admin') {
+        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
             return redirect('admin');
         }
 

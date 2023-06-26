@@ -34,7 +34,7 @@ class AuthController extends Controller
         $isSuccessCaptcha = $this->validateRecaptcha($request);
 
         if ($isSuccessCaptcha) {
-            return redirect('admin');
+            return redirect('');
         } else {
             return back()->withErrors(['captcha' => 'ReCaptcha Error']);
         }

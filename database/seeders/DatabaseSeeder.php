@@ -9,6 +9,7 @@ use App\Models\PatientDoctor;
 use App\Models\Payment;
 use App\Models\Role;
 use App\Models\User;
+use App\Utils\Constants;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,9 +26,14 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'role_id' => Role::query()->where('name', 'admin')->first()->id
+            'role_id' => Role::query()->where('name', Constants::$ADMIN)->first()->id
         ]);
-        User::factory(9)->create();
+        User::factory()->create([
+            'name' => 'Doctor User',
+            'email' => 'doctor@example.com',
+            'role_id' => Role::query()->where('name', Constants::$DOCTOR)->first()->id
+        ]);
+        User::factory(8)->create();
         Patient::factory(10)->create();
         Doctor::factory(10)->create();
         PatientDoctor::factory(10)->create();
