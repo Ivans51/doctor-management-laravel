@@ -3,11 +3,13 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\PatientDoctor;
 use App\Models\Payment;
 use App\Models\Role;
+use App\Models\Schedule;
 use App\Models\User;
 use App\Utils\Constants;
 use Illuminate\Database\Seeder;
@@ -38,5 +40,7 @@ class DatabaseSeeder extends Seeder
         Doctor::factory(10)->create();
         PatientDoctor::factory(10)->create();
         Payment::factory(10)->create();
+        Schedule::factory(10)->create();
+        Appointment::factory(10)->create();
     }
 }
