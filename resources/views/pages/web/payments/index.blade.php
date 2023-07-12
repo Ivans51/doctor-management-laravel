@@ -27,7 +27,7 @@
 
         <div class="overflow-x-auto">
             <table class="table-auto border-separate w-full border-spacing-x-0 border-spacing-y-2">
-                <tr class="bg-zinc-100">
+                <tr class="bg-secondary">
                     <th class="px-4 py-1 text-left">Patient Name</th>
                     <th class="px-4 py-1">Amount</th>
                     <th class="px-4 py-1">Date</th>

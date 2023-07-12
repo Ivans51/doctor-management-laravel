@@ -19,7 +19,7 @@
             </div>
 
             <table class="w-full table-auto text-left" style="border-collapse: separate; border-spacing: 0 8px;">
-                <tr class="bg-zinc-100">
+                <tr class="bg-secondary">
                     <th class="px-4 py-1">Monitored trackers</th>
                     <th class="px-4 py-1">Reporting Time & Reminder</th>
                 </tr>

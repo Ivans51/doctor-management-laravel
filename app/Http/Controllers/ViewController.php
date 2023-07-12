@@ -3,30 +3,93 @@
 namespace App\Http\Controllers;
 
 use App\Charts\HomeChart;
+use App\Models\Appointment;
+use App\Models\Doctor;
+use App\Models\Patient;
+use App\Utils\Constants;
+use Auth;
+use Faker\Factory as Faker;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-use Faker\Factory as Faker;
 
 class ViewController extends Controller
 {
     public function getDashBoard(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $files = [];
+        $userId = Auth::user()->id;
 
-        $faker = Faker::create();
+        $doctorId = Doctor::query()
+            ->where('user_id', $userId)
+            ->first()
+            ->id;
 
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
+        $patients = Patient::query()
+            ->whereHas('doctorPatient', function ($query) use ($doctorId) {
+                $query->where('doctor_id', $doctorId);
+            })
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        $patientsAll = Patient::query()
+            ->whereHas('doctorPatient', function ($query) use ($doctorId) {
+                $query->where('doctor_id', $doctorId);
+            });
+
+        $patientFemale = 0;
+        $patientMale = 0;
+        $collection = $patientsAll->get();
+        foreach ($collection as $item) {
+            if ($item->gender == Constants::$FEMALE) {
+                $patientFemale++;
+            } else {
+                $patientMale++;
+            }
         }
 
+        $countPatients = $patientsAll
+            ->count();
+
+        $countAppointments = Appointment::query()
+            ->where('doctor_id', $doctorId)
+            ->count();
+
+        $appointments = Appointment::query()
+            ->with([
+                'patient',
+                'schedule',
+            ])
+            ->where('doctor_id', $doctorId)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        $todayAppointments = Appointment::query()
+            ->with([
+                'patient',
+                'schedule',
+            ])
+            ->whereHas('schedule', function ($query) {
+                $query->whereDate('date', date('Y-m-d'));
+            })
+            ->where('doctor_id', $doctorId)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
         $chart = new HomeChart;
-        $chart->labels(['One', 'Two', 'Three', 'Four']);
-        $chart->dataset('My dataset', 'pie', [1, 2, 3, 4]);
+        $chart
+            ->labels([Constants::$FEMALE, Constants::$MALE])
+            ->dataset('My dataset', 'pie', [$patientFemale, $patientMale])
+            ->backgroundColor(collect(['#ff6384', '#36a2eb']));
 
         return view('pages/web/main')->with([
-            'images' => $files,
+            'patients' => $patients,
+            'appointments' => $appointments,
+            'appointmentsToday' => $todayAppointments,
+            'countAppointments' => $countAppointments,
+            'countPatients' => $countPatients,
             'chart' => $chart,
         ]);
     }

@@ -16,6 +16,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
+            $table->enum('gender', [
+                Constants::$MALE,
+                Constants::$FEMALE
+            ])->default(Constants::$MALE);
             $table->string('address')->nullable();
             $table->enum('status', [
                 Constants::$ACTIVE,

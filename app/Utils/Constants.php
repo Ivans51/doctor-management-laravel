@@ -15,8 +15,13 @@ class Constants
     public static $PAYMENT_STATUS_CANCEL = 'cancel';
     public static $PAYMENT_STATUS_REFUND = 'refund';
     public static $PAYMENT_STATUS_FAILED = 'failed';
+    public static $MALE = 'Male';
+    public static $FEMALE = 'Female';
     public static $PAYMENT_METHODS = [
         'paypal',
         'stripe',
     ];
+    public static $PENDING = 'pending';
+    public static $APPROVED = 'approved';
+    public static $REJECTED = 'rejected';
 }

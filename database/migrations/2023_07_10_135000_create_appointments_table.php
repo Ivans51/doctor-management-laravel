@@ -1,11 +1,11 @@
 <?php
 
+use App\Utils\Constants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,7 +17,11 @@ return new class extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('payment_id')->nullable();
-            $table->string('status');
+            $table->enum('status', [
+                Constants::$PENDING,
+                Constants::$APPROVED,
+                Constants::$REJECTED,
+            ])->default(Constants::$PENDING);
             $table->string('description')->nullable();
             $table->foreign('patient_id')->references('id')->on('patients');
             $table->foreign('doctor_id')->references('id')->on('doctors');

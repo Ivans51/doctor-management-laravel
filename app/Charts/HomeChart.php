@@ -14,5 +14,6 @@ class HomeChart extends Chart
     public function __construct()
     {
         parent::__construct();
+        $this->displayAxes(false);
     }
 }

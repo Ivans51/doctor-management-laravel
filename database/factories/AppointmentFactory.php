@@ -26,7 +26,11 @@ class AppointmentFactory extends Factory
             'doctor_id' => Doctor::query()->inRandomOrder()->first()->id,
             'schedule_id' => Schedule::query()->inRandomOrder()->first()->id,
             'payment_id' => Payment::query()->inRandomOrder()->first()->id,
-            'status' => $this->faker->randomElement([Constants::$ACTIVE, Constants::$INACTIVE]),
+            'status' => $this->faker->randomElement([
+                Constants::$PENDING,
+                Constants::$APPROVED,
+                Constants::$REJECTED,
+            ]),
             'description' => $this->faker->text(),
             'created_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
