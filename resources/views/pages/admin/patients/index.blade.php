@@ -68,8 +68,12 @@
         // search data
         function searchData(page = 1) {
             showLoading()
-            let url = `/admin/patients/search?search=${search}&limit=${limit}&page=${page}`
-            let token = $('meta[name="csrf-token"]').attr('content')
+            // get query doctorId from url
+            const urlData = new URL(window.location.href);
+            const doctorId = urlData.searchParams.get("doctorId");
+            const doctorIdQuery = doctorId ? `doctorId=${doctorId}` : '';
+            const url = `/admin/patients/search?search=${search}&limit=${limit}&page=${page}&${doctorIdQuery}`
+            const token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
                 url: url,

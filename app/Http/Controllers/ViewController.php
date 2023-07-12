@@ -134,17 +134,7 @@ class ViewController extends Controller
 
     public function getPatients(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $files = [];
-
-        $faker = Faker::create();
-
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
-
-        return view('pages/web/patients/index')->with([
-            'images' => $files,
-        ]);
+        return view('pages/web/patients/index');
     }
 
     public function getPatientsDetail(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application

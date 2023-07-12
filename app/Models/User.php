@@ -44,10 +44,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['roles'];
+    protected $with = ['roles', 'doctor'];
 
     public function roles(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    // get doctor
+    public function doctor(): BelongsTo
+    {
+        return $this->belongsTo(Doctor::class, 'id', 'user_id');
     }
 }

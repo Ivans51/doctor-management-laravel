@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\PatientDoctor;
 use App\Models\Role;
 use App\Models\User;
 use App\Utils\Constants;
+use Auth;
 use DB;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -22,7 +25,7 @@ class PatientsController extends Controller
      */
     public function index(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $doctorId = $request->query('doctorId');
+        $doctorId = $request->query('doctorId', '');
         return view('pages/admin/patients/index', compact('doctorId'));
     }
 
@@ -33,7 +36,33 @@ class PatientsController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
-        $doctorId = $request->query('doctorId');
+        $doctorId = $request->query('doctorId', '');
+        return $this->getPatients($request, $doctorId);
+    }
+
+    /**
+     * Search user with parameter email and name
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchByDoctor(Request $request): JsonResponse
+    {
+        $userId = Auth::user()->id;
+        $doctorId = Doctor::query()
+            ->where('user_id', $userId)
+            ->first()
+            ->id;
+
+        return $this->getPatients($request, $doctorId);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $doctorId
+     * @return JsonResponse
+     */
+    private function getPatients(Request $request, string $doctorId): JsonResponse
+    {
         $limit = $request->limit ?? 10;
 
         if ($request->search) {
@@ -76,7 +105,11 @@ class PatientsController extends Controller
 
     public function create()
     {
-        return view('pages/admin/patients/create');
+        $doctors = Doctor::query()->get();
+
+        return Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN
+            ? view('pages/admin/patients/create')->with('doctors', $doctors)
+            : view('pages/web/patients/create');
     }
 
     /**
@@ -102,13 +135,19 @@ class PatientsController extends Controller
                 'password' => bcrypt($request->password),
             ]);
 
-            Patient::query()
+            $patient = Patient::query()
                 ->create([
                     'name' => $request->name,
                     'phone' => $request->phone_number,
                     'address' => $request->input('location_address-search'),
                     'status' => Constants::$ACTIVE,
                     'user_id' => $user->id,
+                ]);
+
+            PatientDoctor::query()
+                ->create([
+                    'patient_id' => $patient->id,
+                    'doctor_id' => $request->doctor_id,
                 ]);
 
             DB::commit();
@@ -122,7 +161,10 @@ class PatientsController extends Controller
 
     public function show($id)
     {
-        return view('pages/admin/patients/show');
+        return Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN
+            ? view('pages/admin/patients/show')
+            : view('pages/web/patients/show');
+
     }
 
     /**
@@ -131,12 +173,15 @@ class PatientsController extends Controller
      */
     public function edit($id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
+        $doctors = Doctor::query()->get();
         $patient = Patient::query()
             ->with(['user'])
             ->where('id', $id)
             ->first();
 
-        return view('pages/admin/patients/edit', compact('patient'));
+        return Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN
+            ? view('pages/admin/patients/edit', compact('patient', 'doctors'))
+            : view('pages/web/patients/edit', compact('patient'));
     }
 
     /**

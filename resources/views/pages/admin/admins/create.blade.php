@@ -51,7 +51,7 @@
                     Save
                 </button>
                 <a
-                    href="{{ route('admins.index') }}"
+                    href="{{ url()->previous() }}"
                     class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
                 >
                     Cancel

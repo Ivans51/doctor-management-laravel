@@ -22,6 +22,20 @@
                 </div>
 
                 <div class="w-full">
+                    <label for="doctors">Doctors</label>
+                    <select name="doctors[]" id="doctors" class="border w-full">\
+                        @foreach($doctors as $doctor)
+                            <option
+                                value="{{ $doctor->id }}"
+                                {{ $patient->doctors->contains($doctor->id) ? 'selected' : '' }}
+                            >
+                                {{ $doctor->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="w-full">
                     <label for="location">Location</label>
                     <input
                         class="border w-full"
@@ -108,7 +122,7 @@
                     Save
                 </button>
                 <a
-                    href="{{ route('patients.index') }}"
+                    href="{{ url()->previous() }}"
                     class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
                 >
                     Cancel

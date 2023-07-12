@@ -1,25 +1,24 @@
-@extends('layouts.admin')
+@php use App\Utils\Constants; @endphp
+@extends('layouts.home')
 
 @section('content')
-    <section class="mt-10">
-        <x-utils.message-component/>
+    <x-utils.message-component/>
 
-        <form action="{{ route('patients.store') }}" method="post">
+    <section class="mt-10">
+        <form action="{{ route('my-patients-doctor.update', $patient->user->id) }}" method="post">
             @csrf
+            @method('PUT')
 
             <div class="space-y-6">
                 <div class="w-full">
                     <label for="name">First Name</label>
-                    <input class="border w-full" type="text" name="name" id="name">
-                </div>
-
-                <div class="w-full">
-                    <label for="doctors">Doctors</label>
-                    <select name="doctors[]" id="doctors" class="border w-full">
-                        @foreach($doctors as $doctor)
-                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                        @endforeach
-                    </select>
+                    <input
+                        class="border w-full"
+                        type="text"
+                        name="name"
+                        id="name"
+                        value="{{ $patient->name }}"
+                    >
                 </div>
 
                 <div class="w-full">
@@ -29,19 +28,52 @@
                         name="location"
                         type="text"
                         autocomplete="shipping address-line1"
-                        id="location">
+                        id="location"
+                        value="{{ $patient->address }}"
+                    >
                 </div>
 
                 <div class="grid grid-cols-2 gap-x-4">
                     <div>
                         <label for="email">Email</label>
-                        <input class="border w-full" type="email" name="email" id="email">
+                        <input
+                            class="border w-full"
+                            type="email"
+                            name="email"
+                            id="email"
+                            value="{{ $patient->user->email }}"
+                        >
                     </div>
 
                     <div>
                         <label for="phone_number">Phone Number</label>
-                        <input class="border w-full" type="tel" name="phone_number" id="phone_number">
+                        <input
+                            class="border w-full"
+                            type="tel"
+                            name="phone_number"
+                            id="phone_number"
+                            value="{{ $patient->phone }}"
+                        >
                     </div>
+                </div>
+
+                <div class="w-full">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="border w-full">
+                        <option value="">Selection</option>
+                        <option
+                            value="{{ Constants::$ACTIVE }}"
+                            {{ $patient->status == Constants::$ACTIVE ? 'selected' : '' }}
+                        >
+                            Active
+                        </option>
+                        <option
+                            value="{{ Constants::$INACTIVE }}"
+                            {{ $patient->status == Constants::$INACTIVE ? 'selected' : '' }}
+                        >
+                            Inactive
+                        </option>
+                    </select>
                 </div>
 
                 <div class="grid grid-cols-2 gap-x-4">
@@ -56,12 +88,12 @@
                         >
                     </div>
                     <div>
-                        <label for="password_confirmation">Confirm Password</label>
+                        <label for="confirm_password">Confirm Password</label>
                         <input
                             class="border w-full"
                             type="password"
-                            name="password_confirmation"
-                            id="password_confirmation"
+                            name="confirm_password"
+                            id="confirm_password"
                             placeholder="*********"
                         >
                     </div>
@@ -94,7 +126,6 @@
 
     <script>
         const script = document.getElementById('search-js');
-
         script.onload = function () {
             mapboxsearch.autofill({
                 accessToken: '{{ config('services.mapbox.token') }}',

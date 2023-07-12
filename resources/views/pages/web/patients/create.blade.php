@@ -1,25 +1,16 @@
-@extends('layouts.admin')
+@extends('layouts.home')
 
 @section('content')
     <section class="mt-10">
         <x-utils.message-component/>
 
-        <form action="{{ route('patients.store') }}" method="post">
+        <form action="{{ route('my-patients-doctor.store') }}" method="post">
             @csrf
 
             <div class="space-y-6">
                 <div class="w-full">
                     <label for="name">First Name</label>
                     <input class="border w-full" type="text" name="name" id="name">
-                </div>
-
-                <div class="w-full">
-                    <label for="doctors">Doctors</label>
-                    <select name="doctors[]" id="doctors" class="border w-full">
-                        @foreach($doctors as $doctor)
-                            <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                        @endforeach
-                    </select>
                 </div>
 
                 <div class="w-full">
@@ -67,6 +58,8 @@
                     </div>
                 </div>
             </div>
+
+            <input type="hidden" name="doctor_id" value="{{ Auth::user()->doctor->id }}">
 
             <div class="flex items-center space-x-2 mt-10">
                 <button

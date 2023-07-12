@@ -37,8 +37,11 @@ Route::middleware('user')->group(function () {
     Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
     Route::get('/logout', [AuthController::class, 'logout'])->name('web-logout');
 
+    Route::resource('my-patients-doctor', PatientsController::class);
+
     /* JSON */
     Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments-doctor');
+    Route::post('/patients/doctor/search', [PatientsController::class, 'searchByDoctor'])->name('search-patient-doctor');
 
     Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');
 });

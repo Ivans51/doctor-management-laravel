@@ -1,21 +1,23 @@
 @extends('layouts.home')
 
 @section('content')
+    <x-utils.loading-component/>
+
     <section class="mt-10">
         <div class="flex justify-between items-center">
             <h3 class="my-2 font-bold text-lg">Patient list</h3>
-            <button
-                id="modal-open"
+            <a
+                href="{{ route('my-patients-doctor.create') }}"
                 class="rounded text-white bg-violet-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
             >
                 <x-ri-heart-add-fill/>
                 <span>Add Patient</span>
-            </button>
+            </a>
         </div>
 
         <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
             <label>Show
-                <select class="bg-white p-1 border ml-2" name="show" id="show">
+                <select class="bg-white p-1 border ml-2" name="select-show" id="select-show">
                     <option value="10">10</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
@@ -26,7 +28,7 @@
         <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
             <label class="w-full lg:w-2/3">
                 Search
-                <input class="w-full" type="search" placeholder="Patient name, status, type">
+                <input class="w-full" type="search" name="search" id="search_field" placeholder="Patient name, status">
             </label>
             <label class="w-full lg:w-1/3">
                 Date
@@ -38,137 +40,147 @@
             <table class="table-auto border-separate w-full border-spacing-x-0 border-spacing-y-2">
                 <tr class="bg-secondary">
                     <th class="px-4 py-1 text-left">Patient Name</th>
-                    <th class="px-4 py-1">Visit Id</th>
                     <th class="px-4 py-1">Date</th>
                     <th class="px-4 py-1">Gender</th>
                     <th class="px-4 py-1">Diseases</th>
                     <th class="px-4 py-1">Status</th>
+                    <th class="px-4 py-1">Action</th>
                 </tr>
-                @foreach($images as $image)
-                    <tr class="bg-white rounded">
-                        <td class="px-4 py-2 flex items-center">
-                            <img class="h-10 mr-3" src="{{$image}}" alt="image animal" style="border-radius: 50%">
-                            <a href="{{ route('my-patients-detail') }}">
-                                Jenny Wilson
-                            </a>
-                        </td>
-                        <td class="px-4 py-2 text-center">
-                            1
-                        </td>
-                        <td class="px-4 py-2 text-center">
-                            1
-                        </td>
-                        <td class="px-4 py-2 text-center">
-                            1
-                        </td>
-                        <td class="px-4 py-2 text-center">
-                            1
-                        </td>
-                        <td class="px-4 py-2 text-center">
-                            <a
-                                href="{{ route('my-patients-monitoring') }}"
-                                class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                            >
-                                Log monitoring
-                            </a>
-                            <a
-                                href="{{ route('messages') }}"
-                                class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                            >
-                                Message
-                            </a>
-                        </td>
-                    </tr>
-                @endforeach
+                <tbody id="tbody"></tbody>
             </table>
         </div>
+
+        <x-utils.pagination-component/>
     </section>
-
-    <x-modal.modal-component
-        title="Add new patient"
-        modalClass="modal"
-    >
-        <x-slot name="content">
-            <form action="" method="post">
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-x-4">
-                        <div>
-                            <label for="first_name">First Name</label>
-                            <input class="border w-full" type="text" name="first_name" id="first_name">
-                        </div>
-
-                        <div>
-                            <label for="last_name">Last Name</label>
-                            <input class="border w-full" type="text" name="last_name" id="last_name">
-                        </div>
-                    </div>
-
-                    <div class="w-full">
-                        <label for="location">Location</label>
-                        <input
-                            class="border w-full"
-                            name="location"
-                            type="text"
-                            autocomplete="shipping address-line1"
-                            id="location">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-x-4">
-                        <div>
-                            <label for="email">Email</label>
-                            <input class="border w-full" type="email" name="email" id="email">
-                        </div>
-
-                        <div>
-                            <label for="phone_number">Phone Number</label>
-                            <input class="border w-full" type="tel" name="phone_number" id="phone_number">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-2 mt-10">
-                    <button
-                        type="submit"
-                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
-                    >
-                        Save
-                    </button>
-                    <button
-                        type="button"
-                        class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </x-slot>
-    </x-modal.modal-component>
 
 @endsection
 
 @push('scripts-bottom')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
-    <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
     <script>
-        configModal('modal', 'modal-open')
-    </script>
 
-    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+        const selectShow = $('#select-show');
+        let limit = selectShow.val();
+        let search = '';
 
-    <script>
-        const script = document.getElementById('search-js');
-        script.onload = function () {
-            mapboxsearch.autofill({
-                accessToken: '{{ config('services.mapbox.token') }}',
-                options: {
-                    language: 'es',
+        searchData();
+
+        // limit show with ajax
+        selectShow.on('change', function () {
+            limit = $(this).val()
+            searchData();
+        })
+
+        // search user with ajax when after 5 seconds
+        let timeout = null;
+        $('#search_field').on('keyup', function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                search = $('#search_field').val()
+                searchData();
+            }, 500);
+        })
+
+        // search data
+        function searchData(page = 1) {
+            showLoading()
+            let url = `/patients/doctor/search?search=${search}&limit=${limit}&page=${page}`
+            let token = $('meta[name="csrf-token"]').attr('content')
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: token
                 },
+                success: function (response) {
+                    setDataTable(response)
+                    hideLoading()
+                },
+                error: function (xhr) {
+                    console.log(xhr)
+                    hideLoading()
+                }
             })
-        };
+        }
 
-        document.querySelector('input[name="location"]').addEventListener('input', event => {
-            /*console.log(`${event.target.value}`);*/
-        });
+        function setDataTable(response) {
+            let html = ''
+
+            setPagination(response)
+
+            response.data.data.forEach(function (item) {
+                let image
+                let status
+
+                if (item.profile == null) {
+                    const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
+                    image = `<img
+                        class="h-10 mr-3"
+                        src="${urlImage}"
+                        alt="profile patient"
+                        style="border-radius: 50%"
+                    >`
+                } else {
+                    const urlImage = `{{ Vite::asset('storage/') }}/${item.profile}`
+                    image = `<img
+                            class="h-10 mr-3"
+                            src="${urlImage}"
+                            alt="profile patient"
+                            style="border-radius: 50%"
+                        >`
+                }
+
+                if (item.status === CONST_ACTIVE) {
+                    status = `<span class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm">
+                        Active
+                    </span>`
+                } else if (item.status === CONST_INACTIVE) {
+                    status = `<span class="rounded text-yellow-900 bg-yellow-100 px-4 py-1 text-sm">
+                        Inactive
+                    </span>`
+                }
+
+                const iconMonitoring = `<x-ri-heart-add-fill width='30'/>`
+                const iconMessage = `<x-ri-message-2-fill width='30'/>`
+                const iconEdit = `<x-ri-edit-2-fill width='30'/>`
+
+                html += `<tr class="bg-white rounded">
+                            <td class="px-4 py-2 flex items-center">
+                                ${image}
+                                ${item.name}
+                            </td>
+                            <td class="px-4 py-2 text-center capitalize">${formatDate(item.created_at)}</td>
+                            <td class="px-4 py-2 text-center capitalize">${item.gender}</td>
+                            <td class="px-4 py-2 text-center">Not found</td>
+                            <td class="px-4 py-2 text-center">${status}</td>
+                            <td class="px-4 py-2 flex items-center">
+                                <a
+                                    title="Add Monitoring"
+                                    href="/my-patients/monitoring?patient_id=${item.id}"
+                                    class="rounded text-blue-900 ml-2"
+                                >
+                                    ${iconMonitoring}
+                                </a>
+                                <a
+                                    title="Message"
+                                    href="/messages?patient_id=${item.id}"
+                                    class="rounded text-blue-900 ml-2"
+                                >
+                                    ${iconMessage}
+                                </a>
+                                <a
+                                    title="Edit"
+                                    href="/my-patients-doctor/${item.id}/edit?doctor_id=${item.doctorPatient}"
+                                    class="rounded text-blue-900 ml-2"
+                                >
+                                    ${iconEdit}
+                                </but>
+                            </td>
+                        </tr>`
+            })
+
+            $('#tbody').html(html)
+        }
     </script>
 @endpush

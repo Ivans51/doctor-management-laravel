@@ -17,3 +17,5 @@ function formatDate(date) {
 const CONST_APPROVED = 'approved'
 const CONST_PENDING = 'pending'
 const CONST_REJECTED = 'rejected'
+const CONST_ACTIVE = 'active'
+const CONST_INACTIVE = 'inactive'

@@ -69,6 +69,16 @@
             searchData();
         })
 
+        // search user with ajax when after 5 seconds
+        let timeout = null;
+        $('#search_field').on('keyup', function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                search = $('#search_field').val()
+                searchData();
+            }, 500);
+        })
+
         // search data
         function searchData(page = 1) {
             showLoading()
