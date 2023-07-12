@@ -111,16 +111,24 @@ class ViewController extends Controller
 
     public function getAppointments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $files = [];
+        $userId = Auth::user()->id;
+        $doctorId = Doctor::query()
+            ->where('user_id', $userId)
+            ->first()
+            ->id;
 
-        $faker = Faker::create();
-
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
+        $appointments = Appointment::query()
+            ->with([
+                'patient',
+                'schedule',
+            ])
+            ->where('doctor_id', $doctorId)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
 
         return view('pages/web/appointments/index')->with([
-            'images' => $files,
+            'appointments' => $appointments,
         ]);
     }
 

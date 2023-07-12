@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\PatientsController;
@@ -35,6 +36,9 @@ Route::middleware('user')->group(function () {
     Route::get('/settings/notifications', [ViewController::class, 'getNotifications'])->name('notifications');
     Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
     Route::get('/logout', [AuthController::class, 'logout'])->name('web-logout');
+
+    /* JSON */
+    Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments-doctor');
 
     Route::post('/my-patient-detail-post', [ViewController::class, 'postSettings'])->name('my-patient-detail-post');
 });

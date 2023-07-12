@@ -34,6 +34,7 @@
 <script src="{{ Vite::asset('resources/js/modal.js') }}"></script>
 <script src="{{ Vite::asset('resources/js/response-management.js') }}"></script>
 <script src="{{ Vite::asset('resources/js/sweet-management.js') }}"></script>
+<script src="{{ Vite::asset('resources/js/utils.js') }}"></script>
 @stack('scripts-bottom')
 
 </body>
