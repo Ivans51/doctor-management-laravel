@@ -18,8 +18,8 @@ return new class extends Migration
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
-            $table->foreignId('doctor_id')->constrained('users');
-            $table->foreignId('patient_id')->constrained('users');
+            $table->foreign('doctor_id')->references('id')->on('doctors');
+            $table->foreign('patient_id')->references('id')->on('patients');
             $table->timestamps();
         });
     }

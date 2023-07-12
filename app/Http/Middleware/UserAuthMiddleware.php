@@ -20,7 +20,7 @@ class UserAuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
-            return redirect('admin');
+            return redirect('/');
         }
 
         return $next($request);

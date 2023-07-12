@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Doctor;
+use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +19,8 @@ class ScheduleFactory extends Factory
     public function definition(): array
     {
         return [
+            'doctor_id' => Doctor::query()->inRandomOrder()->first()->id,
+            'patient_id' => Patient::query()->inRandomOrder()->first()->id,
             'date' => $this->faker->date(),
             'start_time' => $this->faker->time(),
             'end_time' => $this->faker->time(),

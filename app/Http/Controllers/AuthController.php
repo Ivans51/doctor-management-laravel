@@ -141,9 +141,14 @@ class AuthController extends Controller
      */
     public function logout(Request $request): Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
+        $routeTo = 'login';
+        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
+            $routeTo = 'admin/login';
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/admin/login');
+        return redirect($routeTo);
     }
 }
