@@ -11,11 +11,56 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // initialize calendar
             const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: function (info, successCallback, failureCallback) {
+                    // get the start and end dates of the current month
+                    const start = info.startStr;
+                    const end = info.endStr;
+
+                    $.ajax({
+                        url: '{{ route('schedule-timing-doctor') }}',
+                        type: 'POST',
+                        data: {
+                            start: start,
+                            end: end,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            const schedules = data.data.map(function (schedule) {
+                                return {
+                                    title: `${schedule.appointment.patient.name} - ${schedule.start_time} - ${schedule.end_time}`,
+                                    start: schedule.date,
+                                    id: JSON.stringify(schedule)
+                                }
+                            })
+                            successCallback(schedules);
+                        },
+                        error: function () {
+                            failureCallback();
+                        }
+                    });
+                },
+                eventClick: function (info) {
+                    info.jsEvent.preventDefault();
+                    if (info.event.title) {
+                        alert('Event: ' + info.event.title);
+                    }
+                },
+                monthChange: function (info) {
+                    calendar.refetchEvents(); // reload events when the month changes
+                }
+            });
+            calendar.render();
+
+            /*const calendarEl = document.getElementById('calendar');
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth'
             });
-            calendar.render();
+            calendar.render();*/
         });
     </script>
 @endpush

@@ -16,4 +16,10 @@ class Schedule extends Model
         'start_time',
         'end_time',
     ];
+
+    // relation with appointment
+    public function appointment()
+    {
+        return $this->hasOne(Appointment::class);
+    }
 }
