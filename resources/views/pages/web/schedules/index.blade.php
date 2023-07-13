@@ -50,17 +50,8 @@
                         alert('Event: ' + info.event.title);
                     }
                 },
-                monthChange: function (info) {
-                    calendar.refetchEvents(); // reload events when the month changes
-                }
             });
             calendar.render();
-
-            /*const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth'
-            });
-            calendar.render();*/
         });
     </script>
 @endpush
