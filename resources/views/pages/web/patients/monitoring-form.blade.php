@@ -5,82 +5,111 @@
 
     <div class="flex items-start space-x-0 md:space-x-4">
         <section class="w-3/5">
-            <form action="{{ route('my-patient-detail-post') }}" method="post">
-                @csrf <!-- add this to protect against CSRF attacks -->
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-x-4">
-                        <div>
-                            <label for="doctor_id">Healthcare Provider</label>
-                            <input class="border w-full bg-transparent" type="text" name="doctor_id" id="doctor_id">
-                        </div>
+            <x-utils.message-component/>
 
+            <form action="{{ route('appointment-store') }}" method="post" enctype="multipart/form-data">
+                @csrf <!-- add this to protect against CSRF attacks -->
+                @method('POST')
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 gap-x-4">
                         <div>
-                            <label for="type">Type</label>
-                            <select name="type" id="type" class="border w-full p-2 bg-transparent">
-                                <option value="">Select</option>
-                                <option value="1">1</option>
-                            </select>
+                            <label for="patient_name">Patient Name</label>
+                            <input type="hidden" id="patient_id" name="patient_id" value="{{ $patient->id }}">
+                            <input type="hidden" id="doctor_id" name="doctor_id" value="{{ Auth::user()->doctor->id }}">
+                            <input
+                                class="border w-full bg-transparent"
+                                type="text"
+                                name="patient_name"
+                                id="patient_name"
+                                value="{{ $patient->name }}"
+                                readonly
+                            >
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-x-4">
+                    <div class="grid grid-cols-1 gap-x-4">
                         <div>
-                            <label for="patient_id">Patient Name</label>
-                            <select name="patient_id" id="patient_id" class="border w-full p-2 bg-transparent">
-                                <option value="">Select</option>
-                                <option value="1">1</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="location">Location</label>
+                            <label for="healthcare_provider">Healthcare Provider</label>
                             <input
                                 class="border w-full bg-transparent"
-                                name="location"
                                 type="text"
-                                autocomplete="shipping address-line1"
-                                id="location">
+                                name="healthcare_provider"
+                                id="healthcare_provider"
+                            >
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-x-4">
                         <div>
                             <label for="start_time">Start Time</label>
-                            <input class="border w-full bg-transparent" type="time" name="start_time" id="start_time">
+                            <input
+                                class="border w-full bg-transparent"
+                                type="time"
+                                name="start_time"
+                                id="start_time"
+                                required
+                            >
                         </div>
 
                         <div>
+                            <label for="end_time">End Time</label>
+                            <input
+                                class="border w-full bg-transparent"
+                                type="time"
+                                name="end_time"
+                                id="end_time"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-x-4">
+                        <div>
                             <label for="date_consulting">Date of Consulting</label>
+                            {{-- input date not before today --}}
                             <input
                                 class="border w-full bg-transparent"
                                 type="date"
                                 name="date_consulting"
                                 id="date_consulting"
+                                min="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"
+                                required
                             >
                         </div>
                     </div>
 
                     <div>
-                        <label for="reason_consulting">Reason for Consulting</label>
+                        <label for="description">Reason for Consulting</label>
                         <textarea
                             class="border w-full bg-transparent p-2"
                             rows="5"
-                            name="reason_consulting"
-                            id="date_consulting"
+                            name="description"
+                            id="description"
                         ></textarea>
                     </div>
 
                     <div>
-                        <label for="review_notes">Review Notes</label>
+                        <label for="notes">Review Notes</label>
                         <textarea
                             class="border w-full bg-transparent p-2"
                             rows="5"
-                            name="review_notes"
-                            id="date_consulting"
+                            name="notes"
+                            id="notes"
                         ></textarea>
                     </div>
 
-                    <div class="dropzone" id="mydropzone"></div>
+                    <div>
+                        <label for="file" class="block">Upload File</label>
+                        <p class="text-sm text-zinc-400">File must be in .pdf, .docx format</p>
+                        <input
+                            class="border w-full bg-transparent"
+                            type="file"
+                            name="file"
+                            id="file"
+                            accept=".pdf,.doc,.docx"
+                        >
+                    </div>
                 </div>
 
                 <div class="flex items-center space-x-2 mt-10">
@@ -103,14 +132,23 @@
 
         <section class="w-2/5 bg-white rounded p-6">
             <div class="flex flex-col items-center">
-                <img
-                    class="mb-2 w-24 h-24"
-                    src="{{ Vite::asset('resources/img/home/logo.png') }}"
-                    alt="patient profile image"
-                    style="border-radius: 50%"
-                >
-                <p class="font-bold">Mr. Jone Martin</p>
-                <p class="text-zinc-400">22 Years, Male</p>
+                @if($patient->profile == null)
+                    <img
+                        class="mb-2 w-24 h-24"
+                        src="{{ Vite::asset('resources/img/icons8-male-user.png') }}"
+                        alt="profile patient"
+                        style="border-radius: 50%"
+                    >
+                @else
+                    <img
+                        class="h-10 mr-3"
+                        src="{{asset('storage/'.$patient->profile)}}"
+                        alt="profile patient"
+                        style="border-radius: 50%"
+                    >
+                @endif
+                <p class="font-bold">{{ $patient->name }}</p>
+                <p class="text-zinc-400">{{ $patient->years_old }} Years, {{ $patient->gender }}</p>
             </div>
 
             <hr class="my-4">
@@ -118,60 +156,25 @@
             <div class="space-y-4">
                 <div>
                     <p class="text-zinc-400">Email</p>
-                    <p>test@gmail.com</p>
+                    <p>{{ $patient->user->email }}</p>
                 </div>
                 <div>
                     <p class="text-zinc-400">Phone</p>
-                    <p>(707) 555-0710</p>
+                    <p>{{ $patient->phone }}</p>
                 </div>
                 <div>
                     <p class="text-zinc-400">Date of Birth</p>
-                    <p>14 February 2021</p>
+                    <p>
+                        {{ \Carbon\Carbon::parse($patient->date_of_birth)->format('d F Y') }}
+                    </p>
                 </div>
                 <div>
                     <p class="text-zinc-400">Diseases</p>
-                    <p>Cardiology</p>
+                    <p>Not found</p>
                 </div>
             </div>
 
             <hr class="my-4">
         </section>
     </div>
-
 @endsection
-
-@push('scripts-bottom')
-    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
-    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css"/>
-
-    <script>
-        Dropzone.autoDiscover = false;
-        const myDropzone = new Dropzone("div#mydropzone", {
-            url: "/file/post",
-            paramName: "file",
-            acceptedFiles: 'application/pdf',
-            maxFiles: 1,
-            success: function (file, response) {
-                console.log(response);
-            }
-        });
-    </script>
-
-    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
-
-    <script>
-        const script = document.getElementById('search-js');
-        script.onload = function () {
-            mapboxsearch.autofill({
-                accessToken: '{{ config('services.mapbox.token') }}',
-                options: {
-                    language: 'es',
-                },
-            })
-        };
-
-        document.querySelector('input[name="location"]').addEventListener('input', event => {
-            /*console.log(`${event.target.value}`);*/
-        });
-    </script>
-@endpush

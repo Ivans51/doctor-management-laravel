@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->string('healthcare_provider')->nullable();
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
+            $table->text('file')->nullable();
             $table->foreign('patient_id')->references('id')->on('patients');
             $table->foreign('doctor_id')->references('id')->on('doctors');
             $table->foreign('schedule_id')->references('id')->on('schedules');

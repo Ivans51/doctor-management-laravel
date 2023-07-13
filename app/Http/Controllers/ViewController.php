@@ -12,6 +12,7 @@ use Faker\Factory as Faker;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 
 class ViewController extends Controller
 {
@@ -152,9 +153,28 @@ class ViewController extends Controller
         ]);
     }
 
-    public function getMonitoringForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    /**
+     * @param Request $request
+     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     */
+    public function getMonitoringForm(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('pages/web/patients/monitoring-form');
+        $patientId = $request->query('patient_id', '');
+
+        $patient = Patient::query()
+            ->with([
+                'user',
+                'doctorPatient',
+                'doctorPatient.doctor',
+            ])
+            ->where('id', $patientId)
+            ->first();
+
+        if ($patient && $patient->date_of_birth) {
+            $patient->years_old = date_diff(date_create($patient->date_of_birth), date_create())->y;
+        }
+
+        return view('pages/web/patients/monitoring-form', compact('patient'));
     }
 
     public function getCheckoutForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -250,10 +270,5 @@ class ViewController extends Controller
         return view('pages/web/settings/reviews')->with([
             'images' => $files,
         ]);
-    }
-
-    public function postSettings(): \Illuminate\Http\RedirectResponse
-    {
-        return redirect()->route('my-patients-checkout');
     }
 }

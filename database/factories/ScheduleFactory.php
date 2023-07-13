@@ -21,7 +21,7 @@ class ScheduleFactory extends Factory
         return [
             'doctor_id' => Doctor::query()->inRandomOrder()->first()->id,
             'patient_id' => Patient::query()->inRandomOrder()->first()->id,
-            'date' => $this->faker->date(),
+            'date' => $this->faker->dateTimeBetween('+1 days', '+1 years')->format('Y-m-d'),
             'start_time' => $this->faker->time(),
             'end_time' => $this->faker->time(),
         ];

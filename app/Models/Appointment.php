@@ -9,6 +9,18 @@ class Appointment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'patient_id',
+        'doctor_id',
+        'schedule_id',
+        'payment_id',
+        'healthcare_provider',
+        'description',
+        'notes',
+        'file',
+        'status',
+    ];
+
     // relation with patient
     public function patient()
     {
