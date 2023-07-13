@@ -30,13 +30,38 @@ class PaymentsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function searchByDoctor(Request $request): JsonResponse
+    {
+        $doctorId = \Auth::user()->doctor->id;
+        return $this->getPayments($request, $doctorId);
+    }
+
+    /**
+     * Search user with parameter email and name
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function search(Request $request): JsonResponse
     {
         $doctorId = $request->query('doctorId');
-        $limit = $request->limit ?? 10;
+        return $this->getPayments($request, $doctorId);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $doctorId
+     * @return JsonResponse
+     */
+    private function getPayments(Request $request, string $doctorId): JsonResponse
+    {
+        $limit = $request->query('limit', 10);
 
         if ($request->search) {
             $payments = Payment::query()
+                ->with([
+                    'patient',
+                    'doctor',
+                ])
                 ->when($doctorId, function ($query, $doctorId) {
                     return $query->where('doctor_id', $doctorId);
                 })
@@ -46,6 +71,10 @@ class PaymentsController extends Controller
                 ->paginate($limit);
         } else {
             $payments = Payment::query()
+                ->with([
+                    'patient',
+                    'doctor',
+                ])
                 ->when($doctorId, function ($query, $doctorId) {
                     return $query->where('doctor_id', $doctorId);
                 })

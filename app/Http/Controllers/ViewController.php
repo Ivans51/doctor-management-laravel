@@ -189,17 +189,7 @@ class ViewController extends Controller
 
     public function getPayments(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $files = [];
-
-        $faker = Faker::create();
-
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
-
-        return view('pages/web/payments/index')->with([
-            'images' => $files,
-        ]);
+        return view('pages/web/payments/index');
     }
 
     public function getMessages(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application

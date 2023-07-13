@@ -13,6 +13,11 @@ function formatDate(date) {
     return [day, month, year].join('/')
 }
 
+// format number point to decimal and add $ symbol and dot for a thousand
+function formatNumber(number) {
+    return new Intl.NumberFormat('es-ES', {style: 'currency', currency: 'USD'}).format(number)
+}
+
 // constants
 const CONST_APPROVED = 'approved'
 const CONST_PENDING = 'pending'
