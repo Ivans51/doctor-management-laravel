@@ -31,6 +31,8 @@ class AppointmentFactory extends Factory
                 Constants::$APPROVED,
                 Constants::$REJECTED,
             ]),
+            'healthcare_provider' => $this->faker->text(),
+            'notes' => $this->faker->text(),
             'description' => $this->faker->text(),
             'created_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 years', 'now'),

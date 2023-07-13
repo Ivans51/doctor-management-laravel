@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
+            $table->date('date_of_birth')->nullable();
             $table->enum('gender', [
                 Constants::$MALE,
                 Constants::$FEMALE

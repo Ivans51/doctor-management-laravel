@@ -2,9 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Doctor;
+use App\Models\Role;
 use App\Models\User;
 use App\Utils\Constants;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Doctor>
@@ -28,7 +31,6 @@ class DoctorFactory extends Factory
                 Constants::$ACTIVE,
                 Constants::$INACTIVE
             ]),
-            'user_id' => User::query()->inRandomOrder()->first()->id,
             'created_at' => $this->faker->dateTime(),
             'updated_at' => $this->faker->dateTime(),
         ];

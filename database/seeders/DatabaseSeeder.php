@@ -25,22 +25,69 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class
         ]);
 
+        $this->createUsers();
+
+        $userIdsPatient = $this->getUserIds(Constants::$PATIENT);
+        foreach ($userIdsPatient as $item) {
+            Patient::factory(1, ['user_id' => $item])->create();
+        }
+
+        $userIdsDoctor = $this->getUserIds(Constants::$DOCTOR);
+        foreach ($userIdsDoctor as $item) {
+            Doctor::factory(1, ['user_id' => $item])->create();
+        }
+
+        PatientDoctor::factory(10)->create();
+        Payment::factory(10)->create();
+        Schedule::factory(10)->create();
+        Appointment::factory(10)->create();
+    }
+
+    /**
+     * @return void
+     */
+    private function createUsers(): void
+    {
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'role_id' => Role::query()->where('name', Constants::$ADMIN)->first()->id
         ]);
         User::factory()->create([
+            'name' => 'Patient User',
+            'email' => 'patient@example.com',
+            'role_id' => Role::query()->where('name', Constants::$PATIENT)->first()->id
+        ]);
+        User::factory()->create([
             'name' => 'Doctor User',
             'email' => 'doctor@example.com',
             'role_id' => Role::query()->where('name', Constants::$DOCTOR)->first()->id
         ]);
-        User::factory(8)->create();
-        Patient::factory(10)->create();
-        Doctor::factory(10)->create();
-        PatientDoctor::factory(10)->create();
-        Payment::factory(10)->create();
-        Schedule::factory(10)->create();
-        Appointment::factory(10)->create();
+        User::factory(1, [
+            'role_id' => Role::query()->where('name', Constants::$ADMIN)->first()->id
+        ])->create();
+        User::factory(4, [
+            'role_id' => Role::query()->where('name', Constants::$PATIENT)->first()->id
+        ])->create();
+        User::factory(4, [
+            'role_id' => Role::query()->where('name', Constants::$DOCTOR)->first()->id
+        ])->create();
+    }
+
+    /**
+     * @param string $type
+     * @return array
+     */
+    private function getUserIds(string $type): array
+    {
+        $roleId = Role::query()
+            ->where('name', $type)
+            ->pluck('id')
+            ->first();
+
+        return User::query()
+            ->where('role_id', $roleId)
+            ->pluck('id')
+            ->toArray();
     }
 }
