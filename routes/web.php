@@ -25,7 +25,6 @@ Route::middleware('user')->group(function () {
     Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
     Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
     Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
-    Route::get('/my-patients/detail', [ViewController::class, 'getPatientsDetail'])->name('my-patients-detail');
     Route::get('/my-patients/monitoring', [ViewController::class, 'getMonitoringForm'])->name('my-patients-monitoring');
     Route::get('/my-patients/checkout', [ViewController::class, 'getCheckoutForm'])->name('my-patients-checkout');
     Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');
@@ -38,13 +37,17 @@ Route::middleware('user')->group(function () {
     Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
     Route::get('/logout', [AuthController::class, 'logout'])->name('web-logout');
 
-    /* POST */
+    /* PAYMENTS */
+    /* STRIPE */
+    Route::post('/payment/stripe', [PaymentsController::class, 'stripePayment'])->name('payment-stripe');
+    Route::get('/payment/stripe/success', [PaymentsController::class, 'stripeSuccess'])->name('payment-stripe-success');
 
     /* RESOURCE */
     Route::resource('my-patients-doctor', PatientsController::class);
     Route::post('appointment', [AppointmentController::class, 'store'])->name('appointment-store');
 
     /* JSON */
+    Route::get('/doctor/list', [DoctorsController::class, 'doctorList'])->name('doctor-list');
     Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments-doctor');
     Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor'])->name('search-payment-doctor');
     Route::post('/schedule-timing/doctor', [ScheduleController::class, 'getScheduleByDoctorId'])->name('schedule-timing-doctor');

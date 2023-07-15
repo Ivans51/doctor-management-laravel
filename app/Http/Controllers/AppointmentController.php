@@ -85,11 +85,12 @@ class AppointmentController extends Controller
                     'end_time' => $request->end_time,
                 ]);
 
-            Appointment::query()
+            $appointment = Appointment::query()
                 ->create([
                     'patient_id' => $request->patient_id,
                     'doctor_id' => $request->doctor_id,
                     'schedule_id' => $schedule->id,
+                    'medical_specialty_id' => $request->medical_specialty_id,
                     'status' => $request->status,
                     'healthcare_provider' => $request->healthcare_provider,
                     'description' => $request->description,
@@ -99,7 +100,9 @@ class AppointmentController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Appointment created successfully');
+            return redirect()->route('my-patients-checkout', [
+                'appointment_id' => $appointment->id,
+            ]);
 
         } catch (\Exception $e) {
             DB::rollBack();

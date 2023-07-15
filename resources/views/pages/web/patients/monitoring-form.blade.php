@@ -16,7 +16,6 @@
                         <div>
                             <label for="patient_name">Patient Name</label>
                             <input type="hidden" id="patient_id" name="patient_id" value="{{ $patient->id }}">
-                            <input type="hidden" id="doctor_id" name="doctor_id" value="{{ Auth::user()->doctor->id }}">
                             <input
                                 class="border w-full bg-transparent"
                                 type="text"
@@ -25,6 +24,37 @@
                                 value="{{ $patient->name }}"
                                 readonly
                             >
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-x-4">
+                        <div>
+                            <label for="medical_specialty_id">Medical Specialties</label>
+                            <select
+                                name="medical_specialty_id"
+                                id="medical_specialty_id"
+                                class="border w-full bg-transparent"
+                                required
+                            >
+                                <option value="">Select</option>
+                                @foreach($medicalSpecialties as $medicalSpecialty)
+                                    <option value="{{ $medicalSpecialty->id }}">
+                                        {{ $medicalSpecialty->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            Price: <span id="price">$0</span>
+                        </div>
+
+                        <div>
+                            <label for="doctor_id">Doctors</label>
+                            <select
+                                name="doctor_id"
+                                id="doctor_id"
+                                class="border w-full bg-transparent"
+                                required
+                            >
+                            </select>
                         </div>
                     </div>
 
@@ -178,3 +208,34 @@
         </section>
     </div>
 @endsection
+
+@push('scripts-bottom')
+    <script>
+        // detect change medical specialty
+        $('#medical_specialty_id').change(function () {
+            // set price
+            const medicalSpecialties = @json($medicalSpecialties);
+            const medicalSpecialty = medicalSpecialties.find(medicalSpecialty => {
+                return medicalSpecialty.id === parseInt($(this).val());
+            });
+            $('#price').text(formatNumber(medicalSpecialty.price));
+
+            let medicalSpecialtyId = $(this).val();
+            let url = '{{ route('doctor-list') }}' + '?medical_specialty_id=' + medicalSpecialtyId;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    const doctorId = $('#doctor_id');
+                    doctorId.empty();
+                    doctorId.append('<option value="">Select Doctor</option>');
+
+                    $.each(data.data, function (key, value) {
+                        doctorId.append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        });
+    </script>
+@endpush

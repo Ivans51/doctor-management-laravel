@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('payment_method');
             $table->string('payment_status');
             $table->string('payment_date');
+            $table->string('transaction_id')->nullable();
             $table->timestamps();
             $table->foreign('patient_id')->references('id')->on('patients');
             $table->foreign('doctor_id')->references('id')->on('doctors');

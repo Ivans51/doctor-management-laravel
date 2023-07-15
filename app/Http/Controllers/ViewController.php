@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Charts\HomeChart;
 use App\Models\Appointment;
 use App\Models\Doctor;
+use App\Models\MedicalSpecialty;
 use App\Models\Patient;
 use App\Utils\Constants;
 use Auth;
@@ -138,28 +139,18 @@ class ViewController extends Controller
         return view('pages/web/patients/index');
     }
 
-    public function getPatientsDetail(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $files = [];
-
-        $faker = Faker::create();
-
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
-
-        return view('pages/web/patients/detail')->with([
-            'images' => $files,
-        ]);
-    }
-
     /**
      * @param Request $request
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
     public function getMonitoringForm(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
+        /*$patientId = Auth::user()->patient->id;*/
         $patientId = $request->query('patient_id', '');
+
+        if (!$patientId) {
+            abort('404', 'The post you are looking for was not found');
+        }
 
         $patient = Patient::query()
             ->with([
@@ -170,16 +161,41 @@ class ViewController extends Controller
             ->where('id', $patientId)
             ->first();
 
+        $medicalSpecialties = MedicalSpecialty::query()
+            ->orderBy('name')
+            ->get();
+
         if ($patient && $patient->date_of_birth) {
             $patient->years_old = date_diff(date_create($patient->date_of_birth), date_create())->y;
         }
 
-        return view('pages/web/patients/monitoring-form', compact('patient'));
+        return view('pages/web/patients/monitoring-form', compact([
+            'patient', 'medicalSpecialties'
+        ]));
     }
 
-    public function getCheckoutForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application
+     */
+    public function getCheckoutForm(): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
     {
-        return view('pages/web/patients/checkout-form');
+        $appointmentId = request()->query('appointment_id');
+
+        if (!$appointmentId) {
+            abort('404', 'The post you are looking for was not found');
+        }
+
+        $appointment = Appointment::query()
+            ->with([
+                'patient',
+                'schedule',
+                'medicalSpecialty',
+            ])
+            ->where('id', $appointmentId)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return view('pages/web/patients/checkout-form', compact('appointment'));
     }
 
     public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application

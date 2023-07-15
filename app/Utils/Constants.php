@@ -24,4 +24,7 @@ class Constants
     public static $PENDING = 'pending';
     public static $APPROVED = 'approved';
     public static $REJECTED = 'rejected';
+
+    public static $STRIPE = 'stripe';
+    public static $PAYPAL = 'paypal';
 }

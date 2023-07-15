@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('payment_id')->nullable();
+            $table->unsignedBigInteger('medical_specialty_id')->nullable();
             $table->enum('status', [
                 Constants::$PENDING,
                 Constants::$APPROVED,
@@ -30,6 +31,7 @@ return new class extends Migration {
             $table->foreign('doctor_id')->references('id')->on('doctors');
             $table->foreign('schedule_id')->references('id')->on('schedules');
             $table->foreign('payment_id')->references('id')->on('payments');
+            $table->foreign('medical_specialty_id')->references('id')->on('medical_specialties');
             $table->timestamps();
         });
     }

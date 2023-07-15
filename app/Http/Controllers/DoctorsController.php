@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
-use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
 use App\Utils\Constants;
 use DB;
-use Faker\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
@@ -20,6 +18,34 @@ class DoctorsController extends Controller
     public function index()
     {
         return view('pages/admin/doctors/index');
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function doctorList(Request $request): JsonResponse
+    {
+        $medicalSpecialtyId = $request->query('medical_specialty_id');
+
+        $doctors = Doctor::query()
+            ->with([
+                'user',
+                'medicalSpecialty'
+            ])
+            ->whereHas('medicalSpecialty', function ($query) use ($medicalSpecialtyId) {
+                if ($medicalSpecialtyId) {
+                    $query->where('id', $medicalSpecialtyId);
+                }
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data retrieved successfully',
+            'data' => $doctors
+        ]);
     }
 
     /**

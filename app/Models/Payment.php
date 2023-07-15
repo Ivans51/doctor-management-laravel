@@ -17,7 +17,14 @@ class Payment extends Model
         'payment_method',
         'payment_status',
         'payment_date',
+        'transaction_id',
     ];
+
+    // relation with user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function patient()
     {
