@@ -43,7 +43,7 @@
 
             <h3 class="font-bold text-lg mb-2 mt-10">Method Payment</h3>
             @if($appointment->doctorMedicalSpecialty && $appointment->doctorMedicalSpecialty->medicalSpecialty)
-                <p class="text-zinc-400">Price: ${{ $appointment->doctorMedicalSpecialty->medicalSpecialty->price }}</p>
+                <p class="text-zinc-400">Price: ${{ $appointment->medicalSpecialty->price }} USD</p>
 
                 <div class="flex space-x-2">
                     <form action="{{ route('payment-stripe') }}" method="post">
@@ -63,9 +63,14 @@
                         </button>
                     </form>
 
-                    <form action="{{ route('payment-stripe') }}" method="post">
+                    <form action="{{ route('payment-paypal') }}" method="post">
                         @csrf <!-- add this to protect against CSRF attacks -->
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <input
+                            type="hidden"
+                            name="appointment_id"
+                            value="{{ $appointment->id }}"
+                        >
                         <button type="submit" id="checkout-live-button">
                             <img
                                 src="{{ Vite::asset('resources/img/checkout/icons8-paypal.png') }}"

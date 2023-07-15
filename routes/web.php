@@ -5,7 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewAdminController;
 use App\Http\Controllers\ViewController;
@@ -39,8 +41,13 @@ Route::middleware('user')->group(function () {
 
     /* PAYMENTS */
     /* STRIPE */
-    Route::post('/payment/stripe', [PaymentsController::class, 'stripePayment'])->name('payment-stripe');
-    Route::get('/payment/stripe/success', [PaymentsController::class, 'stripeSuccess'])->name('payment-stripe-success');
+    Route::post('/payment/stripe', [StripeController::class, 'checkout'])->name('payment-stripe');
+    Route::get('/payment/stripe/success', [StripeController::class, 'success'])->name('payment-stripe-success');
+
+    /* PAYPAL */
+    Route::post('/payment/paypal', [PaypalController::class, 'checkout'])->name('payment-paypal');
+    Route::get('/payment/paypal/success', [PaypalController::class, 'success'])->name('payment-paypal-success');
+    Route::get('/payment/paypal/cancel', [PaypalController::class, 'cancel'])->name('payment-paypal-cancel');
 
     /* RESOURCE */
     Route::resource('my-patients-doctor', PatientsController::class);

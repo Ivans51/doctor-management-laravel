@@ -151,7 +151,7 @@
                         Set monitoring Plane
                     </button>
                     <a
-                        href="{{ route('my-patients-detail') }}"
+                        href="{{ url()->previous() }}"
                         class="rounded bg-white-500 px-4 py-1 w-full border text-center"
                     >
                         Cancel

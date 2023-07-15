@@ -57,26 +57,27 @@
             {{ $data->doctor->name }}
         </li>
         <li>
-            <div class="col-md-12">
-                <strong>Nombre de la especialidad: </strong>{{ $data->medicalSpecialty->name }}
-                <strong class="ml-2">Monto: </strong>
-                ${{ number_format($data->medicalSpecialty->price, 2, ',', '.') }}
-            </div>
+            <strong>Nombre de la especialidad: </strong>
+            {{ $data->medicalSpecialty->name }}
+        </li>
+        <li>
+            <strong class="ml-2">Monto: </strong>
+            ${{ number_format($data->medicalSpecialty->price, 2, ',', '.') }} USD
         </li>
         <li>
             <strong>Fecha: </strong>
-            {{ $data->schedule->date }}
+            {{ date('d-m-Y', strtotime($data->schedule->date)) }}
         </li>
         <li>
             <strong>Hora: </strong>
-            {{ $data->schedule->start_time }}
+            {{ date('H:i', strtotime($data->schedule->start_time)) }}
         </li>
     </ul>
 
     <div class="row mt-5">
         <div class="col-md-12">
             <strong>Total: </strong>
-            ${{ number_format($data->medicalSpecialty->price, 2, ',', '.') }}
+            ${{ number_format($data->medicalSpecialty->price, 2, ',', '.') }} USD
         </div>
     </div>
 </div>
