@@ -4,7 +4,9 @@
     <h3 class="font-bold text-lg mb-10">My Profile</h3>
 
     <div id="settings" class="flex flex-col md:flex-row items-start space-x-0 md:space-x-4">
-        <x-settings.profile-component></x-settings.profile-component>
+        <x-settings.profile-component
+            :user="$user"
+        ></x-settings.profile-component>
 
         <section class="w-full md:w-3/5 mt-10 md:mt-0">
             <ul id="menu-setting" class="bg-white flex space-x-5">
@@ -15,36 +17,78 @@
             </ul>
 
             <h2 class="font-bold mt-8 mb-4">My information</h2>
-            <form action="" method="post">
+
+            <x-utils.message-component/>
+
+            <form action="{{ route('settings.update.profile') }}" method="post">
+                @csrf
+                @method('PUT')
+
                 <div class="space-y-6">
                     <div class="w-full">
-                        <label for="first_name">First Name</label>
-                        <input class="border w-full" type="text" name="first_name" id="first_name">
-                    </div>
-
-                    <div class="w-full">
-                        <label for="last_name">Last Name</label>
-                        <input class="border w-full" type="text" name="last_name" id="last_name">
-                    </div>
-
-                    <div class="w-full">
-                        <label for="location">Location</label>
+                        <label for="name">Name</label>
                         <input
                             class="border w-full"
-                            name="location"
+                            type="text"
+                            name="name"
+                            id="name"
+                            value="{{ $user->name }}"
+                        >
+                    </div>
+
+                    <div class="w-full">
+                        <label for="address">Location</label>
+                        <input
+                            class="border w-full"
+                            name="address"
                             type="text"
                             autocomplete="shipping address-line1"
-                            id="location">
+                            id="address"
+                            value="{{ $user->address }}"
+                        >
                     </div>
 
                     <div class="w-full">
                         <label for="email">Email</label>
-                        <input class="border w-full" type="email" name="email" id="email">
+                        <input
+                            class="border w-full"
+                            type="email"
+                            name="email"
+                            id="email"
+                            value="{{ Auth::user()->email }}"
+                        >
                     </div>
 
                     <div class="w-full">
                         <label for="phone_number">Phone Number</label>
-                        <input class="border w-full" type="tel" name="phone_number" id="phone_number">
+                        <input
+                            class="border w-full"
+                            type="tel"
+                            name="phone_number"
+                            id="phone_number"
+                            value="{{ $user->phone }}"
+                        >
+                    </div>
+
+                    <div class="w-full">
+                        <label for="specialties">Medical Specialties</label>
+                        <select
+                            name="specialties[]"
+                            id="specialties"
+                            class="border w-full bg-transparent"
+                            required
+                            multiple
+                        >
+                            <option value="">Select</option>
+                            @foreach($medicalSpecialties as $medicalSpecialty)
+                                <option
+                                    value="{{ $medicalSpecialty->id }}"
+                                    {{ $myMedicalSpecialties->contains($medicalSpecialty->id) ? 'selected' : '' }}
+                                >
+                                    {{ $medicalSpecialty->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -82,7 +126,7 @@
             })
         };
 
-        document.querySelector('input[name="location"]').addEventListener('input', event => {
+        document.querySelector('input[name="address"]').addEventListener('input', event => {
             /*console.log(`${event.target.value}`);*/
         });
     </script>

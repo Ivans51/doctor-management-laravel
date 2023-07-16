@@ -4,7 +4,9 @@
     <h3 class="font-bold text-lg mb-10">Notifications</h3>
 
     <div id="settings" class="flex flex-col md:flex-row items-start space-x-0 md:space-x-4">
-        <x-settings.profile-component></x-settings.profile-component>
+        <x-settings.profile-component
+            :user="$user"
+        ></x-settings.profile-component>
 
         <section class="w-full md:w-3/5 mt-10 md:mt-0">
             <ul id="menu-setting" class="bg-white flex space-x-5">
@@ -15,16 +17,32 @@
             </ul>
 
             <h2 class="font-bold mt-8">Change Password</h2>
-            <form action="" method="post">
+
+            <x-utils.message-component/>
+
+            <form action="{{ route('settings.update.password') }}" method="post">
+                @csrf
+                @method('PUT')
+
                 <div class="space-y-6">
                     <div class="w-full">
                         <label for="password">Password</label>
-                        <input class="border w-full" type="password" name="password" id="password">
+                        <input
+                            class="border w-full"
+                            type="password"
+                            name="password"
+                            id="password"
+                        >
                     </div>
 
                     <div class="w-full">
-                        <label for="confirm_password">Confirm Password</label>
-                        <input class="border w-full" type="password" name="confirm_password" id="confirm_password">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input
+                            class="border w-full"
+                            type="password"
+                            name="password_confirmation"
+                            id="password_confirmation"
+                        >
                     </div>
                 </div>
 

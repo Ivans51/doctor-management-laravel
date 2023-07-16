@@ -8,6 +8,7 @@ use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewAdminController;
@@ -34,10 +35,10 @@ Route::middleware('user')->group(function () {
     Route::get('/payments', [ViewController::class, 'getPayments'])->name('payments');
     Route::get('/messages', [ViewController::class, 'getMessages'])->name('messages');
     Route::get('/blog', [ViewController::class, 'getBlog'])->name('blog');
-    Route::get('/settings', [ViewController::class, 'getSettings'])->name('settings');
-    Route::get('/settings/change-password', [ViewController::class, 'getChangePassword'])->name('change-password');
-    Route::get('/settings/notifications', [ViewController::class, 'getNotifications'])->name('notifications');
-    Route::get('/settings/reviews', [ViewController::class, 'getReviews'])->name('reviews');
+    Route::get('/settings', [SettingsController::class, 'getSettings'])->name('settings');
+    Route::get('/settings/change-password', [SettingsController::class, 'getChangePassword'])->name('change-password');
+    Route::get('/settings/notifications', [SettingsController::class, 'getNotifications'])->name('notifications');
+    Route::get('/settings/reviews', [SettingsController::class, 'getReviews'])->name('reviews');
     Route::get('/logout', [AuthController::class, 'logout'])->name('web-logout');
 
     /* PAYMENTS */
@@ -57,9 +58,13 @@ Route::middleware('user')->group(function () {
     /* JSON */
     Route::get('/doctor/list', [DoctorsController::class, 'doctorList'])->name('doctor-list');
     Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments-doctor');
+
+    /* POST */
     Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor'])->name('search-payment-doctor');
     Route::post('/schedule-timing/doctor', [ScheduleController::class, 'getScheduleByDoctorId'])->name('schedule-timing-doctor');
     Route::post('/patients/doctor/search', [PatientsController::class, 'searchByDoctor'])->name('search-patient-doctor');
+    Route::put('/settings/update/profile', [SettingsController::class, 'updateProfileDoctor'])->name('settings.update.profile');
+    Route::put('/settings/update/password', [SettingsController::class, 'updatePassword'])->name('settings.update.password');
 });
 
 Route::middleware('user.auth')->group(function () {

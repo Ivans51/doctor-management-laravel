@@ -14,24 +14,7 @@
                 >
                     <ul class="space-y-1 btn-link">
                         <li>
-                            <a href="/#" class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block">
-                                My Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/#" class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block">
-                                Change Password
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/#" class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block">
-                                Notifications
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/#" class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block">
-                                Reviews
-                            </a>
+
                         </li>
                     </ul>
                 </div>
@@ -45,7 +28,7 @@
                     >
                     <div class="flex ml-2">
                         <div class="flex flex-col text-xs">
-                            <span><strong>Stephen Conley</strong></span>
+                            <span><strong>{{ Auth::user()->doctor->name }}</strong></span>
                             <span>Cardiologist</span>
                         </div>
                         <x-ri-arrow-drop-down-fill class="h-8 inline-block"/>
@@ -55,7 +38,7 @@
                     <ul class="space-y-1 btn-link">
                         <li>
                             <a
-                                href="/#"
+                                href="{{ route('settings') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 My Profile
@@ -63,7 +46,7 @@
                         </li>
                         <li>
                             <a
-                                href="/#"
+                                href="{{ route('change-password') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Change Password
@@ -71,7 +54,7 @@
                         </li>
                         <li>
                             <a
-                                href="/#"
+                                href="{{ route('notifications') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Notifications
@@ -79,7 +62,7 @@
                         </li>
                         <li>
                             <a
-                                href="/#"
+                                href="{{ route('reviews') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Reviews
