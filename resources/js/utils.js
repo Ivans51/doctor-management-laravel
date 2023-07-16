@@ -18,6 +18,14 @@ function formatNumber(number) {
     return new Intl.NumberFormat('es-ES', {style: 'currency', currency: 'USD'}).format(number)
 }
 
+// limit text to 50 characters in description and add three dots
+function limitText(text, number = 20) {
+    if (text.length <= number) {
+        return text
+    }
+    return text.substring(0, number) + '...'
+}
+
 // constants
 const CONST_APPROVED = 'approved'
 const CONST_PENDING = 'pending'

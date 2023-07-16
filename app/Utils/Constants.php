@@ -27,4 +27,5 @@ class Constants
 
     public static $STRIPE = 'stripe';
     public static $PAYPAL = 'paypal';
+    public static $CURRENCY_USD = 'USD';
 }

@@ -11,6 +11,12 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('medical.index') }}">
+                <x-ri-dashboard-line/>
+                Medical Specialty
+            </a>
+        </li>
+        <li>
             <a href="{{ route('doctors.index') }}">
                 <x-ri-dashboard-line/>
                 Doctors
@@ -37,14 +43,17 @@
         if (siteBaseURL === 'admins') {
             $($('#menu-vertical li a')[0]).addClass('active')
         }
-        if (siteBaseURL === 'doctors') {
+        if (siteBaseURL === 'medical') {
             $($('#menu-vertical li a')[1]).addClass('active')
         }
-        if (siteBaseURL === 'patients') {
+        if (siteBaseURL === 'doctors') {
             $($('#menu-vertical li a')[2]).addClass('active')
         }
-        if (siteBaseURL === 'payments') {
+        if (siteBaseURL === 'patients') {
             $($('#menu-vertical li a')[3]).addClass('active')
+        }
+        if (siteBaseURL === 'payments') {
+            $($('#menu-vertical li a')[4]).addClass('active')
         }
     </script>
 @endpush

@@ -144,7 +144,6 @@
                         if (response.status === 'success') {
                             hideLoading()
                             successSwal()
-                            getData();
                         }
                     },
                     error: function (response) {

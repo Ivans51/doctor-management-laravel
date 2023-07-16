@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorsController;
+use App\Http\Controllers\MedicalSpecialtyController;
 use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PaypalController;
@@ -87,6 +88,9 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::resource('payments', PaymentsController::class);
         Route::post('/payments/search', [PaymentsController::class, 'search'])->name('search-payment');
+
+        Route::resource('medical', MedicalSpecialtyController::class);
+        Route::post('/medical/search', [MedicalSpecialtyController::class, 'search'])->name('search-medical');
     });
 
     Route::middleware('admin.auth')->group(function () {
