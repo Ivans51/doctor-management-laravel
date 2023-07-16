@@ -12,7 +12,7 @@
 
             <x-utils.message-component/>
 
-            <form action="{{ route('web-form-register') }}" method="post">
+            <form action="{{ route('patient-form-register') }}" method="post">
                 @csrf
 
                 <input type="hidden" name="recaptcha" id="recaptcha">

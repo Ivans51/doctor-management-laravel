@@ -13,6 +13,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewAdminController;
 use App\Http\Controllers\ViewController;
+use App\Http\Controllers\ViewPatientController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/* Doctors */
 Route::middleware('user')->group(function () {
     Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
     Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
@@ -72,11 +75,27 @@ Route::middleware('user.auth')->group(function () {
     Route::get('/register', [ViewController::class, 'getRegister'])->name('register');
     Route::get('/forgot', [ViewController::class, 'getForgot'])->name('forgot');
 
-    Route::post('/login', [AuthController::class, 'login'])->name('web-login');
-    Route::post('/register', [AuthController::class, 'register'])->name('web-register');
+    Route::post('/login', [AuthController::class, 'login'])->name('web-form-login');
+    Route::post('/register', [AuthController::class, 'register'])->name('web-form-register');
     Route::post('/forgot', [AuthController::class, 'forgot'])->name('web-form-forgot');
 });
 
+/* Patients */
+Route::group(['prefix' => 'patient'], function () {
+    Route::middleware('patient')->group(function () {
+        Route::get('/', [ViewPatientController::class, 'getDashBoard'])->name('patient-home');
+    });
+
+    Route::middleware('patient.auth')->group(function () {
+        Route::get('/login', [ViewPatientController::class, 'getLogin'])->name('patient-login');
+        Route::get('/forgot', [ViewPatientController::class, 'getForgot'])->name('patient-forgot');
+
+        Route::post('/login', [AuthController::class, 'login'])->name('patient-form-login');
+        Route::post('/forgot', [AuthController::class, 'forgot'])->name('patient-form-forgot');
+    });
+});
+
+/* Admins */
 Route::group(['prefix' => 'admin'], function () {
     Route::middleware(['admin'])->group(function () {
         Route::get('/', [ViewAdminController::class, 'getDashBoard'])->name('admin-home');
@@ -103,8 +122,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/register', [ViewAdminController::class, 'getSignUp'])->name('admin-sign-up');
         Route::get('/forgot', [ViewAdminController::class, 'getForgot'])->name('admin-forgot');
 
-        Route::post('/login', [AuthController::class, 'login'])->name('admin-login');
-        Route::post('/register', [AuthController::class, 'register'])->name('admin-register');
+        Route::post('/login', [AuthController::class, 'login'])->name('admin-form-login');
+        Route::post('/register', [AuthController::class, 'register'])->name('admin-form-register');
         Route::post('/forgot', [AuthController::class, 'forgot'])->name('admin-form-forgot');
     });
 });

@@ -44,7 +44,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['roles', 'doctor'];
+    protected $with = ['roles', 'doctor', 'patient'];
 
     public function roles(): BelongsTo
     {
@@ -55,5 +55,11 @@ class User extends Authenticatable
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(Doctor::class, 'id', 'user_id');
+    }
+
+    // get patient
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class, 'id', 'user_id');
     }
 }

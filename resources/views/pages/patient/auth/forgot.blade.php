@@ -2,33 +2,23 @@
 
 @section('content')
     <section class="flex flex-col justify-center h-screen items-center">
-        <div class="bg-white p-8 rounded max-w-xl">
+        <div class="bg-white p-8 rounded">
             <img
                 class="mx-auto mb-5"
                 src="{{ Vite::asset('resources/img/home/logo.png') }}"
                 alt="doctor management logo"
             >
-            <h1 class="font-bold text-xl mb-4 text-center">Sign Up</h1>
+            <h1 class="font-bold text-xl mb-4 mb-0">Forgot Password</h1>
+            <p class="text-zinc-300 mb-8">Enter your email, and we will send you a reset link</p>
 
             <x-utils.message-component/>
 
-            <form action="{{ route('web-form-register') }}" method="post">
+            <form action="{{ route('web-form-forgot') }}" method="post">
                 @csrf
 
                 <input type="hidden" name="recaptcha" id="recaptcha">
 
                 <div class="space-y-6">
-                    <div class="w-full">
-                        <label for="name">Your name</label>
-                        <input
-                            class="border w-full rounded"
-                            type="text"
-                            name="name"
-                            id="name"
-                            placeholder="Josh"
-                        >
-                    </div>
-
                     <div class="w-full">
                         <label for="email">Email</label>
                         <input
@@ -39,30 +29,6 @@
                             placeholder="josh@gmail.com"
                         >
                     </div>
-
-                    <div class="grid grid-cols-2 gap-x-4">
-                        <div class="w-full">
-                            <label for="password">Password</label>
-                            <input
-                                class="border w-full rounded"
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="*********"
-                            >
-                        </div>
-
-                        <div class="w-full">
-                            <label for="password_confirmation">Confirm Password</label>
-                            <input
-                                class="border w-full rounded"
-                                type="password"
-                                name="password_confirmation"
-                                id="password_confirmation"
-                                placeholder="*********"
-                            >
-                        </div>
-                    </div>
                 </div>
 
                 <div class="flex items-center space-x-20 mt-10">
@@ -70,7 +36,7 @@
                         type="submit"
                         class="rounded text-white bg-blue-500 px-4 py-1 w-full"
                     >
-                        Sing up
+                        Send me link
                     </button>
                 </div>
             </form>

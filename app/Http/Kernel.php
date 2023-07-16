@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'admin.auth' => \App\Http\Middleware\AdminAuthMiddleware::class,
         'user' => \App\Http\Middleware\UserMiddleware::class,
         'user.auth' => \App\Http\Middleware\UserAuthMiddleware::class,
+        'patient' => \App\Http\Middleware\PatientMiddleware::class,
+        'patient.auth' => \App\Http\Middleware\PatientAuthMiddleware::class,
     ];
 }

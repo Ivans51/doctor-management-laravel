@@ -2,7 +2,7 @@
 @extends('layouts.home')
 
 @section('content')
-    <h1 class="font-bold text-2xl mb-1">Welcome, Dr. Stephen</h1>
+    <h1 class="font-bold text-2xl mb-1">Welcome, Dr. {{ auth()->user()->doctor->name }}</h1>
     <p class="text-sm">Have a nice day at great work</p>
 
     <section id="head-info" class="text-white my-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">

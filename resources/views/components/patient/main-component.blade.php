@@ -31,8 +31,8 @@
                     >
                     <div class="flex ml-2">
                         <div class="flex flex-col text-xs">
-                            <span><strong>Stephen Conley</strong></span>
-                            <span>Cardiologist</span>
+                            <span><strong>{{ Auth::user()->patient->name }}</strong></span>
+                            <span>Patient</span>
                         </div>
                         <x-ri-arrow-drop-down-fill class="h-8 inline-block"/>
                     </div>
@@ -53,22 +53,6 @@
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Change Password
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="/#"
-                                class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
-                            >
-                                Notifications
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="/#"
-                                class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
-                            >
-                                Reviews
                             </a>
                         </li>
                         <li>

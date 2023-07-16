@@ -13,8 +13,11 @@
                     class="z-10 bg-white absolute border rounded-lg mt-3 hidden right-0"
                 >
                     <ul class="space-y-1 btn-link">
-                        <li>
-
+                        <li class="px-2 py-2 text-center">
+                            <x-utils.not-data
+                                title=""
+                                description="No Notification"
+                            />
                         </li>
                     </ul>
                 </div>
