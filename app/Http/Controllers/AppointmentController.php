@@ -23,11 +23,7 @@ class AppointmentController extends Controller
     public function getAppointmentsByDoctor(Request $request): JsonResponse
     {
         $limit = $request->query('limit', 10);
-        $userId = Auth::user()->id;
-        $doctorId = Doctor::query()
-            ->where('user_id', $userId)
-            ->first()
-            ->id;
+        $doctorId = Auth::user()->doctor->id;
 
         $appointments = Appointment::query()
             ->with([
@@ -35,6 +31,31 @@ class AppointmentController extends Controller
                 'schedule',
             ])
             ->where('doctor_id', $doctorId)
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit);
+
+        return response()->json([
+            'success' => true,
+            'data' => $appointments
+        ]);
+    }
+
+    // get appointments by patient id
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getAppointmentsByPatient(Request $request): JsonResponse
+    {
+        $limit = $request->query('limit', 10);
+        $patientId = Auth::user()->patient->id;
+
+        $appointments = Appointment::query()
+            ->with([
+                'patient',
+                'schedule',
+            ])
+            ->where('patient_id', $patientId)
             ->orderBy('created_at', 'desc')
             ->paginate($limit);
 

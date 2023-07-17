@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DoctorMedicalSpecialty;
-use App\Models\MedicalSpecialty;
 use App\Models\User;
 use Auth;
 use DB;
@@ -14,42 +12,31 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class SettingsController extends Controller
+class SettingsPatientController extends Controller
 {
     public function getSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $user = Auth::user()->doctor;
+        $user = Auth::user()->patient;
 
-        $specialties = MedicalSpecialty::query()
-            ->get();
-
-        $mySpecialties = MedicalSpecialty::query()
-            ->whereHas('doctorMedicalSpecialty', function ($query) use ($user) {
-                $query->where('doctor_id', $user->id);
-            })
-            ->get();
-
-        return view('pages/web/settings/index')->with([
+        return view('pages/patient/settings/index')->with([
             'user' => $user,
-            'medicalSpecialties' => $specialties,
-            'myMedicalSpecialties' => $mySpecialties,
         ]);
     }
 
     public function getChangePassword(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $user = Auth::user()->doctor;
+        $user = Auth::user()->patient;
 
-        return view('pages/web/settings/change-password')->with([
+        return view('pages/patient/settings/change-password')->with([
             'user' => $user,
         ]);
     }
 
     public function getNotifications(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $user = Auth::user()->doctor;
+        $user = Auth::user()->patient;
 
-        return view('pages/web/settings/notifications')->with([
+        return view('pages/patient/settings/notifications')->with([
             'user' => $user,
             'notifications' => [],
         ]);
@@ -57,9 +44,9 @@ class SettingsController extends Controller
 
     public function getReviews(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $user = Auth::user()->doctor;
+        $user = Auth::user()->patient;
 
-        return view('pages/web/settings/reviews')->with([
+        return view('pages/patient/settings/reviews')->with([
             'user' => $user,
             'reviews' => [],
         ]);
@@ -70,19 +57,16 @@ class SettingsController extends Controller
      * @return RedirectResponse
      * @throws \Throwable
      */
-    public function updateProfileDoctor(Request $request): RedirectResponse
+    public function updatePatient(Request $request): RedirectResponse
     {
         try {
             $request->validate([
                 'name' => 'required',
                 'email' => 'required',
                 'address_address-search' => 'required',
-                'specialties' => 'required',
             ]);
 
             DB::beginTransaction();
-
-            $specialties = $request->specialties;
 
             $doctor = Auth::user()->doctor;
             $doctor->update([
@@ -94,19 +78,6 @@ class SettingsController extends Controller
             $user->update([
                 'email' => $request->email,
             ]);
-
-            // Update doctor medical specialty only if there is a change
-            foreach ($specialties as $specialty) {
-                DoctorMedicalSpecialty::query()
-                    ->where('doctor_id', $doctor->id)
-                    ->where('medical_specialty_id', $specialty)
-                    ->delete();
-
-                DoctorMedicalSpecialty::query()->create([
-                    'doctor_id' => $doctor->id,
-                    'medical_specialty_id' => $specialty,
-                ]);
-            }
 
             DB::commit();
 

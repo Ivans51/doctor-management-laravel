@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.patient')
 
 @section('content')
     <section class="flex items-start">

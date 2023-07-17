@@ -47,6 +47,17 @@ class PaymentsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function searchByPatient(Request $request): JsonResponse
+    {
+        $doctorId = \Auth::user()->patient->id;
+        return $this->getPayments($request, $doctorId);
+    }
+
+    /**
+     * Search user with parameter email and name
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function search(Request $request): JsonResponse
     {
         $doctorId = $request->query('doctorId');
