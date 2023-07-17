@@ -30,9 +30,8 @@
                         alt="user"
                     >
                     <div class="flex ml-2">
-                        <div class="flex flex-col text-xs">
+                        <div class="flex items-center text-xs">
                             <span><strong>{{ Auth::user()->patient->name }}</strong></span>
-                            <span>Patient</span>
                         </div>
                         <x-ri-arrow-drop-down-fill class="h-8 inline-block"/>
                     </div>

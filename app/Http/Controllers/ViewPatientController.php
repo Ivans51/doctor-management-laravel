@@ -83,7 +83,7 @@ class ViewPatientController extends Controller
             $patient->years_old = date_diff(date_create($patient->date_of_birth), date_create())->y;
         }
 
-        return view('pages/checkout/monitoring-form', compact([
+        return view('pages/patient/checkout/monitoring-form', compact([
             'patient', 'medicalSpecialties'
         ]));
     }
@@ -109,7 +109,7 @@ class ViewPatientController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        return view('pages/checkout/checkout-form', compact('appointment'));
+        return view('pages/patient/checkout/checkout-form', compact('appointment'));
     }
 
     public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application

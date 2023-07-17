@@ -31,7 +31,7 @@
         <div class="w-full">
             <div class="flex items-center justify-between">
                 <h3 class="my-2 font-bold text-lg">Appointment Request</h3>
-                <a class="text-blue-400" href="{{ route('appointments') }}">View All ></a>
+                <a class="text-blue-400" href="{{ route('doctor.appointments') }}">View All ></a>
             </div>
             <div class="px-4 py-2 bg-white rounded">
                 @if(sizeof($appointments) == 0)

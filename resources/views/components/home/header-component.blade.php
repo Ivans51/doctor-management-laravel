@@ -1,5 +1,5 @@
 <nav class="w-1/4 mx-4">
-    <a href="{{ route('home') }}">
+    <a href="{{ route('doctor.home') }}">
         <img class="mt-4 mb-8 mx-2" src="{{ Vite::asset('resources/img/home/logo.png') }}" alt="logo">
     </a>
 

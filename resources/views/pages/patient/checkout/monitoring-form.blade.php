@@ -7,7 +7,7 @@
         <section class="w-3/5">
             <x-utils.message-component/>
 
-            <form action="{{ route('appointment-store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('patient.appointment.store') }}" method="post" enctype="multipart/form-data">
                 @csrf <!-- add this to protect against CSRF attacks -->
                 @method('POST')
 

@@ -10,17 +10,17 @@
 
         <section class="w-full md:w-3/5 mt-10 md:mt-0">
             <ul id="menu-setting" class="bg-white flex space-x-5">
-                <li class="px-2 py-2"><a href="{{ route('settings') }}">My Profile</a></li>
-                <li class="px-2 py-2"><a href="{{ route('change-password') }}">Change Password</a></li>
-                <li class="px-2 py-2"><a href="{{ route('notifications') }}">Notifications</a></li>
-                <li class="px-2 py-2"><a href="{{ route('reviews') }}">Reviews</a></li>
+                <li class="px-2 py-2"><a href="{{ route('doctor.settings') }}">My Profile</a></li>
+                <li class="px-2 py-2"><a href="{{ route('doctor.change.password') }}">Change Password</a></li>
+                <li class="px-2 py-2"><a href="{{ route('doctor.notifications') }}">Notifications</a></li>
+                <li class="px-2 py-2"><a href="{{ route('doctor.reviews') }}">Reviews</a></li>
             </ul>
 
             <h2 class="font-bold mt-8 mb-4">My information</h2>
 
             <x-utils.message-component/>
 
-            <form action="{{ route('settings.update.profile') }}" method="post">
+            <form action="{{ route('doctor.update.profile') }}" method="post">
                 @csrf
                 @method('PUT')
 

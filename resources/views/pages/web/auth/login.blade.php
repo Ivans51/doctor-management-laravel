@@ -12,7 +12,7 @@
 
             <x-utils.message-component/>
 
-            <form action="{{ route('web-form-login') }}" method="post">
+            <form action="{{ route('doctor.form.login') }}" method="post">
                 @csrf
 
                 <input type="hidden" name="recaptcha" id="recaptcha">
@@ -52,14 +52,14 @@
                 </div>
 
                 <div class="text-right text-blue-500 my-5">
-                    <a href="{{ route('forgot') }}">Forgot Password?</a>
+                    <a href="{{ route('doctor.forgot') }}">Forgot Password?</a>
                 </div>
             </form>
 
             <hr class="mt-5 mb-5">
 
             <p class="text-center">
-                Don't you have an account? <a class="text-blue-500" href="{{ route('register') }}">Sign up</a>
+                Don't you have an account? <a class="text-blue-500" href="{{ route('doctor.register') }}">Sign up</a>
             </p>
         </div>
     </section>
