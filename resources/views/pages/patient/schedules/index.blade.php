@@ -32,7 +32,7 @@
                     const end = info.endStr;
 
                     $.ajax({
-                        url: '{{ route('schedule-timing-doctor') }}',
+                        url: '{{ route('patient.api.schedule.timing') }}',
                         type: 'POST',
                         data: {
                             start: start,
@@ -43,8 +43,11 @@
                         success: function (data) {
                             const schedules = data.data.map(function (schedule) {
                                 configModal('modal', `btn-hide`)
+                                const scheduleName = schedule.appointment.patient
+                                    ? schedule.appointment.patient.name
+                                    : 'No name'
                                 return {
-                                    title: `${schedule.appointment.patient.name} - ${schedule.start_time} - ${schedule.end_time}`,
+                                    title: `${scheduleName} - ${schedule.start_time} - ${schedule.end_time}`,
                                     start: schedule.date,
                                     id: JSON.stringify(schedule)
                                 }
@@ -62,7 +65,6 @@
                         // force click btn-hide
                         $(`#btn-hide`).click()
                         const item = JSON.parse(info.event.id);
-                        console.log(item)
                         setDataModal(item)
                     }
                 },

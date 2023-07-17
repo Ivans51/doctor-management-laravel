@@ -32,7 +32,7 @@
         // search data
         function searchData(page = 1) {
             showLoading()
-            let url = `/appointments/doctor?search=${search}&limit=${limit}&page=${page}`
+            let url = `/doctor/api/appointments?search=${search}&limit=${limit}&page=${page}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({

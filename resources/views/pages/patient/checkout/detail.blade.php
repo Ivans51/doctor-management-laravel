@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.patient')
 
 @section('content')
     <div class="flex items-start space-x-0 md:space-x-4">
@@ -12,7 +12,7 @@
             </h3>
 
             <div class="flex justify-center mb-6">
-                <a href="{{ route('doctor.appointments') }}" class="bg-blue-400 text-white rounded px-4 py-1">
+                <a href="{{ route('patient.appointments') }}" class="bg-blue-400 text-white rounded px-4 py-1">
                     Back to home
                 </a>
             </div>

@@ -15,7 +15,7 @@ class ScheduleController extends Controller
      */
     public function getScheduleByDoctorId(Request $request): JsonResponse
     {
-        $doctor_id = \Auth::user()->doctor->id;
+        $doctorId = \Auth::user()->doctor->id;
         $start_date = $request->start;
         $end_date = $request->end;
 
@@ -24,7 +24,36 @@ class ScheduleController extends Controller
                 'appointment',
                 'appointment.patient',
             ])
-            ->where('doctor_id', $doctor_id)
+            ->where('doctor_id', $doctorId)
+            ->whereBetween('date', [$start_date, $end_date])
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'success get schedule and appointment by doctor id',
+            'data' => $schedule
+        ]);
+    }
+
+    // get schedule and appointment by doctor id
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getScheduleByPatientId(Request $request): JsonResponse
+    {
+        $patientId = \Auth::user()->patient->id;
+        $start_date = $request->start;
+        $end_date = $request->end;
+
+        $schedule = Schedule::query()
+            ->with([
+                'appointment',
+                'appointment.patient',
+            ])
+            ->whereHas('appointment', function ($query) use ($patientId) {
+                $query->where('patient_id', $patientId);
+            })
             ->whereBetween('date', [$start_date, $end_date])
             ->get();
 

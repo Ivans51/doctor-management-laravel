@@ -6,6 +6,7 @@
     <div id="settings" class="flex flex-col md:flex-row items-start space-x-0 md:space-x-4">
         <x-settings.profile-component
             :user="$user"
+            :route="route('doctor.settings')"
         ></x-settings.profile-component>
 
         <section class="w-full md:w-3/5 mt-10 md:mt-0">
@@ -67,4 +68,7 @@
 
 @push('scripts-bottom')
     <script src="{{ Vite::asset('resources/js/settings-menu.js') }}"></script>
+    <script>
+        setMenuSetting(2)
+    </script>
 @endpush

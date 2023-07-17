@@ -57,7 +57,7 @@ class StripeController extends Controller
                 ],
             ],
             'mode' => 'payment',
-            'success_url' => route('payment-stripe-success'),
+            'success_url' => route('patient.payment-stripe-success'),
             'cancel_url' => url()->previous(),
         ]);
 
@@ -112,7 +112,7 @@ class StripeController extends Controller
         /*$email = $appointment->patient->user->email;
         \Mail::to($email)->send(new PaymentSuccess($appointment));*/
 
-        return view('pages/web/patients/detail')->with([
+        return view('pages/patient/checkout/detail')->with([
             'appointment' => $appointment,
         ]);
     }

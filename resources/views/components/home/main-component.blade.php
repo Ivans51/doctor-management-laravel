@@ -30,7 +30,7 @@
                         alt="user"
                     >
                     <div class="flex ml-2">
-                        <div class="flex flex-col text-xs">
+                        <div class="flex items-center text-xs">
                             <span><strong>{{ Auth::user()->doctor->name }}</strong></span>
                             <span></span>
                         </div>

@@ -21,7 +21,7 @@
     </div>
 
     <a
-        href="{{ route('doctor.settings') }}"
+        href="{{ $route }}"
         class="rounded text-white bg-violet-500 px-4 py-1 text-sm flex items-center flex-row my-8"
     >
         <x-ri-edit-2-fill class="w-6 h-6 mr-2"/>

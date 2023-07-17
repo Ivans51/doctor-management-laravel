@@ -5,7 +5,17 @@
 
     <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-start">
         <div class="w-full">
-            <h3 class="my-2 font-bold text-lg">Appointment Request</h3>
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="my-2 font-bold text-lg">Appointment Request</h3>
+                <a
+                    href="{{ route('patient.monitoring') }}"
+                    class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
+                >
+                    <x-ri-heart-add-fill/>
+                    <span>Add Appointment</span>
+                </a>
+            </div>
+
             <div class="px-4 py-2 bg-white rounded">
                 @if(sizeof($appointments) == 0)
                     <x-utils.not-data
@@ -32,7 +42,7 @@
         // search data
         function searchData(page = 1) {
             showLoading()
-            let url = `/appointments/doctor?search=${search}&limit=${limit}&page=${page}`
+            let url = `/patient/api/appointments?search=${search}&limit=${limit}&page=${page}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
@@ -58,58 +68,66 @@
 
             setPagination(response)
 
-            response.data.data.forEach(function (item) {
-                let image
-                let status
+            if (response.data.data.length === 0) {
+                html += `
+                    <div class="flex justify-center items-center">
+                        <p class="text-gray-500">No data found</p>
+                    </div>
+                `
+            } else {
+                response.data.data.forEach(function (item) {
+                    let image
+                    let status
 
-                if (item.patient.profile == null) {
-                    const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
-                    image = `<img
+                    if (item.patient.profile == null) {
+                        const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
+                        image = `<img
                         class="h-10 mr-3"
                         src="${urlImage}"
                         alt="profile patient"
                         style="border-radius: 50%"
                     >`
-                } else {
-                    const urlImage = `{{ Vite::asset('storage/') }}/${item.patient.profile}`
-                    image = `<img
+                    } else {
+                        const urlImage = `{{ Vite::asset('storage/') }}/${item.patient.profile}`
+                        image = `<img
                             class="h-10 mr-3"
                             src="${urlImage}"
                             alt="profile patient"
                             style="border-radius: 50%"
                         >`
-                }
+                    }
 
-                if (item.status === CONST_APPROVED) {
-                    status = `<span class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm">
+                    if (item.status === CONST_APPROVED) {
+                        status = `<span class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm">
                         Confirmed
                     </span>`
-                } else if (item.status === CONST_PENDING) {
-                    status = `<span class="rounded text-yellow-900 bg-yellow-100 px-4 py-1 text-sm">
+                    } else if (item.status === CONST_PENDING) {
+                        status = `<span class="rounded text-yellow-900 bg-yellow-100 px-4 py-1 text-sm">
                         Pending
                     </span>`
-                } else if (item.status === CONST_REJECTED) {
-                    status = `<span class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm">
+                    } else if (item.status === CONST_REJECTED) {
+                        status = `<span class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm">
                         Cancelled
                     </span>`
-                }
+                    }
 
-                html += `
-                        <div class="flex justify-between items-center my-4">
-                            <div class="flex items-start">
-                                ${image}
-                                <div class="flex flex-col">
-                                    <p>${item.patient.name}</p>
-                                    <p class="text-xs mt-1">
-                                        ${item.patient.gender}, ${formatDate(item.schedule.date)}
-                                    </p>
-                                <div>
+                    html += `
+                            <div class="flex justify-between items-center my-4">
+                                <div class="flex items-start">
+                                    ${image}
+                                    <div class="flex flex-col">
+                                        <p>${item.patient.name}</p>
+                                        <p class="text-xs mt-1">
+                                            ${item.patient.gender}, ${formatDate(item.schedule.date)}
+                                        </p>
+                                    <div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    ${status}
-                </div>`
-            })
+                        ${status}
+                    </div>`
+                })
+            }
 
             $('#content-body').html(html)
         }

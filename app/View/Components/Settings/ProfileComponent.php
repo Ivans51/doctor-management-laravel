@@ -9,14 +9,16 @@ use Illuminate\View\Component;
 class ProfileComponent extends Component
 {
     public $user;
+    public $route;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($user)
+    public function __construct($user, $route)
     {
         //
         $this->user = $user;
+        $this->route = $route;
     }
 
     /**

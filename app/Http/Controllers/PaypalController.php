@@ -73,8 +73,8 @@ class PaypalController extends Controller
             $response = $provider->createOrder([
                 "intent" => "CAPTURE",
                 "application_context" => [
-                    "return_url" => route('payment-paypal-success'),
-                    "cancel_url" => route('payment-paypal-cancel'),
+                    "return_url" => route('patient.payment-paypal-success'),
+                    "cancel_url" => route('patient.payment-paypal-cancel'),
                 ],
                 "purchase_units" => $items
             ]);
@@ -87,16 +87,16 @@ class PaypalController extends Controller
                     }
                 }
                 return redirect()
-                    ->route('my-patients-checkout')
+                    ->route('patient.checkout')
                     ->with('error', 'Something went wrong');
             } else {
                 return redirect()
-                    ->route('my-patients-checkout')
+                    ->route('patient.checkout')
                     ->with('error', $response['message'] ?? 'Something went wrong');
             }
         } catch (\Exception $e) {
             return redirect()
-                ->route('my-patients-checkout')
+                ->route('patient.checkout')
                 ->with('error', $e->getMessage());
         }
     }
@@ -152,12 +152,12 @@ class PaypalController extends Controller
             /*$email = $appointment->patient->user->email;*/
             \Mail::to($email)->send(new PaymentSuccess($appointment));
 
-            return view('pages/web/patients/detail')->with([
+            return view('pages/patient/checkout/detail')->with([
                 'appointment' => $appointment,
             ]);
         } catch (\Exception $e) {
             return redirect()
-                ->route('my-patients-checkout')
+                ->route('patient.checkout')
                 ->with('error', $e->getMessage());
         }
     }

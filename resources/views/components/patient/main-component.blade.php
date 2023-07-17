@@ -40,7 +40,7 @@
                     <ul class="space-y-1 btn-link">
                         <li>
                             <a
-                                href="/#"
+                                href="{{ route('patient.settings') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 My Profile
@@ -48,7 +48,7 @@
                         </li>
                         <li>
                             <a
-                                href="/#"
+                                href="{{ route('patient.change.password') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Change Password

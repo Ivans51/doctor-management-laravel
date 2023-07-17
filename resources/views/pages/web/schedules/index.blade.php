@@ -32,7 +32,7 @@
                     const end = info.endStr;
 
                     $.ajax({
-                        url: '{{ route('doctor.schedule.timing') }}',
+                        url: '{{ route('doctor.api.schedule.timing') }}',
                         type: 'POST',
                         data: {
                             start: start,

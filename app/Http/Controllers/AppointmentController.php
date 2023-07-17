@@ -40,8 +40,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    // get appointments by patient id
-    /**
+    /** get appointments by patient id
      * @param Request $request
      * @return JsonResponse
      */
@@ -121,7 +120,7 @@ class AppointmentController extends Controller
 
             DB::commit();
 
-            return redirect()->route('my-patients-checkout', [
+            return redirect()->route('patient.checkout', [
                 'appointment_id' => $appointment->id,
             ]);
 

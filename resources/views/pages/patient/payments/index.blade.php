@@ -22,7 +22,7 @@
                 <input
                     class="w-full"
                     type="search"
-                    placeholder="Patient name, status, type"
+                    placeholder="Status, type"
                     id="search_field"
                     name="search_field"
                 >
@@ -36,7 +36,6 @@
         <div class="overflow-x-auto">
             <table class="table-auto border-separate w-full border-spacing-x-0 border-spacing-y-2">
                 <tr class="bg-secondary">
-                    <th class="px-4 py-1 text-left">Patient Name</th>
                     <th class="px-4 py-1">Total</th>
                     <th class="px-4 py-1">Método de Pago</th>
                     <th class="px-4 py-1">Estatus</th>
@@ -86,7 +85,7 @@
         // search data
         function searchData(page = 1) {
             showLoading()
-            let url = `/payments/search?search=${search}&limit=${limit}&page=${page}`
+            let url = `/patient/payments/search?search=${search}&limit=${limit}&page=${page}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
@@ -114,7 +113,6 @@
 
             response.data.data.forEach(function (item) {
                 html += `<tr class="bg-white rounded">
-                            <td class="px-4 py-2 text-center">${item.patient.name}</td>
                             <td class="px-4 py-2 text-center">${formatNumber(item.amount)}</td>
                             <td class="px-4 py-2 text-center capitalize">${item.payment_method}</td>
                             <td class="px-4 py-2 text-center capitalize">${item.payment_status}</td>

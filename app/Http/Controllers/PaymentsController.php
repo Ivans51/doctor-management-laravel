@@ -47,6 +47,17 @@ class PaymentsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function searchByPatient(Request $request): JsonResponse
+    {
+        $patientId = \Auth::user()->patient->id;
+        return $this->getPayments($request, null, $patientId);
+    }
+
+    /**
+     * Search user with parameter email and name
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function search(Request $request): JsonResponse
     {
         $doctorId = $request->query('doctorId', '');
@@ -56,9 +67,10 @@ class PaymentsController extends Controller
     /**
      * @param Request $request
      * @param string $doctorId
+     * @param string|null $patientId
      * @return JsonResponse
      */
-    private function getPayments(Request $request, string $doctorId): JsonResponse
+    private function getPayments(Request $request, mixed $doctorId, string $patientId = null): JsonResponse
     {
         $limit = $request->query('limit', 10);
 
@@ -71,9 +83,12 @@ class PaymentsController extends Controller
                 ->when($doctorId, function ($query, $doctorId) {
                     return $query->where('doctor_id', $doctorId);
                 })
+                ->when($patientId, function ($query, $patientId) {
+                    return $query->where('patient_id', $patientId);
+                })
                 ->where('payment_method', 'LIKE', "%{$request->search}%")
                 ->orWhere('payment_status', 'LIKE', "%{$request->search}%")
-                ->orderBy('created_at', 'desc')
+                ->orderBy('payment_date', 'desc')
                 ->paginate($limit);
         } else {
             $payments = Payment::query()
@@ -84,7 +99,10 @@ class PaymentsController extends Controller
                 ->when($doctorId, function ($query, $doctorId) {
                     return $query->where('doctor_id', $doctorId);
                 })
-                ->orderBy('created_at', 'desc')
+                ->when($patientId, function ($query, $patientId) {
+                    return $query->where('patient_id', $patientId);
+                })
+                ->orderBy('payment_date', 'desc')
                 ->paginate($limit);
         }
 

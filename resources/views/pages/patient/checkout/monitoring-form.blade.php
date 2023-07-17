@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.patient')
 
 @section('content')
     <h3 class="font-bold text-lg mb-10">Log New Consulting</h3>
@@ -221,7 +221,7 @@
             $('#price').text(formatNumber(medicalSpecialty.price));
 
             let medicalSpecialtyId = $(this).val();
-            let url = '{{ route('doctor-list') }}' + '?medical_specialty_id=' + medicalSpecialtyId;
+            let url = '{{ route('patient.doctor.list') }}' + '?medical_specialty_id=' + medicalSpecialtyId;
 
             $.ajax({
                 url: url,

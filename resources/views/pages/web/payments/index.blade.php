@@ -86,7 +86,7 @@
         // search data
         function searchData(page = 1) {
             showLoading()
-            let url = `/payments/search?search=${search}&limit=${limit}&page=${page}`
+            let url = `/patient/payments/search?search=${search}&limit=${limit}&page=${page}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({

@@ -34,6 +34,12 @@
                 Payments
             </a>
         </li>
+        <li>
+            <a href="{{ route('patient.settings') }}">
+                <x-ri-settings-5-line/>
+                Settings
+            </a>
+        </li>
     </ul>
 </nav>
 
@@ -54,6 +60,9 @@
         }
         if (siteBaseURL === 'payments') {
             $($('#menu-vertical li a')[4]).addClass('active')
+        }
+        if (siteBaseURL === 'settings') {
+            $($('#menu-vertical li a')[5]).addClass('active')
         }
     </script>
 @endpush

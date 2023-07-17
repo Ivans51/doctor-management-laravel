@@ -12,43 +12,23 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class SettingsPatientController extends Controller
+class SettingsAdminController extends Controller
 {
     public function getSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $user = Auth::user()->patient;
+        $user = Auth::user();
 
-        return view('pages/patient/settings/index')->with([
+        return view('pages/admin/settings/index')->with([
             'user' => $user,
         ]);
     }
 
     public function getChangePassword(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $user = Auth::user()->patient;
+        $user = Auth::user();
 
-        return view('pages/patient/settings/change-password')->with([
+        return view('pages/admin/settings/change-password')->with([
             'user' => $user,
-        ]);
-    }
-
-    public function getNotifications(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $user = Auth::user()->patient;
-
-        return view('pages/patient/settings/notifications')->with([
-            'user' => $user,
-            'notifications' => [],
-        ]);
-    }
-
-    public function getReviews(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $user = Auth::user()->patient;
-
-        return view('pages/patient/settings/reviews')->with([
-            'user' => $user,
-            'reviews' => [],
         ]);
     }
 
@@ -61,18 +41,10 @@ class SettingsPatientController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required',
                 'email' => 'required',
-                'address_address-search' => 'required',
             ]);
 
             DB::beginTransaction();
-
-            $doctor = Auth::user()->patient;
-            $doctor->update([
-                'name' => $request->name,
-                'address' => $request->{'address_address-search'},
-            ]);
 
             $user = Auth::user();
             $user->update([

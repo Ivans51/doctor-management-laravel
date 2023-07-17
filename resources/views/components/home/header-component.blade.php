@@ -23,7 +23,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('doctor.schedule-timing') }}">
+            <a href="{{ route('doctor.schedule.timing') }}">
                 <x-ri-time-line/>
                 Schedule Timing
             </a>

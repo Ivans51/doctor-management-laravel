@@ -8,6 +8,7 @@ use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SettingsAdminController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SettingsPatientController;
 use App\Http\Controllers\StripeController;
@@ -35,7 +36,7 @@ Route::name('doctor.')->group(function () {
         Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
         Route::get('/blog', [ViewController::class, 'getBlog'])->name('blog');
         Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
-        Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');
+        Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule.timing');
         Route::get('/payments', [ViewController::class, 'getPayments'])->name('payments');
         Route::get('/messages', [ViewController::class, 'getMessages'])->name('messages');
         Route::get('/settings', [SettingsController::class, 'getSettings'])->name('settings');
@@ -47,15 +48,15 @@ Route::name('doctor.')->group(function () {
         /* RESOURCE */
         Route::resource('my-patients-doctor', PatientsController::class);
 
-        /* JSON */
-        Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments-doctor');
-
         /* POST */
         Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor']);
-        Route::post('/schedule/timing/doctor', [ScheduleController::class, 'getScheduleByDoctorId'])->name('schedule.timing');
         Route::post('/patients/doctor/search', [PatientsController::class, 'searchByDoctor']);
         Route::put('/settings/update/profile', [SettingsController::class, 'updateProfileDoctor'])->name('update.profile');
         Route::put('/settings/update/password', [SettingsController::class, 'updatePassword'])->name('update.password');
+
+        /* JSON */
+        Route::post('/api/schedule/timing', [ScheduleController::class, 'getScheduleByDoctorId'])->name('api.schedule.timing');
+        Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments.doctor');
     });
 
     Route::middleware('user.auth')->group(function () {
@@ -95,15 +96,16 @@ Route::prefix('patient')->name('patient.')->group(function () {
         Route::get('/payment/paypal/success', [PaypalController::class, 'success'])->name('payment-paypal-success');
         Route::get('/payment/paypal/cancel', [PaypalController::class, 'cancel'])->name('payment-paypal-cancel');
 
-        /* JSON */
-        Route::get('/doctor/list', [DoctorsController::class, 'doctorList'])->name('doctor.list');
-        Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments.doctor');
-
         /* POST */
-        Route::post('appointment', [AppointmentController::class, 'store'])->name('appointment.store');
-        Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor'])->name('search-payment');
-        Route::put('/settings/update/profile', [SettingsPatientController::class, 'updatePatient'])->name('settings.update.profile');
-        Route::put('/settings/update/password', [SettingsPatientController::class, 'updatePassword'])->name('settings.update.password');
+        Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointment.store');
+        Route::post('/payments/search', [PaymentsController::class, 'searchByPatient'])->name('search-payment');
+        Route::put('/settings/update/profile', [SettingsPatientController::class, 'updatePatient'])->name('update.profile');
+        Route::put('/settings/update/password', [SettingsPatientController::class, 'updatePassword'])->name('update.password');
+
+        /* JSON */
+        Route::get('/api/doctor/list', [DoctorsController::class, 'doctorList'])->name('doctor.list');
+        Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByPatient'])->name('appointments.patient');
+        Route::post('/schedule/timing', [ScheduleController::class, 'getScheduleByPatientId'])->name('api.schedule.timing');
     });
 
     Route::middleware('patient.auth')->group(function () {
@@ -135,6 +137,11 @@ Route::name('admin.')->prefix('admin')->group(function () {
 
         Route::resource('medical', MedicalSpecialtyController::class);
         Route::post('/medical/search', [MedicalSpecialtyController::class, 'search'])->name('search.medical');
+
+        Route::get('/settings', [SettingsAdminController::class, 'getSettings'])->name('settings');
+        Route::get('/settings/change-password', [SettingsAdminController::class, 'getChangePassword'])->name('change.password');
+        Route::put('/settings/update/profile', [SettingsAdminController::class, 'updatePatient'])->name('update.profile');
+        Route::put('/settings/update/password', [SettingsAdminController::class, 'updatePassword'])->name('update.password');
     });
 
     Route::middleware('admin.auth')->group(function () {

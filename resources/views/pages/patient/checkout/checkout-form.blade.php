@@ -1,7 +1,7 @@
 @php
     use Carbon\Carbon;
 @endphp
-@extends('layouts.home')
+@extends('layouts.patient')
 
 @section('content')
     <div class="flex items-start space-x-0 md:space-x-4">
@@ -46,7 +46,7 @@
                 <p class="text-zinc-400">Price: ${{ $appointment->medicalSpecialty->price }} USD</p>
 
                 <div class="flex space-x-2">
-                    <form action="{{ route('payment-stripe') }}" method="post">
+                    <form action="{{ route('patient.payment-stripe') }}" method="post">
                         @csrf <!-- add this to protect against CSRF attacks -->
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                         <input
@@ -63,7 +63,7 @@
                         </button>
                     </form>
 
-                    <form action="{{ route('payment-paypal') }}" method="post">
+                    <form action="{{ route('patient.payment-paypal') }}" method="post">
                         @csrf <!-- add this to protect against CSRF attacks -->
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                         <input
