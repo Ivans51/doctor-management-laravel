@@ -34,7 +34,18 @@ class AuthController extends Controller
         $isSuccessCaptcha = $this->validateRecaptcha($request);
 
         if ($isSuccessCaptcha) {
-            return redirect('');
+            $routeTo = 'login';
+            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
+                $routeTo = 'admin';
+            }
+            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
+                $routeTo = 'patient';
+            }
+            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
+                $routeTo = '';
+            }
+
+            return redirect($routeTo);
         } else {
             return back()->withErrors(['captcha' => 'ReCaptcha Error']);
         }
@@ -144,6 +155,12 @@ class AuthController extends Controller
         $routeTo = 'login';
         if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
             $routeTo = 'admin/login';
+        }
+        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
+            $routeTo = 'patient/login';
+        }
+        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
+            $routeTo = 'login';
         }
 
         Auth::logout();

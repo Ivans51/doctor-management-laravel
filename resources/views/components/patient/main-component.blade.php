@@ -57,7 +57,7 @@
                         </li>
                         <li>
                             <a
-                                href="{{ route('admin-logout') }}"
+                                href="{{ route('patient-logout') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Logout

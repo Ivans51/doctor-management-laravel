@@ -84,6 +84,7 @@ Route::middleware('user.auth')->group(function () {
 Route::group(['prefix' => 'patient'], function () {
     Route::middleware('patient')->group(function () {
         Route::get('/', [ViewPatientController::class, 'getDashBoard'])->name('patient-home');
+        Route::get('/logout', [AuthController::class, 'logout'])->name('patient-logout');
     });
 
     Route::middleware('patient.auth')->group(function () {
@@ -119,11 +120,9 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::middleware('admin.auth')->group(function () {
         Route::get('/login', [ViewAdminController::class, 'getSignIn'])->name('admin-sign-in');
-        Route::get('/register', [ViewAdminController::class, 'getSignUp'])->name('admin-sign-up');
         Route::get('/forgot', [ViewAdminController::class, 'getForgot'])->name('admin-forgot');
 
         Route::post('/login', [AuthController::class, 'login'])->name('admin-form-login');
-        Route::post('/register', [AuthController::class, 'register'])->name('admin-form-register');
         Route::post('/forgot', [AuthController::class, 'forgot'])->name('admin-form-forgot');
     });
 });

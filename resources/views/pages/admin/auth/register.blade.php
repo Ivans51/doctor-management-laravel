@@ -12,7 +12,7 @@
 
             <x-utils.message-component/>
 
-            <form action="{{ route('admin-register') }}" method="post">
+            <form action="{{ route('admin-form-register') }}" method="post">
                 @csrf
 
                 <input type="hidden" name="recaptcha" id="recaptcha">
