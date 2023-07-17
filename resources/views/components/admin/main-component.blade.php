@@ -30,9 +30,8 @@
                         alt="user"
                     >
                     <div class="flex ml-2">
-                        <div class="flex flex-col text-xs">
-                            <span><strong>Stephen Conley</strong></span>
-                            <span>Cardiologist</span>
+                        <div class="flex items-center text-xs">
+                            <span><strong>Admin</strong></span>
                         </div>
                         <x-ri-arrow-drop-down-fill class="h-8 inline-block"/>
                     </div>
@@ -73,7 +72,7 @@
                         </li>
                         <li>
                             <a
-                                href="{{ route('admin-logout') }}"
+                                href="{{ route('admin.logout') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Logout

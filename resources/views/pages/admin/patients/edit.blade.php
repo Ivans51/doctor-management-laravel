@@ -5,7 +5,7 @@
     <x-utils.message-component/>
 
     <section class="mt-10">
-        <form action="{{ route('patients.update', $patient->user->id) }}" method="post">
+        <form action="{{ route('admin.patients.update', $patient->user->id) }}" method="post">
             @csrf
             @method('PUT')
 
@@ -27,7 +27,7 @@
                         @foreach($doctors as $doctor)
                             <option
                                 value="{{ $doctor->id }}"
-                                {{ $patient->doctors->contains($doctor->id) ? 'selected' : '' }}
+                                {{ $patient->doctors && $patient->doctors->contains($doctor->id) ? 'selected' : '' }}
                             >
                                 {{ $doctor->name }}
                             </option>

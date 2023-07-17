@@ -5,7 +5,7 @@
     <x-utils.message-component/>
 
     <section class="mt-10">
-        <form action="{{ route('medical.update', $medical->id) }}" method="post">
+        <form action="{{ route('admin.medical.update', $medical->id) }}" method="post">
             @csrf
             @method('PUT')
 

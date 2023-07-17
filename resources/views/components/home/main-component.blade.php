@@ -32,7 +32,7 @@
                     <div class="flex ml-2">
                         <div class="flex flex-col text-xs">
                             <span><strong>{{ Auth::user()->doctor->name }}</strong></span>
-                            <span>Cardiologist</span>
+                            <span></span>
                         </div>
                         <x-ri-arrow-drop-down-fill class="h-8 inline-block"/>
                     </div>
@@ -41,7 +41,7 @@
                     <ul class="space-y-1 btn-link">
                         <li>
                             <a
-                                href="{{ route('settings') }}"
+                                href="{{ route('doctor.settings') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 My Profile
@@ -49,7 +49,7 @@
                         </li>
                         <li>
                             <a
-                                href="{{ route('change-password') }}"
+                                href="{{ route('doctor.change.password') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Change Password
@@ -57,7 +57,7 @@
                         </li>
                         <li>
                             <a
-                                href="{{ route('notifications') }}"
+                                href="{{ route('doctor.notifications') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Notifications
@@ -65,7 +65,7 @@
                         </li>
                         <li>
                             <a
-                                href="{{ route('reviews') }}"
+                                href="{{ route('doctor.reviews') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Reviews
@@ -73,7 +73,7 @@
                         </li>
                         <li>
                             <a
-                                href="{{ route('web-logout') }}"
+                                href="{{ route('doctor.logout') }}"
                                 class="whitespace-nowrap py-2 px-4 hover:bg-gray-100 block"
                             >
                                 Logout

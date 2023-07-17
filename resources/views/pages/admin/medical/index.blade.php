@@ -7,7 +7,7 @@
         <div class="flex justify-between items-center">
             <h3 class="my-2 font-bold text-lg">Medical Specialty list</h3>
             <a
-                href="{{ route('medical.create') }}"
+                href="{{ route('admin.medical.create') }}"
                 class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
             >
                 <span>Add</span>

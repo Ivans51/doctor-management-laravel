@@ -5,49 +5,49 @@
 
     <ul id="menu-vertical">
         <li>
-            <a href="{{ route('home') }}">
+            <a href="{{ route('doctor.home') }}">
                 <x-ri-dashboard-line/>
                 Overview
             </a>
         </li>
         <li>
-            <a href="{{ route('appointments') }}">
+            <a href="{{ route('doctor.appointments') }}">
                 <x-ri-calendar-line/>
                 Appointment
             </a>
         </li>
         <li>
-            <a href="{{ route('my-patients') }}">
+            <a href="{{ route('doctor.my-patients') }}">
                 <x-ri-user-3-line/>
                 My patients
             </a>
         </li>
         <li>
-            <a href="{{ route('schedule-timing') }}">
+            <a href="{{ route('doctor.schedule-timing') }}">
                 <x-ri-time-line/>
                 Schedule Timing
             </a>
         </li>
         <li>
-            <a href="{{ route('payments') }}">
+            <a href="{{ route('doctor.payments') }}">
                 <x-ri-bank-card-line/>
                 Payments
             </a>
         </li>
         <li>
-            <a href="{{ route('messages') }}">
+            <a href="{{ route('doctor.messages') }}">
                 <x-ri-message-3-line/>
                 Message
             </a>
         </li>
         <li>
-            <a href="{{ route('blog') }}">
+            <a href="{{ route('doctor.blog') }}">
                 <x-lineawesome-blog-solid/>
                 Blog
             </a>
         </li>
         <li>
-            <a href="{{ route('settings') }}">
+            <a href="{{ route('doctor.settings') }}">
                 <x-ri-settings-5-line/>
                 Settings
             </a>

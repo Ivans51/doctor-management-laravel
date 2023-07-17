@@ -12,7 +12,7 @@
 
             <x-utils.message-component/>
 
-            <form action="{{ route('admin-form-login') }}" method="post">
+            <form action="{{ route('admin.form.login') }}" method="post">
                 @csrf
 
                 <input type="hidden" name="recaptcha" id="recaptcha">
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="text-right text-blue-500 my-5">
-                    <a href="{{ route('admin-forgot') }}">Forgot Password?</a>
+                    <a href="{{ route('admin.forgot') }}">Forgot Password?</a>
                 </div>
             </form>
         </div>

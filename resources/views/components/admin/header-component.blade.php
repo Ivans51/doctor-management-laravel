@@ -1,35 +1,35 @@
 <nav class="w-1/4 mx-4">
-    <a href="{{ route('admin-home') }}">
+    <a href="{{ route('admin.home') }}">
         <img class="mt-4 mb-8 mx-2" src="{{ Vite::asset('resources/img/home/logo.png') }}" alt="logo">
     </a>
 
     <ul id="menu-vertical">
         <li>
-            <a href="{{ route('admins.index') }}">
+            <a href="{{ route('admin.admins.index') }}">
                 <x-ri-dashboard-line/>
                 Admins
             </a>
         </li>
         <li>
-            <a href="{{ route('medical.index') }}">
+            <a href="{{ route('admin.medical.index') }}">
                 <x-ri-dashboard-line/>
                 Medical Specialty
             </a>
         </li>
         <li>
-            <a href="{{ route('doctors.index') }}">
+            <a href="{{ route('admin.doctors.index') }}">
                 <x-ri-dashboard-line/>
                 Doctors
             </a>
         </li>
         <li>
-            <a href="{{ route('patients.index') }}">
+            <a href="{{ route('admin.patients.index') }}">
                 <x-ri-dashboard-line/>
                 Patients
             </a>
         </li>
         <li>
-            <a href="{{ route('payments.index') }}">
+            <a href="{{ route('admin.payments.index') }}">
                 <x-ri-dashboard-line/>
                 Payments
             </a>

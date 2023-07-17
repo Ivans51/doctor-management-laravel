@@ -4,7 +4,7 @@
     <section class="mt-10">
         <x-utils.message-component/>
 
-        <form action="{{ route('doctors.store') }}" method="post">
+        <form action="{{ route('admin.doctors.store') }}" method="post">
             @csrf
 
             <div class="space-y-6">

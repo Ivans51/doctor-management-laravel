@@ -29,43 +29,45 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* Doctors */
-Route::middleware('user')->group(function () {
-    Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
-    Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
-    Route::get('/blog', [ViewController::class, 'getBlog'])->name('blog');
-    Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
-    Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');
-    Route::get('/payments', [ViewController::class, 'getPayments'])->name('payments');
-    Route::get('/messages', [ViewController::class, 'getMessages'])->name('messages');
-    Route::get('/settings', [SettingsController::class, 'getSettings'])->name('settings');
-    Route::get('/settings/change-password', [SettingsController::class, 'getChangePassword'])->name('change-password');
-    Route::get('/settings/notifications', [SettingsController::class, 'getNotifications'])->name('notifications');
-    Route::get('/settings/reviews', [SettingsController::class, 'getReviews'])->name('reviews');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('web-logout');
+Route::name('doctor.')->group(function () {
+    Route::middleware('user')->group(function () {
+        Route::get('/', [ViewController::class, 'getDashBoard'])->name('home');
+        Route::get('/my-patients', [ViewController::class, 'getPatients'])->name('my-patients');
+        Route::get('/blog', [ViewController::class, 'getBlog'])->name('blog');
+        Route::get('/appointments', [ViewController::class, 'getAppointments'])->name('appointments');
+        Route::get('/schedule-timing', [ViewController::class, 'getScheduleTiming'])->name('schedule-timing');
+        Route::get('/payments', [ViewController::class, 'getPayments'])->name('payments');
+        Route::get('/messages', [ViewController::class, 'getMessages'])->name('messages');
+        Route::get('/settings', [SettingsController::class, 'getSettings'])->name('settings');
+        Route::get('/settings/change-password', [SettingsController::class, 'getChangePassword'])->name('change-password');
+        Route::get('/settings/notifications', [SettingsController::class, 'getNotifications'])->name('notifications');
+        Route::get('/settings/reviews', [SettingsController::class, 'getReviews'])->name('reviews');
+        Route::get('/logout', [AuthController::class, 'logout'])->name('web-logout');
 
-    /* RESOURCE */
-    /*Route::resource('my-patients-doctor', PatientsController::class);*/
+        /* RESOURCE */
+        /*Route::resource('my-patients-doctor', PatientsController::class);*/
 
-    /* JSON */
-    Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments-doctor');
+        /* JSON */
+        Route::get('/appointments/doctor', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments-doctor');
 
-    /* POST */
-    Route::post('appointment', [AppointmentController::class, 'store'])->name('appointment-store');
-    Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor'])->name('search-payment-doctor');
-    Route::post('/schedule/timing/doctor', [ScheduleController::class, 'getScheduleByDoctorId'])->name('schedule-timing-doctor');
-    Route::post('/patients/doctor/search', [PatientsController::class, 'searchByDoctor'])->name('search-patient-doctor');
-    Route::put('/settings/update/profile', [SettingsController::class, 'updateProfileDoctor'])->name('settings.update.profile');
-    Route::put('/settings/update/password', [SettingsController::class, 'updatePassword'])->name('settings.update.password');
-});
+        /* POST */
+        Route::post('appointment', [AppointmentController::class, 'store'])->name('appointment-store');
+        Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor'])->name('search-payment-doctor');
+        Route::post('/schedule/timing/doctor', [ScheduleController::class, 'getScheduleByDoctorId'])->name('schedule-timing-doctor');
+        Route::post('/patients/doctor/search', [PatientsController::class, 'searchByDoctor'])->name('search-patient-doctor');
+        Route::put('/settings/update/profile', [SettingsController::class, 'updateProfileDoctor'])->name('settings.update.profile');
+        Route::put('/settings/update/password', [SettingsController::class, 'updatePassword'])->name('settings.update.password');
+    });
 
-Route::middleware('user.auth')->group(function () {
-    Route::get('/login', [ViewController::class, 'getLogin'])->name('login');
-    Route::get('/register', [ViewController::class, 'getRegister'])->name('register');
-    Route::get('/forgot', [ViewController::class, 'getForgot'])->name('forgot');
+    Route::middleware('user.auth')->group(function () {
+        Route::get('/login', [ViewController::class, 'getLogin'])->name('login');
+        Route::get('/register', [ViewController::class, 'getRegister'])->name('register');
+        Route::get('/forgot', [ViewController::class, 'getForgot'])->name('forgot');
 
-    Route::post('/login', [AuthController::class, 'login'])->name('web-form-login');
-    Route::post('/register', [AuthController::class, 'register'])->name('web-form-register');
-    Route::post('/forgot', [AuthController::class, 'forgot'])->name('web-form-forgot');
+        Route::post('/login', [AuthController::class, 'login'])->name('form.login');
+        Route::post('/register', [AuthController::class, 'register'])->name('form.register');
+        Route::post('/forgot', [AuthController::class, 'forgot'])->name('form.forgot');
+    });
 });
 
 /* Patients */
@@ -115,32 +117,32 @@ Route::prefix('patient')->name('patient.')->group(function () {
 });
 
 /* Admins */
-Route::group(['prefix' => 'admin'], function () {
+Route::name('admin.')->prefix('admin')->group(function () {
     Route::middleware(['admin'])->group(function () {
-        Route::get('/', [ViewAdminController::class, 'getDashBoard'])->name('admin-home');
-        Route::get('/logout', [AuthController::class, 'logout'])->name('admin-logout');
+        Route::get('/', [ViewAdminController::class, 'getDashBoard'])->name('home');
+        Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
         Route::resource('admins', UserController::class);
-        Route::post('/admins/search', [UserController::class, 'searchUser'])->name('search-user');
+        Route::post('/admins/search', [UserController::class, 'searchUser'])->name('search.user');
 
         Route::resource('patients', PatientsController::class);
-        Route::post('/patients/search', [PatientsController::class, 'search'])->name('search-patient');
+        Route::post('/patients/search', [PatientsController::class, 'search'])->name('search.patient');
 
         Route::resource('doctors', DoctorsController::class);
-        Route::post('/doctors/search', [DoctorsController::class, 'search'])->name('search-doctor');
+        Route::post('/doctors/search', [DoctorsController::class, 'search'])->name('search.doctor');
 
         Route::resource('payments', PaymentsController::class);
-        Route::post('/payments/search', [PaymentsController::class, 'search'])->name('search-payment');
+        Route::post('/payments/search', [PaymentsController::class, 'search'])->name('search.payment');
 
         Route::resource('medical', MedicalSpecialtyController::class);
-        Route::post('/medical/search', [MedicalSpecialtyController::class, 'search'])->name('search-medical');
+        Route::post('/medical/search', [MedicalSpecialtyController::class, 'search'])->name('search.medical');
     });
 
     Route::middleware('admin.auth')->group(function () {
-        Route::get('/login', [ViewAdminController::class, 'getSignIn'])->name('admin-sign-in');
-        Route::get('/forgot', [ViewAdminController::class, 'getForgot'])->name('admin-forgot');
+        Route::get('/login', [ViewAdminController::class, 'getSignIn'])->name('login');
+        Route::get('/forgot', [ViewAdminController::class, 'getForgot'])->name('forgot');
 
-        Route::post('/login', [AuthController::class, 'login'])->name('admin-form-login');
-        Route::post('/forgot', [AuthController::class, 'forgot'])->name('admin-form-forgot');
+        Route::post('/login', [AuthController::class, 'login'])->name('form.login');
+        Route::post('/forgot', [AuthController::class, 'forgot'])->name('form.forgot');
     });
 });
