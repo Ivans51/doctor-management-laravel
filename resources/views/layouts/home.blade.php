@@ -23,6 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     @vite('resources/js/app.js')
     @stack('scripts-top')
+    <script src="{{ Vite::asset('resources/js/menu.js') }}"></script>
 </head>
 <body class="antialiased flex">
 

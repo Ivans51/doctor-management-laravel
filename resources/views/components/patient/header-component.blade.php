@@ -1,8 +1,6 @@
-<nav class="w-1/4 mx-4">
-    <a href="{{ route('patient.home') }}">
-        <img class="mt-4 mb-8 mx-2" src="{{ Vite::asset('resources/img/home/logo.png') }}" alt="logo">
-    </a>
-
+<x-utils.menu-component
+    route="patient.home"
+>
     <ul id="menu-vertical">
         <li>
             <a href="{{ route('patient.home') }}">
@@ -41,7 +39,7 @@
             </a>
         </li>
     </ul>
-</nav>
+</x-utils.menu-component>
 
 @push('scripts-bottom')
     <script>

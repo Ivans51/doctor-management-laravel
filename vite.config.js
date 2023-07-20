@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/js/response-management.js',
                 'resources/js/sweet-management.js',
                 'resources/js/utils.js',
+                'resources/js/menu.js',
             ],
             refresh: true,
         }),

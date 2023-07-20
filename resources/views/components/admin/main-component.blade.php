@@ -1,6 +1,13 @@
-<div class="bg-primary h-screen w-3/4">
+<div class="bg-primary h-screen md:w-3/4 w-full">
     <header class="flex justify-between px-4 py-2 items-center">
-        <div>
+        <div class="flex items-center space-x-2">
+            <button
+                id="btn-menu"
+                class="md:hidden"
+                onclick="openSidebar()"
+            >
+                <x-ri-menu-line class="h-8"/>
+            </button>
             <label>
                 <input class="bg-primary" type="search" placeholder="Search Appointment, Patient or etc">
             </label>

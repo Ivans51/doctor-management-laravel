@@ -3,7 +3,7 @@ nav ul li svg {
 }
 
 nav ul li a {
-    @apply px-4 py-2 block rounded flex;
+    @apply px-2 py-2 block rounded flex;
 }
 
 nav ul li a.active, nav ul li a:hover {
