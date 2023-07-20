@@ -32,7 +32,8 @@
         // search data
         function searchData(page = 1) {
             showLoading()
-            let url = `/doctor/api/appointments?search=${search}&limit=${limit}&page=${page}`
+            const route = '{{ route('doctor.appointments.doctor') }}'
+            let url = `${route}?search=${search}&limit=${limit}&page=${page}`
             let token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
@@ -46,8 +47,7 @@
                     setDataTable(response)
                     hideLoading()
                 },
-                error: function (xhr) {
-                    console.log(xhr)
+                error: function () {
                     hideLoading()
                 }
             })
@@ -61,6 +61,7 @@
             response.data.data.forEach(function (item) {
                 let image
                 let status
+                let btnActions = ''
 
                 if (item.patient.profile == null) {
                     const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
@@ -78,6 +79,44 @@
                             alt="profile patient"
                             style="border-radius: 50%"
                         >`
+                }
+
+                if (isMayorDate(item.schedule.date)) {
+                    const acceptImg = '{{ Vite::asset('resources/img/utils/icons8-accept-96.png') }}'
+                    const cancelImg = '{{ Vite::asset('resources/img/utils/icons8-reject-96.png') }}'
+
+                    if (item.status === CONST_PENDING) {
+                        btnActions = `
+                            <div class="flex items-center">
+                                <img
+                                    class="h-6 mr-2 cursor-pointer"
+                                    alt="btn cancel"
+                                    title="Accept"
+                                    src="${acceptImg}"
+                                    onclick="changeStatus(${item.id}, '${CONST_APPROVED}')"
+                                >
+                                <img
+                                    class="h-6 cursor-pointer"
+                                    alt="btn cancel"
+                                    title="Cancel"
+                                    src="${cancelImg}"
+                                    onclick="changeStatus(${item.id}, '${CONST_REJECTED}')"
+                                >
+                            </div>`
+                    }
+
+                    if (item.status === CONST_APPROVED) {
+                        btnActions = `
+                                <div class="flex items-center">
+                                    <img
+                                        class="h-6 cursor-pointer"
+                                        alt="btn cancel"
+                                        title="Cancel"
+                                        src="${cancelImg}"
+                                        onclick="changeStatus(${item.id}, '${CONST_REJECTED}')"
+                                    >
+                                </div>`
+                    }
                 }
 
                 if (item.status === CONST_APPROVED) {
@@ -108,10 +147,18 @@
                         </div>
                     </div>
                     ${status}
+                    ${btnActions}
                 </div>`
             })
 
             $('#content-body').html(html)
+        }
+
+        function changeStatus(id, status) {
+            const route = '{{ route('doctor.appointment.status') }}';
+            changeStatusAppointment(id, status, route).then(() => {
+                searchData()
+            })
         }
     </script>
 @endpush

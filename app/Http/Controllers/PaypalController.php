@@ -91,12 +91,12 @@ class PaypalController extends Controller
                     ->with('error', 'Something went wrong');
             } else {
                 return redirect()
-                    ->route('patient.checkout')
+                    ->route('patient.checkout', ['appointment_id' => $appointmentId ?? ''])
                     ->with('error', $response['message'] ?? 'Something went wrong');
             }
         } catch (\Exception $e) {
             return redirect()
-                ->route('patient.checkout')
+                ->route('patient.checkout', ['appointment_id' => $appointmentId ?? ''])
                 ->with('error', $e->getMessage());
         }
     }
@@ -145,19 +145,23 @@ class PaypalController extends Controller
                     'transaction_id' => $response['id'],
                 ]);
 
+            $appointment->update([
+                'is_paid' => true,
+            ]);
+
             $request->session()->forget('transaction_id');
 
-            // send email
-            $email = 'ivans51.test@gmail.com';
-            /*$email = $appointment->patient->user->email;*/
-            \Mail::to($email)->send(new PaymentSuccess($appointment));
+            // TODO: send email
+            /*$email = '';
+            $email = $appointment->patient->user->email;
+            \Mail::to($email)->send(new PaymentSuccess($appointment));*/
 
             return view('pages/patient/checkout/detail')->with([
                 'appointment' => $appointment,
             ]);
         } catch (\Exception $e) {
             return redirect()
-                ->route('patient.checkout')
+                ->route('patient.checkout', ['appointment_id' => $appointmentId ?? ''])
                 ->with('error', $e->getMessage());
         }
     }

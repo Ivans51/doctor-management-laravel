@@ -20,6 +20,7 @@ class Appointment extends Model
         'notes',
         'file',
         'status',
+        'is_paid',
     ];
 
     // relation with patient

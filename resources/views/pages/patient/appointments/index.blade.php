@@ -57,7 +57,6 @@
                     hideLoading()
                 },
                 error: function (xhr) {
-                    console.log(xhr)
                     hideLoading()
                 }
             })
@@ -78,15 +77,16 @@
                 response.data.data.forEach(function (item) {
                     let image
                     let status
+                    let btnActions = ''
 
                     if (item.patient.profile == null) {
                         const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
                         image = `<img
-                        class="h-10 mr-3"
-                        src="${urlImage}"
-                        alt="profile patient"
-                        style="border-radius: 50%"
-                    >`
+                            class="h-10 mr-3"
+                            src="${urlImage}"
+                            alt="profile patient"
+                            style="border-radius: 50%"
+                        >`
                     } else {
                         const urlImage = `{{ Vite::asset('storage/') }}/${item.patient.profile}`
                         image = `<img
@@ -97,18 +97,38 @@
                         >`
                     }
 
+                    if (isMayorDate(item.schedule.date)) {
+                        const cancelImg = '{{ Vite::asset('resources/img/utils/icons8-reject-96.png') }}'
+
+                        if (item.status === CONST_APPROVED || item.status === CONST_PENDING) {
+                            btnActions = `
+                                <div class="flex items-center">
+                                    <img
+                                        class="h-6 cursor-pointer"
+                                        alt="btn cancel"
+                                        title="Cancel"
+                                        src="${cancelImg}"
+                                        onclick="changeStatus(${item.id}, '${CONST_REJECTED}')"
+                                    >
+                                </div>`
+                        }
+                    }
+
                     if (item.status === CONST_APPROVED) {
-                        status = `<span class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm">
-                        Confirmed
-                    </span>`
+                        status = `
+                        <span class="text-xs text-zinc-500">
+                            Confirmed
+                        </span>`
                     } else if (item.status === CONST_PENDING) {
-                        status = `<span class="rounded text-yellow-900 bg-yellow-100 px-4 py-1 text-sm">
-                        Pending
-                    </span>`
+                        status = `
+                        <span class="text-xs text-zinc-500">
+                            Pending
+                        </span>`
                     } else if (item.status === CONST_REJECTED) {
-                        status = `<span class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm">
-                        Cancelled
-                    </span>`
+                        status = `
+                        <span class="text-xs text-zinc-500">
+                            Cancelled
+                        </span>`
                     }
 
                     html += `
@@ -124,12 +144,22 @@
                                 </div>
                             </div>
                         </div>
-                        ${status}
+                        <div class="flex flex-col items-center">
+                            ${btnActions}
+                            ${status}
+                        </div>
                     </div>`
                 })
             }
 
             $('#content-body').html(html)
+        }
+
+        function changeStatus(id, status) {
+            const route = '{{ route('patient.appointment.status') }}';
+            changeStatusAppointment(id, status, route).then(() => {
+                searchData()
+            })
         }
     </script>
 @endpush

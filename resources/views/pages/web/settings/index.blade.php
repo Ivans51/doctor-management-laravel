@@ -131,7 +131,6 @@
         };
 
         document.querySelector('input[name="address"]').addEventListener('input', event => {
-            /*console.log(`${event.target.value}`);*/
         });
     </script>
 @endpush

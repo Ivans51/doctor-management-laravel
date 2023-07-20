@@ -1,3 +1,4 @@
+@php use App\Constants\AppointmentStatus; @endphp
 @extends('layouts.home')
 
 @section('content')
@@ -46,7 +47,19 @@
                                 return {
                                     title: `${schedule.appointment.patient.name} - ${schedule.start_time} - ${schedule.end_time}`,
                                     start: schedule.date,
-                                    id: JSON.stringify(schedule)
+                                    id: JSON.stringify(schedule),
+                                    backgroundColor: schedule.appointment.status === CONST_APPROVED ?
+                                        '#90cdf4'
+                                        : schedule.appointment.status === CONST_PENDING
+                                            ? '#faf089'
+                                            : '#f56565',
+                                    borderColor: schedule.appointment.status === CONST_APPROVED ?
+                                        '#90cdf4'
+                                        : schedule.appointment.status === CONST_PENDING
+                                            ? '#faf089'
+                                            : '#f56565',
+                                    textColor: schedule.appointment.status === CONST_APPROVED || schedule.appointment.status === CONST_REJECTED
+                                        ? '#FFFFFF' : '#000000',
                                 }
                             })
                             successCallback(schedules);
@@ -62,7 +75,6 @@
                         // force click btn-hide
                         $(`#btn-hide`).click()
                         const item = JSON.parse(info.event.id);
-                        console.log(item)
                         setDataModal(item)
                     }
                 },
@@ -72,6 +84,8 @@
             function setDataModal(item) {
                 let image
                 let status
+                let btnActions = ''
+
                 const patient = item.appointment.patient
                 const statusData = item.appointment.status
                 const linkDownloadFileAppointment = `${window.location.origin}/storage/files/${item.appointment.file}`
@@ -92,6 +106,44 @@
                         alt="profile patient"
                         style="border-radius: 50%"
                     >`
+                }
+
+                if (isMayorDate(item.date)) {
+                    const acceptImg = '{{ Vite::asset('resources/img/utils/icons8-accept-96.png') }}'
+                    const cancelImg = '{{ Vite::asset('resources/img/utils/icons8-reject-96.png') }}'
+
+                    if (statusData === CONST_PENDING) {
+                        btnActions = `
+                            <div class="flex items-center">
+                                <img
+                                    class="h-6 mr-2 cursor-pointer"
+                                    alt="btn cancel"
+                                    title="Accept"
+                                    src="${acceptImg}"
+                                    onclick="changeStatus(${item.appointment.id}, '${CONST_APPROVED}')"
+                                >
+                                <img
+                                    class="h-6 cursor-pointer"
+                                    alt="btn cancel"
+                                    title="Cancel"
+                                    src="${cancelImg}"
+                                    onclick="changeStatus(${item.appointment.id}, '${CONST_REJECTED}')"
+                                >
+                            </div>`
+                    }
+
+                    if (statusData === CONST_APPROVED) {
+                        btnActions = `
+                                <div class="flex items-center">
+                                    <img
+                                        class="h-6 cursor-pointer"
+                                        alt="btn cancel"
+                                        title="Cancel"
+                                        src="${cancelImg}"
+                                        onclick="changeStatus(${item.appointment.id}, '${CONST_REJECTED}')"
+                                    >
+                                </div>`
+                    }
                 }
 
                 if (statusData === CONST_APPROVED) {
@@ -124,7 +176,10 @@
                                     </div>
                                 </div>
                             </div>
-                            ${status}
+                            <div class="flex flex-col items-center">
+                                ${btnActions}
+                                ${status}
+                            </div>
                         </div>
                     </li>
                     <li class="border-b-2">
@@ -158,5 +213,12 @@
             `)
             }
         });
+
+        function changeStatus(id, status) {
+            const route = '{{ route('doctor.appointment.status') }}';
+            changeStatusAppointment(id, status, route).then(() => {
+                location.reload()
+            })
+        }
     </script>
 @endpush

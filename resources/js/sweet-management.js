@@ -21,16 +21,16 @@ function errorSwal(error, text = '') {
     })
 }
 
-function deleteSwal() {
+function deleteSwal(text = 'You won\'t be able to revert this!') {
     return new Promise(resolve => {
         Swal.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {
                 resolve()

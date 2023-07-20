@@ -92,8 +92,7 @@
                     setDataTable(response)
                     hideLoading()
                 },
-                error: function (xhr) {
-                    console.log(xhr)
+                error: function () {
                     hideLoading()
                 }
             })

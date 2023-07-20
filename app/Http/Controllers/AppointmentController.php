@@ -15,6 +15,33 @@ use Throwable;
 
 class AppointmentController extends Controller
 {
+    // cancel appointment
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function changeStatusAppointment(Request $request): JsonResponse
+    {
+        $appointmentId = $request->input('appointment_id');
+        $status = $request->input('status');
+        $appointment = Appointment::query()->find($appointmentId);
+
+        if ($appointment) {
+            $appointment->status = $status;
+            $appointment->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Appointment cancelled successfully'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Appointment not found'
+        ]);
+    }
+
     // get appointments by doctor id
     /**
      * @param Request $request
@@ -80,9 +107,6 @@ class AppointmentController extends Controller
             'end_time' => 'required',
         ]);
 
-        // add in request status
-        $request->request->add(['status' => Constants::$PENDING]);
-
         try {
             DB::beginTransaction();
 
@@ -111,7 +135,6 @@ class AppointmentController extends Controller
                     'doctor_id' => $request->doctor_id,
                     'schedule_id' => $schedule->id,
                     'medical_specialty_id' => $request->medical_specialty_id,
-                    'status' => $request->status,
                     'healthcare_provider' => $request->healthcare_provider,
                     'description' => $request->description,
                     'notes' => $request->notes,

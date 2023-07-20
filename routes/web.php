@@ -57,6 +57,7 @@ Route::name('doctor.')->group(function () {
         /* JSON */
         Route::post('/api/schedule/timing', [ScheduleController::class, 'getScheduleByDoctorId'])->name('api.schedule.timing');
         Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments.doctor');
+        Route::put('/api/appointments/status', [AppointmentController::class, 'changeStatusAppointment'])->name('appointment.status');
     });
 
     Route::middleware('user.auth')->group(function () {
@@ -106,6 +107,7 @@ Route::prefix('patient')->name('patient.')->group(function () {
         Route::get('/api/doctor/list', [DoctorsController::class, 'doctorList'])->name('doctor.list');
         Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByPatient'])->name('appointments.patient');
         Route::post('/schedule/timing', [ScheduleController::class, 'getScheduleByPatientId'])->name('api.schedule.timing');
+        Route::put('/api/appointments/status', [AppointmentController::class, 'changeStatusAppointment'])->name('appointment.status');
     });
 
     Route::middleware('patient.auth')->group(function () {

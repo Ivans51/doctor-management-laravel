@@ -1,6 +1,5 @@
 function setMenuSetting(number) {
     let siteBaseSetting = document.location.pathname.split("/")[number]
-    console.log(siteBaseSetting)
 
     if (siteBaseSetting === undefined) {
         $($('#menu-setting li')[0]).addClass('active')

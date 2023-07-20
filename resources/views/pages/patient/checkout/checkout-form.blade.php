@@ -4,6 +4,8 @@
 @extends('layouts.patient')
 
 @section('content')
+    <x-utils.message-component/>
+
     <div class="flex items-start space-x-0 md:space-x-4">
         <section class="w-3/5">
             <h3 class="font-bold text-lg mb-2">Payment Info</h3>

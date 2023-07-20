@@ -40,11 +40,11 @@ class DatabaseSeeder extends Seeder
         }
 
         PatientDoctor::factory(10)->create();
-        Payment::factory(10)->create();
         Schedule::factory(10)->create();
         MedicalSpecialty::factory(10)->create();
         DoctorMedicalSpecialty::factory(10)->create();
         Appointment::factory(10)->create();
+        Payment::factory(10)->create();
     }
 
     /**

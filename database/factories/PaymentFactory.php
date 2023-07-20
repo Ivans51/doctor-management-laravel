@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Utils\Constants;
@@ -22,6 +23,7 @@ class PaymentFactory extends Factory
         return [
             'patient_id' => Patient::query()->inRandomOrder()->first()->id,
             'doctor_id' => Doctor::query()->inRandomOrder()->first()->id,
+            'appointment_id' => Appointment::query()->inRandomOrder()->first()->id,
             'amount' => $this->faker->numberBetween(100, 1000),
             'payment_method' => Constants::$PAYMENT_METHODS[array_rand(Constants::$PAYMENT_METHODS)],
             'payment_status' => Constants::$PAYMENT_STATUS_PAID,

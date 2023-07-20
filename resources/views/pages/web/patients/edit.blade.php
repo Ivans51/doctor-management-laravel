@@ -136,7 +136,6 @@
         };
 
         document.querySelector('input[name="location"]').addEventListener('input', event => {
-            /*console.log(`${event.target.value}`);*/
         });
     </script>
 @endpush
