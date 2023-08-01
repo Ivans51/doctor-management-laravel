@@ -12,7 +12,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
-use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 class StripeController extends Controller
@@ -20,7 +19,6 @@ class StripeController extends Controller
     /**
      * @param Request $request
      * @return RedirectResponse
-     * @throws ApiErrorException
      */
     public function checkout(Request $request): RedirectResponse
     {
