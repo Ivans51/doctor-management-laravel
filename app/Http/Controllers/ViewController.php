@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Charts\HomeChart;
 use App\Models\Appointment;
+use App\Models\Chat;
 use App\Models\Doctor;
-use App\Models\MedicalSpecialty;
+use App\Models\Message;
 use App\Models\Patient;
 use App\Utils\Constants;
 use Auth;
-use Faker\Factory as Faker;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 
 class ViewController extends Controller
 {
@@ -147,17 +146,7 @@ class ViewController extends Controller
 
     public function getMessages(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $files = [];
-
-        $faker = Faker::create();
-
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
-
-        return view('pages/web/messages/index')->with([
-            'images' => $files,
-        ]);
+        return view('pages/web/messages/index');
     }
 
     public function getBlog(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application

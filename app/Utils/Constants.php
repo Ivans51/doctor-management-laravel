@@ -28,4 +28,6 @@ class Constants
     public static $STRIPE = 'stripe';
     public static $PAYPAL = 'paypal';
     public static $CURRENCY_USD = 'USD';
+    public static $CHAT_CHANNEL = 'ChatChannel';
+    public static $CHAT_SEND_MESSAGE = 'SendMessageEvent';
 }

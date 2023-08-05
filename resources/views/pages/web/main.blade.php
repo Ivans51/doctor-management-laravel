@@ -99,21 +99,7 @@
                     @foreach($appointmentsToday as $item)
                         <div class="flex justify-between items-center my-4">
                             <div class="flex items-start">
-                                @if($item->patient->profile == null)
-                                    <img
-                                        class="h-10 mr-3"
-                                        src="{{ Vite::asset('resources/img/icons8-male-user.png') }}"
-                                        alt="profile patient"
-                                        style="border-radius: 50%"
-                                    >
-                                @else
-                                    <img
-                                        class="h-10 mr-3"
-                                        src="{{asset('storage/'.$item->profile)}}"
-                                        alt="profile patient"
-                                        style="border-radius: 50%"
-                                    >
-                                @endif
+                                <x-utils.image-profile-component :item="$item->patient"/>
                                 <div>
                                     <p>{{ $item->patient->name }}</p>
                                     <p class="text-xs mt-1">

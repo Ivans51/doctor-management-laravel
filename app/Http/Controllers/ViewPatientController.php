@@ -124,16 +124,6 @@ class ViewPatientController extends Controller
 
     public function getMessages(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $files = [];
-
-        $faker = Faker::create();
-
-        for ($i = 0; $i <= 10; $i++) {
-            $files[] = $faker->imageUrl(200, 200, 'people', false, true, 'lightblue');
-        }
-
-        return view('pages/patient/messages/index')->with([
-            'images' => $files,
-        ]);
+        return view('pages/patient/messages/index');
     }
 }

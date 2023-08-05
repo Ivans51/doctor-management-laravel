@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Appointment;
+use App\Models\Chat;
 use App\Models\Doctor;
 use App\Models\DoctorMedicalSpecialty;
 use App\Models\MedicalSpecialty;
+use App\Models\Message;
 use App\Models\Patient;
 use App\Models\PatientDoctor;
 use App\Models\Payment;
@@ -45,6 +47,11 @@ class DatabaseSeeder extends Seeder
         DoctorMedicalSpecialty::factory(10)->create();
         Appointment::factory(10)->create();
         Payment::factory(10)->create();
+        Chat::factory()->create([
+            'user1_id' => 2,
+            'user2_id' => 3,
+        ]);
+        Message::factory(10)->create();
     }
 
     /**
