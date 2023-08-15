@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\User;
-use App\Utils\Constants;
-use Carbon\Carbon;
 use DB;
 use Faker\Factory;
 use Illuminate\Contracts\View\View;
@@ -15,9 +12,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Stripe\Checkout\Session;
-use Stripe\Exception\ApiErrorException;
-use Stripe\Stripe;
 
 class PaymentsController extends Controller
 {

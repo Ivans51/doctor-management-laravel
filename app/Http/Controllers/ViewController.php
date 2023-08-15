@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Charts\HomeChart;
 use App\Models\Appointment;
-use App\Models\Chat;
 use App\Models\Doctor;
-use App\Models\Message;
 use App\Models\Patient;
 use App\Utils\Constants;
 use Auth;

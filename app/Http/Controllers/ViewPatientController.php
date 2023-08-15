@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
-use App\Models\Doctor;
 use App\Models\MedicalSpecialty;
 use App\Models\Patient;
 use Auth;
-use Faker\Factory as Faker;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;

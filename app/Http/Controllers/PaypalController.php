@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PaymentSuccess;
 use App\Models\Appointment;
 use App\Models\Payment;
 use App\Utils\Constants;

@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Charts\HomeChart;
-use App\Models\User;
 use Faker\Factory as Faker;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 
 class ViewAdminController extends Controller
 {

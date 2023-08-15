@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
-use App\Models\Doctor;
 use App\Models\Schedule;
-use App\Utils\Constants;
 use Auth;
 use DB;
 use Illuminate\Http\JsonResponse;
@@ -43,6 +41,7 @@ class AppointmentController extends Controller
     }
 
     // get appointments by doctor id
+
     /**
      * @param Request $request
      * @return JsonResponse

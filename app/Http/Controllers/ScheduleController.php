@@ -36,6 +36,7 @@ class ScheduleController extends Controller
     }
 
     // get schedule and appointment by doctor id
+
     /**
      * @param Request $request
      * @return JsonResponse
