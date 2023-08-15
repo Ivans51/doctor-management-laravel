@@ -24,7 +24,6 @@ class ChatEvent implements ShouldBroadcast
     {
         $this->userId = $userId;
         $chat = Chat::query()->find($chatId)->messages()->latest()->first();
-        $chat->diffForHumans = '1 second ago';
         $this->message = $chat;
     }
 
@@ -35,6 +34,7 @@ class ChatEvent implements ShouldBroadcast
      */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel(Constants::$CHAT_CHANNEL . '.' . $this->userId);
+        $name = Constants::$CHAT_CHANNEL . '.' . $this->userId;
+        return new PrivateChannel($name);
     }
 }

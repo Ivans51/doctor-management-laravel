@@ -53,8 +53,8 @@
             <div class="flex items-center p-4 space-x-2">
                 <div class="flex items-center justify-between p-2 w-full">
                     <div class="flex items-center">
-                        <x-ri-clipboard-line class="w-6 h-6 cursor-pointer"/>
-                        <x-lineawesome-microphone-solid class=" w-6 h-6 cursor-pointer"/>
+                        {{--<x-ri-clipboard-line class="w-6 h-6 cursor-pointer"/>
+                        <x-lineawesome-microphone-solid class=" w-6 h-6 cursor-pointer"/>--}}
                     </div>
                     <textarea id="editor-text"></textarea>
                 </div>
@@ -313,12 +313,31 @@
                 },
                 success: function () {
                     $("#editor-text").emojioneArea().val('').trigger('change')
-                    loadChat()
+                    addMessage(contentText, true)
                 },
                 error: function (error) {
                     errorSwal(error, 'No se pudo enviar el mensaje')
                 }
             })
+        }
+
+        function addMessage(message, right) {
+            countChat++
+            let html
+            if (right) {
+                html = rightMessage({
+                    message: message,
+                    diffForHumans: '1 second ago'
+                }, countChat)
+            } else {
+                html = leftMessage({
+                    message: message,
+                    diffForHumans: '1 second ago'
+                }, countChat)
+            }
+            const grid = $('#grid-main')
+            grid.append(html)
+            grid.scrollTop(grid[0].scrollHeight);
         }
     </script>
 
@@ -327,10 +346,7 @@
         const channel = `ChatChannel.${userId}`;
         window.Echo.private(channel)
             .listen('ChatEvent', (e) => {
-                if (e.chatId === chatId) {
-                    countChat++
-                    leftMessage(e, countChat)
-                }
+                addMessage(e.message.message, false)
             });
     </script>
 
