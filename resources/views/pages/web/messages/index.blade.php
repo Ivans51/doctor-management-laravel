@@ -135,6 +135,7 @@
                 },
                 success: function (response) {
                     let html = ''
+                    $('#content-list-chat').empty()
 
                     const data = response.data;
                     if (data.length > 0) {

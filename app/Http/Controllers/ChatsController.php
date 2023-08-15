@@ -77,10 +77,12 @@ class ChatsController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function searchChatByDoctor(): JsonResponse
+    public function searchChatByDoctor(Request $request): JsonResponse
     {
+        $search = $request->query('search');
         $doctorId = Auth::user()->doctor->id;
         $doctorUserId = Auth::user()->id;
 
@@ -92,6 +94,9 @@ class ChatsController extends Controller
             ])
             ->whereHas('doctorPatient', function ($query) use ($doctorId) {
                 $query->where('doctor_id', $doctorId);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
             })
             ->get();
 
@@ -111,10 +116,12 @@ class ChatsController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function searchChatByPatient(): JsonResponse
+    public function searchChatByPatient(Request $request): JsonResponse
     {
+        $search = $request->query('search');
         $patientId = Auth::user()->patient->id;
         $patientUserId = Auth::user()->id;
 
@@ -126,6 +133,9 @@ class ChatsController extends Controller
             ])
             ->whereHas('patientDoctor', function ($query) use ($patientId) {
                 $query->where('patient_id', $patientId);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
             })
             ->get();
 

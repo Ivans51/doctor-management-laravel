@@ -19,7 +19,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel(Constants::$CHAT_CHANNEL . '.{userId}', function ($user, $userId) {
-    \Log::info('info', [$user->id == $userId]);
     return $user->id == $userId;
 });
 
