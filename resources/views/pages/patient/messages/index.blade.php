@@ -249,21 +249,6 @@
                                 ${item.diffForHumans}
                             </p>
                         </div>
-                        <div class="relative">
-                            <x-lineawesome-comment-dots
-                                id="btn-message-${index + 1}"
-                                class="w-6 h-6 mt-2 ml-2 cursor-pointer"
-                            />
-                            <div
-                                id="content-message-${index + 1}"
-                                class="bg-white z-10 absolute border rounded-lg hidden py-2 px-4 right-0"
-                            >
-                                <ul class="space-y-2 btn-link">
-                                    <li><a href="/#" class="whitespace-nowrap">Reply</a></li>
-                                    <li><a href="/#" class="whitespace-nowrap">Delete</a></li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>`
         }
@@ -272,21 +257,6 @@
             return `
                 <div class="flex justify-end">
                     <div class="flex items-start justify-end bg-white px-2 py-2 text-right w-3/4">
-                        <div class="relative">
-                            <x-lineawesome-comment-dots
-                                id="btn-message-${index + 1}"
-                                class="w-6 h-6 mt-2 mr-2 cursor-pointer"
-                            />
-                            <div
-                                id="content-message-${index + 1}"
-                                class="bg-white z-10 absolute border rounded-lg hidden py-2 px-4 right-0"
-                            >
-                                <ul class="space-y-2 btn-link">
-                                    <li><a href="/#" class="whitespace-nowrap">Reply</a></li>
-                                    <li><a href="/#" class="whitespace-nowrap">Delete</a></li>
-                                </ul>
-                            </div>
-                        </div>
                         <div>
                             <p class="bg-blue-500 text-white py-2 px-4 rounded">
                                 ${item.message}
