@@ -29,8 +29,6 @@ class AppointmentControllerTest extends TestCase
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->get(route('doctor.appointments.doctor', $data));
 
-        $response->dump();
-
         $response->assertStatus(200);
     }
 
@@ -47,8 +45,6 @@ class AppointmentControllerTest extends TestCase
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->put(route('doctor.appointment.status', $data));
-
-        $response->dump();
 
         $response->assertJsonStructure([
             'success',

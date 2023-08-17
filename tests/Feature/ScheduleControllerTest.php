@@ -28,8 +28,6 @@ class ScheduleControllerTest extends TestCase
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->post(route('doctor.api.schedule.timing', $data));
 
-        $response->dump();
-
         $response->assertJsonStructure([
             'status',
             'message',

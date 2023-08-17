@@ -29,8 +29,6 @@ class ChatsControllerTest extends TestCase
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->get(route('doctor.chats.list', $data));
 
-        $response->dump();
-
         $response->assertJsonStructure([
             'messages' => [],
         ]);
@@ -50,8 +48,6 @@ class ChatsControllerTest extends TestCase
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->post(route('doctor.search.chat', $data));
 
-        $response->dump();
-
         $response->assertStatus(200);
     }
 
@@ -69,8 +65,6 @@ class ChatsControllerTest extends TestCase
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->post(route('doctor.send.message', $data));
-
-        $response->dump();
 
         $response->assertStatus(200);
     }

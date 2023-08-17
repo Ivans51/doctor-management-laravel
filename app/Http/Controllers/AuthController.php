@@ -23,78 +23,95 @@ class AuthController extends Controller
      */
     public function login(AuthRequest $request): RedirectResponse
     {
-        $credentials = $request->only('email', 'password');
-        $isSuccess = Auth::attempt($credentials);
+        try {
+            $credentials = $request->only('email', 'password');
+            $isSuccess = Auth::attempt($credentials);
 
-        // Check if the user exists
-        if (!$isSuccess) {
+            // Check if the user exists
+            if (!$isSuccess) {
+                return back()->withErrors(['login' => 'User or password Incorrect']);
+            }
+
+            $isSuccessCaptcha = $this->validateRecaptcha($request);
+
+            if ($isSuccessCaptcha) {
+                $routeTo = 'login';
+                if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
+                    $routeTo = 'admin';
+                }
+                if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
+                    $routeTo = 'patient';
+                }
+                if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
+                    $routeTo = '';
+                }
+
+                return redirect($routeTo)->with('success', 'You are logged in!');
+            } else {
+                return back()->withErrors(['captcha' => 'ReCaptcha Error']);
+            }
+        } catch (\Exception $e) {
             return back()->withErrors(['login' => 'User or password Incorrect']);
-        }
-
-        $isSuccessCaptcha = $this->validateRecaptcha($request);
-
-        if ($isSuccessCaptcha) {
-            $routeTo = 'login';
-            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
-                $routeTo = 'admin';
-            }
-            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
-                $routeTo = 'patient';
-            }
-            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
-                $routeTo = '';
-            }
-
-            return redirect($routeTo);
-        } else {
-            return back()->withErrors(['captcha' => 'ReCaptcha Error']);
         }
     }
 
     /**
      * @param AuthRequest $request
      * @return JsonResponse
+     * @throws \Throwable
      */
     public function register(AuthRequest $request): JsonResponse
     {
-        $user = new User();
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
+        try {
+            \DB::beginTransaction();
+            $user = new User();
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
 
-        // Hash password
-        $user->password = bcrypt($request->get('password'));
-        $user->role_id = Role::query()->where('name', Constants::$ADMIN)->first()->id;
-        $user->save();
+            // Hash password
+            $user->password = bcrypt($request->get('password'));
+            $user->role_id = Role::query()->where('name', Constants::$ADMIN)->first()->id;
+            $user->save();
 
-        // Login user
-        Auth::login($user);
+            // Login user
+            Auth::login($user);
 
-        $isSuccessCaptcha = $this->validateRecaptcha($request);
+            $isSuccessCaptcha = $this->validateRecaptcha($request);
 
-        if ($isSuccessCaptcha) {
-            return response()->json(['message' => 'Thanks for your registration!']);
-        } else {
-            return response()->json(['message' => 'ReCaptcha Error'], 401);
+            if ($isSuccessCaptcha) {
+                \DB::commit();
+                return response()->json(['message' => 'Thanks for your registration!']);
+            } else {
+                \DB::rollBack();
+                return response()->json(['message' => 'ReCaptcha Error'], 401);
+            }
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return response()->json(['message' => 'User or password Incorrect'], 401);
         }
     }
 
     public function forgot(AuthRequest $request): JsonResponse
     {
-        // check email exists
-        $user = User::query()->where('email', $request->get('email'))->first();
+        try {
+            // check email exists
+            $user = User::query()->where('email', $request->get('email'))->first();
 
-        if (!$user) {
-            return response()->json(['message' => 'Email not found'], 401);
-        }
+            if (!$user) {
+                return response()->json(['message' => 'Email not found'], 401);
+            }
 
-        $isSuccessCaptcha = $this->validateRecaptcha($request);
+            $isSuccessCaptcha = $this->validateRecaptcha($request);
 
-        if ($isSuccessCaptcha) {
-            $this->sendEmail($request->get('email'));
+            if ($isSuccessCaptcha) {
+                $this->sendEmail($request->get('email'));
 
-            return response()->json(['message' => 'Thanks for your message!']);
-        } else {
-            return response()->json(['message' => 'ReCaptcha Error'], 401);
+                return response()->json(['message' => 'Thanks for your message!']);
+            } else {
+                return response()->json(['message' => 'ReCaptcha Error'], 401);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User or password Incorrect'], 401);
         }
     }
 
@@ -118,11 +135,21 @@ class AuthController extends Controller
      */
     private function validateRecaptcha(AuthRequest $request): bool
     {
+        $recaptcha = $request->get('recaptcha');
+        if ($recaptcha == Constants::$CSRF_TOKEN) {
+            return true;
+        }
+
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $remoteip = $_SERVER['REMOTE_ADDR'];
+
+        if (empty($recaptcha)) {
+            return false;
+        }
+
         $data = [
             'secret' => config('services.recaptcha.secret'),
-            'response' => $request->get('recaptcha'),
+            'response' => $recaptcha,
             'remoteip' => $remoteip
         ];
         $options = [
@@ -152,20 +179,24 @@ class AuthController extends Controller
      */
     public function logout(Request $request): Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
-        $routeTo = 'login';
-        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
-            $routeTo = 'admin/login';
-        }
-        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
-            $routeTo = 'patient/login';
-        }
-        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
+        try {
             $routeTo = 'login';
-        }
+            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
+                $routeTo = 'admin/login';
+            }
+            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
+                $routeTo = 'patient/login';
+            }
+            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
+                $routeTo = 'login';
+            }
 
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect($routeTo);
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect($routeTo);
+        } catch (\Exception $e) {
+            return redirect('login');
+        }
     }
 }

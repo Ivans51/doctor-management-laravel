@@ -14,7 +14,6 @@ class ViewControllerTest extends TestCase
         (new Testing())->createFakeUserWithRole(Constants::$DOCTOR);
     }
 
-
     /**
      * A basic feature test example.
      */

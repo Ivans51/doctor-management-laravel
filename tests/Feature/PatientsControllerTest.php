@@ -138,8 +138,6 @@ class PatientsControllerTest extends TestCase
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->delete(route('doctor.my-patients-doctor.destroy', $patientId), $data);
 
-        $response->dump();
-
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'status',
@@ -160,8 +158,6 @@ class PatientsControllerTest extends TestCase
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->post(route('doctor.search.patients', $data));
-
-        $response->dump();
 
         $response->assertJsonStructure([
             'status',
