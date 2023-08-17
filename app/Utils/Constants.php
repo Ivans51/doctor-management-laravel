@@ -30,4 +30,6 @@ class Constants
     public static $CURRENCY_USD = 'USD';
     public static $CHAT_CHANNEL = 'ChatChannel';
     public static $CHAT_SEND_MESSAGE = 'SendMessageEvent';
+
+    public static $CSRF_TOKEN = 'c2cc1357-bb84-410a-ac81-5d03dccf14be';
 }

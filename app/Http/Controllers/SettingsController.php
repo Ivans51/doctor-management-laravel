@@ -96,12 +96,11 @@ class SettingsController extends Controller
             ]);
 
             // Update doctor medical specialty only if there is a change
-            foreach ($specialties as $specialty) {
-                DoctorMedicalSpecialty::query()
-                    ->where('doctor_id', $doctor->id)
-                    ->where('medical_specialty_id', $specialty)
-                    ->delete();
+            DoctorMedicalSpecialty::query()
+                ->where('doctor_id', $doctor->id)
+                ->delete();
 
+            foreach ($specialties as $specialty) {
                 DoctorMedicalSpecialty::query()->create([
                     'doctor_id' => $doctor->id,
                     'medical_specialty_id' => $specialty,

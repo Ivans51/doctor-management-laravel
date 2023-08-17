@@ -14,6 +14,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SettingsPatientController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ValidatorController;
 use App\Http\Controllers\ViewAdminController;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\ViewPatientController;
@@ -29,6 +30,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::prefix('validator')->name('validator.')->group(function () {
+    Route::get('/image', [ValidatorController::class, 'verifyImage'])->name('image');
+});
 
 /* Doctors */
 Route::name('doctor.')->group(function () {
@@ -49,17 +54,17 @@ Route::name('doctor.')->group(function () {
         /* RESOURCE */
         Route::resource('my-patients-doctor', PatientsController::class);
 
-        /* POST */
-        Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor']);
-        Route::post('/patients/doctor/search', [PatientsController::class, 'searchByDoctor']);
-        Route::post('/chat/search', [ChatsController::class, 'searchChatByDoctor'])->name('search.chat');
-        Route::post('/chat/send/message', [ChatsController::class, 'sendMessage'])->name('send.message');
+        /* PUT */
         Route::put('/settings/update/profile', [SettingsController::class, 'updateProfileDoctor'])->name('update.profile');
         Route::put('/settings/update/password', [SettingsController::class, 'updatePassword'])->name('update.password');
 
         /* JSON */
         Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments.doctor');
         Route::get('/api/chat', [ChatsController::class, 'show'])->name('chats.list');
+        Route::post('/chat/search', [ChatsController::class, 'searchChatByDoctor'])->name('search.chat');
+        Route::post('/chat/send/message', [ChatsController::class, 'sendMessage'])->name('send.message');
+        Route::post('/payments/search', [PaymentsController::class, 'searchByDoctor'])->name('search.payments');
+        Route::post('/patients/doctor/search', [PatientsController::class, 'searchByDoctor'])->name('search.patients');
         Route::post('/api/schedule/timing', [ScheduleController::class, 'getScheduleByDoctorId'])->name('api.schedule.timing');
         Route::put('/api/appointments/status', [AppointmentController::class, 'changeStatusAppointment'])->name('appointment.status');
     });

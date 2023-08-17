@@ -1,6 +1,7 @@
 import.meta.glob([
     '../img/**',
     '../fonts/**',
+    /*'../../storage/app/!**',*/
 ]);
 
 import './bootstrap';

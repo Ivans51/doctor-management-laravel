@@ -59,11 +59,11 @@
             setPagination(response)
 
             response.data.data.forEach(function (item) {
-                let image
+                let image = ''
                 let status
                 let btnActions = ''
 
-                if (item.patient.profile == null) {
+                if (item.patient.profile != null) {
                     const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
                     image = `<img
                         class="h-10 mr-3"
@@ -71,14 +71,6 @@
                         alt="profile patient"
                         style="border-radius: 50%"
                     >`
-                } else {
-                    const urlImage = `{{ Vite::asset('storage/') }}/${item.patient.profile}`
-                    image = `<img
-                            class="h-10 mr-3"
-                            src="${urlImage}"
-                            alt="profile patient"
-                            style="border-radius: 50%"
-                        >`
                 }
 
                 if (isMayorDate(item.schedule.date)) {

@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // run at 16:30 every day
-        $schedule->command('migrate:refresh --seed')->dailyAt('20:37');
+        $schedule->command('migrate:refresh --seed')->daily();
     }
 
     /**

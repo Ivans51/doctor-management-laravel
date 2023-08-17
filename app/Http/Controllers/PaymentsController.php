@@ -68,7 +68,7 @@ class PaymentsController extends Controller
     {
         $limit = $request->query('limit', 10);
 
-        if ($request->search) {
+        if ($request->query('search')) {
             $payments = Payment::query()
                 ->with([
                     'patient',

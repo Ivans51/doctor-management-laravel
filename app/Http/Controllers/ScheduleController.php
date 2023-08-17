@@ -16,8 +16,8 @@ class ScheduleController extends Controller
     public function getScheduleByDoctorId(Request $request): JsonResponse
     {
         $doctorId = \Auth::user()->doctor->id;
-        $start_date = $request->start;
-        $end_date = $request->end;
+        $start_date = $request->input('start');
+        $end_date = $request->input('end');
 
         $schedule = Schedule::query()
             ->with([

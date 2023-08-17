@@ -63,9 +63,9 @@ class PatientsController extends Controller
      */
     private function getPatients(Request $request, string $doctorId): JsonResponse
     {
-        $limit = $request->limit ?? 10;
+        $limit = $request->query('limit') ?? 10;
 
-        if ($request->search) {
+        if ($request->query('search')) {
             $patients = Patient::query()
                 ->when($doctorId, function ($query, $doctorId) {
                     $query->whereHas('doctorPatient', function ($query) use ($doctorId) {
@@ -126,6 +126,9 @@ class PatientsController extends Controller
                 'name' => 'required|min:3',
                 'email' => 'required|unique:users,email',
                 'password' => 'required|min:8|max:20|confirmed',
+                'phone_number' => 'required',
+                'location_address-search' => 'required',
+                'doctor_id' => 'required',
             ]);
 
             $user = User::create([
@@ -161,9 +164,6 @@ class PatientsController extends Controller
 
     public function show($id)
     {
-        return Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN
-            ? view('pages/admin/patients/show')
-            : view('pages/web/patients/show');
 
     }
 
@@ -189,14 +189,17 @@ class PatientsController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        // validate fields
-        $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|unique:users,email,' . $id,
-            'password' => 'nullable|min:8|max:20',
-        ]);
-
         try {
+            // validate fields
+            $request->validate([
+                'name' => 'required|min:3',
+                'email' => 'required|unique:users,email,' . $id,
+                'password' => 'nullable|min:8|max:20',
+                'phone_number' => 'required',
+                'location_address-search' => 'required',
+                'status' => 'required',
+            ]);
+
             DB::beginTransaction();
             $user = User::find($id);
             $user->update([
@@ -258,7 +261,7 @@ class PatientsController extends Controller
                 'status' => 'error',
                 'message' => 'Data failed to delete',
                 'error' => $e->getMessage()
-            ]);
+            ], 400);
         }
     }
 }

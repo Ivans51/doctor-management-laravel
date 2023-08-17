@@ -109,7 +109,7 @@
             setPagination(response)
 
             response.data.data.forEach(function (item) {
-                let image
+                let image = ''
                 let status
 
                 if (item.profile == null) {
@@ -120,14 +120,6 @@
                         alt="profile patient"
                         style="border-radius: 50%"
                     >`
-                } else {
-                    const urlImage = `{{ Vite::asset('storage/') }}/${item.profile}`
-                    image = `<img
-                            class="h-10 mr-3"
-                            src="${urlImage}"
-                            alt="profile patient"
-                            style="border-radius: 50%"
-                        >`
                 }
 
                 if (item.status === CONST_ACTIVE) {
