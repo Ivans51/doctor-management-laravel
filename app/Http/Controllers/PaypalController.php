@@ -118,6 +118,12 @@ class PaypalController extends Controller
             $provider->setApiCredentials(config('paypal'));
             $provider->getAccessToken();
 
+            if (!$request->has('token')) {
+                return redirect()
+                    ->route('patient.checkout', ['appointment_id' => $appointmentId])
+                    ->with('error', 'Something went wrong');
+            }
+
             $response = $provider->capturePaymentOrder($request['token']);
 
             $appointment = Appointment::query()

@@ -45,7 +45,9 @@
 
             <h3 class="font-bold text-lg mb-2 mt-10">Method Payment</h3>
             @if($appointment->doctorMedicalSpecialty && $appointment->doctorMedicalSpecialty->medicalSpecialty)
-                <p class="text-zinc-400">Price: ${{ $appointment->medicalSpecialty->price }} USD</p>
+                @if($appointment->medicalSpecialty)
+                    <p class="text-zinc-400">Price: ${{ $appointment->medicalSpecialty->price }} USD</p>
+                @endif
 
                 <div class="flex space-x-2">
                     <form action="{{ route('patient.payment-stripe') }}" method="post">
