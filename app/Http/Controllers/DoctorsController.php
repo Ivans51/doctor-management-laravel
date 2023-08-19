@@ -125,7 +125,7 @@ class DoctorsController extends Controller
             return redirect()->back()->with('success', 'User created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Something went wrong');
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

@@ -87,27 +87,33 @@ class ViewPatientController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application
+     * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application|\Illuminate\Http\RedirectResponse
      */
-    public function getCheckoutForm(): \Illuminate\Contracts\Foundation\Application|Factory|View|Application
+    public function getCheckoutForm()
     {
-        $appointmentId = request()->query('appointment_id');
+        try {
+            $appointmentId = request()->query('appointment_id');
 
-        if (!$appointmentId) {
-            abort('404', 'The post you are looking for was not found');
+            if (!$appointmentId) {
+                abort('404', 'The post you are looking for was not found');
+            }
+
+            $appointment = Appointment::query()
+                ->with([
+                    'patient',
+                    'schedule',
+                    'medicalSpecialty',
+                ])
+                ->where('id', $appointmentId)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            return view('pages/patient/checkout/checkout-form', compact('appointment'));
+        } catch (\Exception $e) {
+            return redirect()->route('patient.appointments')->with([
+                'error' => 'Error: ' . $e->getMessage(),
+            ]);
         }
-
-        $appointment = Appointment::query()
-            ->with([
-                'patient',
-                'schedule',
-                'medicalSpecialty',
-            ])
-            ->where('id', $appointmentId)
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        return view('pages/patient/checkout/checkout-form', compact('appointment'));
     }
 
     public function getScheduleTiming(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
