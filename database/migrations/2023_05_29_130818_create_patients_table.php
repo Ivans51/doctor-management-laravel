@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('phone');
             $table->date('date_of_birth')->nullable();
@@ -28,7 +28,7 @@ return new class extends Migration
             ])->default(Constants::$ACTIVE);
             $table->timestamps();
             $table->softDeletes();
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

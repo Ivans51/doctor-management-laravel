@@ -101,7 +101,7 @@ class PatientAdminControllerTest extends TestCase
     public function test_patients_update(): void
     {
         $faker = Factory::create();
-        $patientId = Patient::query()->inRandomOrder()->first()->id;
+        $patientId = Patient::query()->inRandomOrder()->first()->user_id;
         $doctorId = Doctor::query()->inRandomOrder()->first()->id;
 
         $data = [

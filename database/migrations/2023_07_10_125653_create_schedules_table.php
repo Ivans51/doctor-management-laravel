@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedules', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('patient_id');
+            $table->uuid('id')->primary();
+            $table->uuid('doctor_id');
+            $table->uuid('patient_id');
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');

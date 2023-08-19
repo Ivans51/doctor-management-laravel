@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('chats', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user1_id');
-            $table->unsignedBigInteger('user2_id');
+            $table->uuid('id')->primary();
+            $table->uuid('user1_id');
+            $table->uuid('user2_id');
             $table->timestamps();
 
             $table->foreign('user1_id')->references('id')->on('users');

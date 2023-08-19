@@ -201,7 +201,7 @@ class PatientsController extends Controller
             ]);
 
             DB::beginTransaction();
-            $user = User::find($id);
+            $user = User::query()->where('id', $id)->first();
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,

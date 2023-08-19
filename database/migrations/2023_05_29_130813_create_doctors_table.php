@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctors', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('speciality');
             $table->string('phone');
@@ -25,7 +25,7 @@ return new class extends Migration
             ])->default(Constants::$ACTIVE);
             $table->timestamps();
             $table->softDeletes();
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

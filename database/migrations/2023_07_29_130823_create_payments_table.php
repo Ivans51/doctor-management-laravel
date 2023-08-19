@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('appointment_id');
+            $table->uuid('id')->primary();
+            $table->uuid('patient_id');
+            $table->uuid('doctor_id');
+            $table->uuid('appointment_id');
             $table->string('amount');
             $table->string('payment_method');
             $table->string('payment_status');

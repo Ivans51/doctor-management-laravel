@@ -47,10 +47,14 @@ class DatabaseSeeder extends Seeder
         DoctorMedicalSpecialty::factory(10)->create();
         Appointment::factory(10)->create();
         Payment::factory(10)->create();
+
+        $rolePatientId = Role::query()->where('name', Constants::$PATIENT)->first()->id;
+        $roleDoctorId = Role::query()->where('name', Constants::$DOCTOR)->first()->id;
         Chat::factory()->create([
-            'user1_id' => 2,
-            'user2_id' => 3,
+            'user1_id' => User::query()->where('role_id', $rolePatientId)->first()->id,
+            'user2_id' => User::query()->where('role_id', $roleDoctorId)->first()->id
         ]);
+
         Message::factory(10)->create();
     }
 

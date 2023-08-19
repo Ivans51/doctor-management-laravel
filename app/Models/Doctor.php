@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use YourAppRocks\EloquentUuid\Traits\HasUuid;
 
 class Doctor extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasUuid;
+
+    public $keyType = 'string';
+    protected string $uuidColumnName = 'id';
 
     protected $fillable = [
         'name',

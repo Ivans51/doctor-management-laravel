@@ -41,44 +41,46 @@
                     />
                 @else
                     @foreach($appointments as $item)
-                        <div class="flex justify-between items-center my-4">
-                            <div class="flex items-start">
-                                @if($item->patient->profile == null)
-                                    <img
-                                        class="h-10 mr-3"
-                                        src="{{ Vite::asset('resources/img/icons8-male-user.png') }}"
-                                        alt="profile patient"
-                                        style="border-radius: 50%"
-                                    >
-                                @else
-                                    <img
-                                        class="h-10 mr-3"
-                                        src="{{asset('storage/'.$item->patient->profile)}}"
-                                        alt="profile patient"
-                                        style="border-radius: 50%"
-                                    >
-                                @endif
-                                <div>
-                                    <p>{{ $item->patient->name }}</p>
-                                    <p class="text-xs mt-1">
-                                        {{ $item->patient->gender }}
-                                    </p>
+                        @if($item->patient)
+                            <div class="flex justify-between items-center my-4">
+                                <div class="flex items-start">
+                                    @if($item->patient->profile == null)
+                                        <img
+                                            class="h-10 mr-3"
+                                            src="{{ Vite::asset('resources/img/icons8-male-user.png') }}"
+                                            alt="profile patient"
+                                            style="border-radius: 50%"
+                                        >
+                                    @else
+                                        <img
+                                            class="h-10 mr-3"
+                                            src="{{asset('storage/'.$item->patient->profile)}}"
+                                            alt="profile patient"
+                                            style="border-radius: 50%"
+                                        >
+                                    @endif
+                                    <div>
+                                        <p>{{ $item->patient->name }}</p>
+                                        <p class="text-xs mt-1">
+                                            {{ $item->patient->gender }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            @if($item->status == Constants::$APPROVED)
-                                <span class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm">
+                                @if($item->status == Constants::$APPROVED)
+                                    <span class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm">
                                     Confirmed
                                 </span>
-                            @elseif($item->status == Constants::$PENDING)
-                                <span class="rounded text-yellow-900 bg-yellow-100 px-4 py-1 text-sm">
+                                @elseif($item->status == Constants::$PENDING)
+                                    <span class="rounded text-yellow-900 bg-yellow-100 px-4 py-1 text-sm">
                                     Pending
                                 </span>
-                            @else
-                                <span class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm">
+                                @else
+                                    <span class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm">
                                     Cancelled
                                 </span>
-                            @endif
-                        </div>
+                                @endif
+                            </div>
+                        @endif
                     @endforeach
                 @endif
             </div>

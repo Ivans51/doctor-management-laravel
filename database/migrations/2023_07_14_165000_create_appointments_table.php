@@ -12,11 +12,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('schedule_id');
-            $table->unsignedBigInteger('medical_specialty_id')->nullable();
+            $table->uuid('id')->primary();
+            $table->uuid('patient_id');
+            $table->uuid('doctor_id');
+            $table->uuid('schedule_id');
+            $table->uuid('medical_specialty_id')->nullable();
             $table->enum('status', [
                 Constants::$PENDING,
                 Constants::$APPROVED,

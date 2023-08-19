@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use YourAppRocks\EloquentUuid\Traits\HasUuid;
 
 class PatientDoctor extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuid;
+
+    public $keyType = 'string';
+    protected string $uuidColumnName = 'id';
 
     protected $table = 'patients_doctors';
 

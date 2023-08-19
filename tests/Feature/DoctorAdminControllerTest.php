@@ -104,19 +104,23 @@ class DoctorAdminControllerTest extends TestCase
     public function test_doctors_update(): void
     {
         $faker = Factory::create();
-        $doctorId = Doctor::query()->first()->id;
+        $doctorUserId = Doctor::query()->first()->user_id;
 
         $data = [
             'name' => 'test',
             'email' => $faker->email . $faker->randomDigitNotNull,
             'password' => 'test1234',
             'password_confirmation' => 'test1234',
+            'speciality' => MedicalSpecialty::query()->inRandomOrder()->first()->id,
+            'phone_number' => $faker->phoneNumber,
+            'location_address-search' => $faker->address,
+            'status' => Constants::$ACTIVE,
             '_token' => Constants::$CSRF_TOKEN,
         ];
 
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
-            ->put(route('admin.doctors.update', $doctorId), $data);
+            ->put(route('admin.doctors.update', $doctorUserId), $data);
 
         $response->assertRedirect();
         $response->assertStatus(302);

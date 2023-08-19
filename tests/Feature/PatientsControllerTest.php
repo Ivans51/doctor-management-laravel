@@ -102,7 +102,7 @@ class PatientsControllerTest extends TestCase
     public function test_my_patients_doctor_update(): void
     {
         $faker = Factory::create();
-        $doctorId = Doctor::query()->inRandomOrder()->first()->id;
+        $patientId = Patient::query()->inRandomOrder()->first()->user_id;
 
         $data = [
             'name' => 'test',
@@ -117,7 +117,7 @@ class PatientsControllerTest extends TestCase
 
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
-            ->put(route('doctor.my-patients-doctor.update', $doctorId), $data);
+            ->put(route('doctor.my-patients-doctor.update', $patientId), $data);
 
         $response->assertRedirect();
         $response->assertStatus(302);

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\MedicalSpecialty;
 use App\Utils\Constants;
 use App\Utils\Testing;
 use Faker\Factory;
@@ -67,7 +68,7 @@ class SettingsControllerTest extends TestCase
             'email' => 'test@test.com' . $faker->randomDigitNotNull,
             'address_address-search' => 'Test',
             'specialties' => [
-                10,
+                MedicalSpecialty::query()->first()->id,
             ],
             '_token' => Constants::$CSRF_TOKEN,
         ];
