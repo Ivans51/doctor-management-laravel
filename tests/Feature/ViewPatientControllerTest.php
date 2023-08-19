@@ -80,7 +80,7 @@ class ViewPatientControllerTest extends TestCase
      */
     public function test_checkout(): void
     {
-        $appointmentId = Appointment::query()->inRandomOrder()->first()->id;
+        $appointmentId = Appointment::query()->first()->id;
 
         $response = $this->get(route('patient.checkout', [
             'appointment_id' => $appointmentId

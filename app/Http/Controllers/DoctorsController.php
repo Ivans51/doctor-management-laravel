@@ -131,7 +131,7 @@ class DoctorsController extends Controller
 
     public function show($id)
     {
-        return view('pages/admin/doctors/show');
+
     }
 
     /**

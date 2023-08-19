@@ -4,15 +4,14 @@ namespace Tests\Feature;
 
 use App\Utils\Constants;
 use App\Utils\Testing;
-use Faker\Factory;
 use Tests\TestCase;
 
-class SettingsControllerTest extends TestCase
+class SettingsAdminControllerTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-        (new Testing())->createFakeUserWithRole(Constants::$DOCTOR);
+        (new Testing())->createFakeUserWithRole(Constants::$ADMIN);
     }
 
     /**
@@ -20,7 +19,7 @@ class SettingsControllerTest extends TestCase
      */
     public function test_settings(): void
     {
-        $response = $this->get(route('doctor.settings'));
+        $response = $this->get(route('admin.settings'));
 
         $response->assertStatus(200);
     }
@@ -30,27 +29,7 @@ class SettingsControllerTest extends TestCase
      */
     public function test_change_password(): void
     {
-        $response = $this->get(route('doctor.change.password'));
-
-        $response->assertStatus(200);
-    }
-
-    /**
-     * A basic feature test example.
-     */
-    public function test_notifications(): void
-    {
-        $response = $this->get(route('doctor.notifications'));
-
-        $response->assertStatus(200);
-    }
-
-    /**
-     * A basic feature test example.
-     */
-    public function test_reviews(): void
-    {
-        $response = $this->get(route('doctor.reviews'));
+        $response = $this->get(route('admin.change.password'));
 
         $response->assertStatus(200);
     }
@@ -60,11 +39,9 @@ class SettingsControllerTest extends TestCase
      */
     public function test_update_profile(): void
     {
-        $faker = Factory::create();
-
         $data = [
             'name' => 'Test',
-            'email' => 'test@test.com' . $faker->randomDigitNotNull,
+            'email' => 'test@test.com',
             'address_address-search' => 'Test',
             'specialties' => [
                 10,
@@ -74,7 +51,7 @@ class SettingsControllerTest extends TestCase
 
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
-            ->put(route('doctor.update.profile'), $data);
+            ->put(route('admin.update.profile'), $data);
 
         $response->assertRedirect();
         $response->assertStatus(302);
@@ -94,7 +71,7 @@ class SettingsControllerTest extends TestCase
 
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
-            ->put(route('doctor.update.password'), $data);
+            ->put(route('admin.update.password'), $data);
 
         $response->assertRedirect();
         $response->assertStatus(302);

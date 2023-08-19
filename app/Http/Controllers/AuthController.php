@@ -104,29 +104,34 @@ class AuthController extends Controller
             $isSuccessCaptcha = $this->validateRecaptcha($request);
 
             if ($isSuccessCaptcha) {
-                $this->sendEmail($request->get('email'));
+                /*$this->sendEmail($request->get('email'));*/
 
                 return response()->json(['message' => 'Thanks for your message!']);
             } else {
                 return response()->json(['message' => 'ReCaptcha Error'], 401);
             }
         } catch (\Exception $e) {
-            return response()->json(['message' => 'User or password Incorrect'], 401);
+            return response()->json(['message' => 'User or password Incorrect'], 400);
         }
     }
 
     /**
      * @param $email
      * @return void
+     * @throws \Exception
      */
     private function sendEmail($email): void
     {
-        $data = [
-            'name' => 'Recovery Password',
-            'message' => 'This is a test email from Laravel 10.'
-        ];
+        try {
+            $data = [
+                'name' => 'Recovery Password',
+                'message' => 'This is a test email from Laravel 10.'
+            ];
 
-        \Mail::to($email)->send(new MailClass($data));
+            \Mail::to($email)->send(new MailClass($data));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     /**

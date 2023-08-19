@@ -84,7 +84,7 @@
             calendar.render();
 
             function setDataModal(item) {
-                let image
+                let image = ''
                 let status
                 let btnActions = ''
 
@@ -94,14 +94,6 @@
 
                 if (patient.profile == null) {
                     const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
-                    image = `<img
-                        class="h-10 mr-3"
-                        src="${urlImage}"
-                        alt="profile patient"
-                        style="border-radius: 50%"
-                    >`
-                } else {
-                    const urlImage = `{{ Vite::asset('storage/') }}/${patient.profile}`
                     image = `<img
                         class="h-10 mr-3"
                         src="${urlImage}"

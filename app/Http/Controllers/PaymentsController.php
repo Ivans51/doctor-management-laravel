@@ -109,7 +109,7 @@ class PaymentsController extends Controller
 
     public function create()
     {
-        return view('pages/admin/payments/create');
+
     }
 
     /**
@@ -123,6 +123,9 @@ class PaymentsController extends Controller
             DB::beginTransaction();
 
             $request->validate([
+                'appointment_id' => 'required',
+                'patient_id' => 'required',
+                'doctor_id' => 'required',
                 'amount' => 'required',
                 'payment_method' => 'required',
                 'payment_status' => 'required',
@@ -131,6 +134,7 @@ class PaymentsController extends Controller
 
             Payment::query()
                 ->create([
+                    'appointment_id' => $request->appointment_id,
                     'patient_id' => $request->patient_id,
                     'doctor_id' => $request->doctor_id,
                     'amount' => $request->amount,
@@ -141,7 +145,7 @@ class PaymentsController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'User created successfully');
+            return redirect()->back()->with('success', 'Created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');
@@ -150,20 +154,14 @@ class PaymentsController extends Controller
 
     public function show($id)
     {
-        return view('pages/admin/patients/show');
+
     }
 
     /**
      * @param $id
-     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
-    public function edit($id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function edit($id)
     {
-        $payment = Payment::query()
-            ->where('id', $id)
-            ->first();
-
-        return view('pages/admin/payments/edit', compact('payment'));
     }
 
     /**
@@ -171,43 +169,6 @@ class PaymentsController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        // validate fields
-        $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|unique:users,email,' . $id,
-            'password' => 'nullable|min:8|max:20',
-        ]);
-
-        try {
-            DB::beginTransaction();
-            $user = User::find($id);
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-            ]);
-            if ($request->password) {
-                $user->update([
-                    'password' => bcrypt($request->password),
-                ]);
-            }
-
-            Patient::query()
-                ->where('user_id', $id)
-                ->update([
-                    'name' => $request->name,
-                    'phone' => $request->phone_number,
-                    'address' => $request->input('location_address-search'),
-                    'status' => $request->status,
-                ]);
-
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Updated successfully');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Something went wrong');
-        }
     }
 
     /**

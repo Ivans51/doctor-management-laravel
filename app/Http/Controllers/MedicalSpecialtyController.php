@@ -89,7 +89,7 @@ class MedicalSpecialtyController extends Controller
 
     public function show($id)
     {
-        return view('pages/admin/medical/show');
+
     }
 
     /**

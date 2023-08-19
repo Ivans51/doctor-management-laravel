@@ -28,7 +28,7 @@ class AuthControllerTest extends TestCase
     public function test_form_login(): void
     {
         $roleId = Role::query()->where('name', Constants::$DOCTOR)->first()->id;
-        $user = User::query()->where('role_id', $roleId)->inRandomOrder()->first();
+        $user = User::query()->where('role_id', $roleId)->first();
 
         $data = [
             'email' => $user->email,
@@ -75,7 +75,7 @@ class AuthControllerTest extends TestCase
     public function test_form_forgot(): void
     {
         $roleId = Role::query()->where('name', Constants::$DOCTOR)->first()->id;
-        $user = User::query()->where('role_id', $roleId)->inRandomOrder()->first();
+        $user = User::query()->where('role_id', $roleId)->first();
 
         $data = [
             'email' => $user->email,
@@ -86,6 +86,8 @@ class AuthControllerTest extends TestCase
         $response = $this
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->post(route('doctor.form.forgot'), $data);
+
+        $response->dump();
 
         $response->assertStatus(200);
         $response->assertJsonStructure(['message']);

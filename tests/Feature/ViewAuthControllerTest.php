@@ -27,4 +27,32 @@ class ViewAuthControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_get_patient_login(): void
+    {
+        $response = $this->get(route('patient.login'));
+
+        $response->assertStatus(200);
+    }
+
+    public function test_get_patient_forgot(): void
+    {
+        $response = $this->get(route('patient.forgot'));
+
+        $response->assertStatus(200);
+    }
+
+    public function test_get_admin_login(): void
+    {
+        $response = $this->get(route('admin.login'));
+
+        $response->assertStatus(200);
+    }
+
+    public function test_get_admin_forgot(): void
+    {
+        $response = $this->get(route('admin.forgot'));
+
+        $response->assertStatus(200);
+    }
 }
