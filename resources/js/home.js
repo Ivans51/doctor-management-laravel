@@ -13,5 +13,11 @@ function openCloseHeaderBtn(content, btn) {
     })
 }
 
+function isMayorDate(value) {
+    const date = new Date(value)
+    const currentDate = new Date()
+    return date >= currentDate
+}
+
 openCloseHeaderBtn('content-notification', 'btn-notification')
 openCloseHeaderBtn('content-user', 'btn-user')
