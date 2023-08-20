@@ -1,4 +1,4 @@
-function setMenuSetting(number) {
+window.setMenuSetting = function setMenuSetting(number) {
     let siteBaseSetting = document.location.pathname.split("/")[number]
 
     if (siteBaseSetting === undefined) {

@@ -1,5 +1,4 @@
-
-function configModal(name, btnId) {
+window.configModal = function configModal(name, btnId) {
     const modalContainer = document.querySelector(`.${name}`);
 
     document.getElementById(btnId).addEventListener('click', function () {

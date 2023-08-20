@@ -1,4 +1,4 @@
-function successSwal(text = '') {
+window.successSwal = function successSwal(text = '') {
     return Swal.fire({
         icon: 'success',
         title: 'Success!',
@@ -6,7 +6,7 @@ function successSwal(text = '') {
     })
 }
 
-function errorSwal(error, text = '') {
+window.errorSwal = function errorSwal(error, text = '') {
     if (error) {
         console.log(error)
         if (error.responseJSON) {
@@ -21,7 +21,7 @@ function errorSwal(error, text = '') {
     })
 }
 
-function deleteSwal(text = 'You won\'t be able to revert this!') {
+window.deleteSwal = function deleteSwal(text = 'You won\'t be able to revert this!') {
     return new Promise(resolve => {
         Swal.fire({
             title: 'Are you sure?',

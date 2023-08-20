@@ -1,5 +1,5 @@
 // Set error message
-function setError(error) {
+window.setError = function setError(error) {
     if (error.response.errors) {
         $('#content-error').show();
         $('#list-errors').html('');

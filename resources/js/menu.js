@@ -1,5 +1,5 @@
 // open sidebar and hide in tailwind class
-function openSidebar() {
+window.openSidebar = function openSidebar() {
     const sidebar = $('#sidebar');
     const overlay = $('#overlay');
 
