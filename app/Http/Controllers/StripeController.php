@@ -119,8 +119,8 @@ class StripeController extends Controller
 
             // TODO: send email
             /*$email = '';*/
-            /*$email = $appointment->patient->user->email;
-            \Mail::to($email)->send(new PaymentSuccess($appointment));*/
+            $email = $appointment->patient->user->email;
+            \Mail::to($email)->send(new PaymentSuccess($appointment));
 
             return view('pages/patient/checkout/detail')->with([
                 'appointment' => $appointment,
