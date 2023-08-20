@@ -27,13 +27,6 @@ function limitText(text, number = 20) {
 }
 
 // date is mayor to current with Date object
-function isMayorDate(value) {
-    const date = new Date(value)
-    const currentDate = new Date()
-    return date >= currentDate
-}
-
-isMayorDate('2021-05-05')
 
 function changeStatusAppointment(id, status, url) {
     return new Promise((resolve, reject) => {
