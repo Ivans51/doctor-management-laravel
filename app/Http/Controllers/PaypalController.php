@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PaymentSuccess;
 use App\Models\Appointment;
 use App\Models\Payment;
 use App\Utils\Constants;
@@ -158,9 +157,9 @@ class PaypalController extends Controller
             $request->session()->forget('transaction_id');
 
             // TODO: send email
-            $email = '';
+            /*$email = '';
             $email = $appointment->patient->user->email;
-            \Mail::to($email)->send(new PaymentSuccess($appointment));
+            \Mail::to($email)->send(new PaymentSuccess($appointment));*/
 
             return view('pages/patient/checkout/detail')->with([
                 'appointment' => $appointment,
