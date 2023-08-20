@@ -87,9 +87,7 @@ class AuthControllerTest extends TestCase
             ->withSession(['_token' => Constants::$CSRF_TOKEN])
             ->post(route('doctor.form.forgot'), $data);
 
-        $response->dump();
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure(['message']);
+        $response->assertRedirect();
+        $response->assertSessionHas('success', 'Thanks for your message!');
     }
 }

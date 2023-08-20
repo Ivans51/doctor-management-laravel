@@ -91,14 +91,14 @@ class AuthController extends Controller
         }
     }
 
-    public function forgot(AuthRequest $request): JsonResponse
+    public function forgot(AuthRequest $request): RedirectResponse
     {
         try {
             // check email exists
             $user = User::query()->where('email', $request->get('email'))->first();
 
             if (!$user) {
-                return response()->json(['message' => 'Email not found'], 401);
+                return redirect()->back()->withErrors(['login' => 'Email not found']);
             }
 
             $isSuccessCaptcha = $this->validateRecaptcha($request);
@@ -106,12 +106,12 @@ class AuthController extends Controller
             if ($isSuccessCaptcha) {
                 /*$this->sendEmail($request->get('email'));*/
 
-                return response()->json(['message' => 'Thanks for your message!']);
+                return redirect()->back()->with('success', 'Thanks for your message!');
             } else {
-                return response()->json(['message' => 'ReCaptcha Error'], 401);
+                return redirect()->back()->withErrors(['captcha' => 'ReCaptcha Error']);
             }
         } catch (\Exception $e) {
-            return response()->json(['message' => 'User or password Incorrect'], 400);
+            return redirect()->back()->withErrors(['login' => 'User or password Incorrect']);
         }
     }
 
