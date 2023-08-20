@@ -216,7 +216,7 @@
             // set price
             const medicalSpecialties = @json($medicalSpecialties);
             const medicalSpecialty = medicalSpecialties.find(medicalSpecialty => {
-                return medicalSpecialty.id === parseInt($(this).val());
+                return medicalSpecialty.id === $(this).val();
             });
             $('#price').text(formatNumber(medicalSpecialty.price));
 
