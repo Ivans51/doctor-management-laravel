@@ -34,9 +34,7 @@ class DoctorsController extends Controller
                 'medicalSpecialty'
             ])
             ->whereHas('medicalSpecialty', function ($query) use ($medicalSpecialtyId) {
-                if ($medicalSpecialtyId) {
-                    $query->where('id', $medicalSpecialtyId);
-                }
+                $query->where('medical_specialty_id', $medicalSpecialtyId);
             })
             ->orderBy('created_at', 'desc')
             ->get();
