@@ -56,7 +56,7 @@
                     setDataTable(response)
                     hideLoading()
                 },
-                error: function (xhr) {
+                error: function () {
                     hideLoading()
                 }
             })
@@ -100,7 +100,7 @@
                                         alt="btn cancel"
                                         title="Cancel"
                                         src="${cancelImg}"
-                                        onclick="changeStatus(${item.id}, '${CONST_REJECTED}')"
+                                        onclick="changeStatus('${item.id}', '${CONST_REJECTED}')"
                                     >
                                 </div>`
                         }

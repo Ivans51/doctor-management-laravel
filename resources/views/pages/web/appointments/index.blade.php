@@ -85,7 +85,7 @@
                                     alt="btn cancel"
                                     title="Accept"
                                     src="${acceptImg}"
-                                    onclick="changeStatus(${item.id}, '${CONST_APPROVED}')"
+                                    onclick="changeStatus('${item.id}', '${CONST_APPROVED}')"
                                 >
                                 <img
                                     class="h-6 cursor-pointer"

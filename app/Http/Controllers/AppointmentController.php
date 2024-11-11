@@ -132,7 +132,7 @@ class AppointmentController extends Controller
                 ->create([
                     'patient_id' => $request->patient_id,
                     'doctor_id' => $request->doctor_id,
-                    'schedule_id' => $schedule->id,
+                    'schedule_id' => '3405a216-8655-4854-9552-e1ab96291adb',
                     'medical_specialty_id' => $request->medical_specialty_id,
                     'healthcare_provider' => $request->healthcare_provider,
                     'description' => $request->description,

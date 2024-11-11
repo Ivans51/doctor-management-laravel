@@ -92,7 +92,7 @@ class ViewPatientController extends Controller
     public function getCheckoutForm()
     {
         try {
-            $appointmentId = request()->query('appointment_id');
+            $appointmentId = 'fa9c798f-564c-4a9a-8efe-97558616b76d';
 
             if (!$appointmentId) {
                 abort('404', 'The post you are looking for was not found');
