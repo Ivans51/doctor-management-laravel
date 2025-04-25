@@ -20,7 +20,6 @@
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
-                        <span class="text-sm font-medium text-gray-700 ml-2">entries</span>
                     </label>
                 </div>
                 <div class="flex flex-1 md:flex-row flex-col gap-3">
@@ -129,7 +128,6 @@
 
             response.data.data.forEach(function(item) {
                 html += `<tr class="bg-white rounded">
-                            <td class="px-4 py-2 text-center">${item.id}</td>
                             <td class="px-4 py-2 text-center">${formatNumber(item.amount)}</td>
                             <td class="px-4 py-2 text-center capitalize">${item.payment_method}</td>
                             <td class="px-4 py-2 text-center capitalize">${item.payment_status}</td>
