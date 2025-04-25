@@ -60,25 +60,31 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-7. Configure Pusher, Stripe, and PayPal credentials in the `.env` file for real-time features and payment processing
+7.  Apply Uuidable Trait Patch:**
+*(Note: This step manually replaces a file within the `vendor` directory.).*
+```bash
+cp vendor_files/Uuidable.php vendor/your-app-rocks/eloquent-uuid/src/Traits/Uuidable.php
+```
 
-8. Run migrations and seed the database
+8. Configure Pusher, Stripe, and PayPal credentials in the `.env` file for real-time features and payment processing
+
+9. Run migrations and seed the database
 ```bash
 php artisan migrate --seed
 ```
 
-9. Generate IDE helper files (optional but recommended)
+10. Generate IDE helper files (optional but recommended)
 ```bash
 php artisan ide-helper:generate
 php artisan ide-helper:models
 ```
 
-10. Start the development server
+11. Start the development server
 ```bash
 php artisan serve
 ```
 
-11. Compile assets
+12. Compile assets
 ```bash
 npm run dev
 ```
@@ -154,4 +160,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Created by [Ivans Del Pino](https://github.com/Ivans51) ❤️
+Created by [Ivans](https://github.com/Ivans51) ❤️
