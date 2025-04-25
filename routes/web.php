@@ -97,7 +97,7 @@ Route::prefix('patient')->name('patient.')->group(function () {
 
         /* Payments */
         Route::get('/monitoring', [ViewPatientController::class, 'getMonitoringForm'])->name('monitoring');
-        Route::get('/checkout', [ViewPatientController::class, 'getCheckoutForm'])->name('checkout');
+        Route::get('/checkout/{encrypted_id}', [ViewPatientController::class, 'getCheckoutForm'])->name('checkout');
         Route::get('/payment/success', [ViewPatientController::class, 'getPaymentSuccess'])->name('payment-success');
         /* STRIPE */
         Route::post('/payment/stripe', [StripeController::class, 'checkout'])->name('payment-stripe');
@@ -119,6 +119,7 @@ Route::prefix('patient')->name('patient.')->group(function () {
         Route::get('/api/doctor/list', [DoctorsController::class, 'doctorList'])->name('doctor.list');
         Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByPatient'])->name('appointments.patient');
         Route::get('/api/chat', [ChatsController::class, 'show'])->name('chats.list');
+        Route::get('/api/appointments/{appointment_id}', [AppointmentController::class, 'getAppointmentDetails'])->name('patient.appointment.details');
         Route::post('/schedule/timing', [ScheduleController::class, 'getScheduleByPatientId'])->name('api.schedule.timing');
         Route::put('/api/appointments/status', [AppointmentController::class, 'changeStatusAppointment'])->name('appointment.status');
     });

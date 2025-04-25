@@ -33,6 +33,13 @@ window.isMayorDate = function isMayorDate(value) {
     return date >= currentDate
 }
 
+// date is minor to current with Date object
+window.isMinorDate = function isMinorDate(value) {
+    const date = new Date(value)
+    const currentDate = new Date()
+    return date < currentDate
+}
+
 window.changeStatusAppointment = function changeStatusAppointment(id, status, url) {
     if (id) {
         return new Promise((resolve, reject) => {

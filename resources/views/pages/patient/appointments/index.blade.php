@@ -2,6 +2,7 @@
 
 @section('content')
     <x-utils.loading-component/>
+    <x-utils.message-component/>
 
     <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-start">
         <div class="w-full">
@@ -30,6 +31,8 @@
             <x-utils.pagination-component/>
         </div>
     </section>
+
+    <x-modal.appointment-detail />
 @endsection
 
 @push('scripts-bottom')
@@ -89,36 +92,61 @@
                         >`
                     }
 
-                    if (isMayorDate(item.schedule.date)) {
-                        const cancelImg = '{{ Vite::asset('resources/img/utils/icons8-reject-96.png') }}'
-
-                        if (item.status === CONST_APPROVED || item.status === CONST_PENDING) {
+                    if (isMinorDate(item.schedule.date)) {
+                        if (item.status === CONST_PENDING) {
                             btnActions = `
-                                <div class="flex items-center">
-                                    <img
-                                        class="h-6 cursor-pointer"
-                                        alt="btn cancel"
-                                        title="Cancel"
-                                        src="${cancelImg}"
-                                        onclick="changeStatus('${item.id}', '${CONST_REJECTED}')"
+                                <div class="flex items-center space-x-2">
+                                    <button
+                                        onclick="openAppointmentDetailModal('${item.encrypted_id}')"
+                                        class="rounded text-white bg-blue-500 px-2 py-1 text-xs"
                                     >
+                                        Detail
+                                    </button>
+                                    <button
+                                        onclick="changeStatus('${item.encrypted_id}', '${CONST_REJECTED}')"
+                                        class="rounded text-white bg-red-500 px-2 py-1 text-xs"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <a
+                                        href="/patient/checkout/${item.encrypted_id}"
+                                        class="rounded text-white bg-green-500 px-2 py-1 text-xs"
+                                    >
+                                        Pay
+                                    </a>
+                                </div>`
+                        } else if (item.status === CONST_APPROVED) {
+                            btnActions = `
+                                <div class="flex items-center space-x-2">
+                                    <button
+                                        onclick="openAppointmentDetailModal('${item.encrypted_id}')"
+                                        class="rounded text-white bg-blue-500 px-2 py-1 text-xs"
+                                    >
+                                        Detail
+                                    </button>
+                                    <button
+                                        onclick="changeStatus('${item.encrypted_id}', '${CONST_REJECTED}')"
+                                        class="rounded text-white bg-red-500 px-2 py-1 text-xs"
+                                    >
+                                        Cancel
+                                    </button>
                                 </div>`
                         }
                     }
 
                     if (item.status === CONST_APPROVED) {
                         status = `
-                        <span class="text-xs text-zinc-500">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             Confirmed
                         </span>`
                     } else if (item.status === CONST_PENDING) {
                         status = `
-                        <span class="text-xs text-zinc-500">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                             Pending
                         </span>`
                     } else if (item.status === CONST_REJECTED) {
                         status = `
-                        <span class="text-xs text-zinc-500">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                             Cancelled
                         </span>`
                     }
@@ -132,15 +160,13 @@
                                         <p class="text-xs mt-1">
                                             ${item.patient.gender}, ${formatDate(item.schedule.date)}
                                         </p>
-                                    <div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            ${btnActions}
-                            ${status}
-                        </div>
-                    </div>`
+                                <div class="flex flex-col items-end space-y-2">
+                                    ${btnActions}
+                                    ${status}
+                                </div>
+                            </div>`
                 })
             }
 
@@ -152,6 +178,49 @@
             changeStatusAppointment(id, status, route).then(() => {
                 searchData()
             })
+        }
+
+        function openAppointmentDetailModal(appointmentId) {
+            showLoading();
+            const url = `/patient/api/appointments/${appointmentId}`;
+            const token = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                data: { _token: token },
+                success: function (response) {
+                    const appointment = response.data;
+                    const modalContent = `
+                        <div class="space-y-4">
+                            <div>
+                                <p class="font-medium">Patient:</p>
+                                <p>${appointment.patient.name}</p>
+                            </div>
+                            <div>
+                                <p class="font-medium">Date:</p>
+                                <p>${formatDate(appointment.schedule.date)}</p>
+                            </div>
+                            <div>
+                                <p class="font-medium">Status:</p>
+                                <p>${appointment.status}</p>
+                            </div>
+                        </div>
+                    `;
+                    $('#modalContent').html(modalContent);
+                    $('#appointmentDetailModal').removeClass('hidden');
+                    hideLoading();
+                },
+                error: function () {
+                    hideLoading();
+                    alert('Failed to load appointment details.');
+                }
+            });
+        }
+
+        function closeModal() {
+            $('#appointmentDetailModal').addClass('hidden');
         }
     </script>
 @endpush

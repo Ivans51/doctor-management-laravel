@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Throwable;
+use Illuminate\Support\Facades\Crypt;
 
 class AppointmentController extends Controller
 {
@@ -84,6 +85,12 @@ class AppointmentController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($limit);
 
+        // Encrypt the IDs of the appointments
+        $appointments->getCollection()->transform(function ($appointment) {
+            $appointment->encrypted_id = encrypt($appointment->id);
+            return $appointment;
+        });
+
         return response()->json([
             'success' => true,
             'data' => $appointments
@@ -119,7 +126,7 @@ class AppointmentController extends Controller
                 $request->request->add(['file' => $request->file('file')->getClientOriginalName()]);
             }
 
-            $schedule = Schedule::query()
+            Schedule::query()
                 ->create([
                     'patient_id' => $request->patient_id,
                     'doctor_id' => $request->doctor_id,
@@ -153,5 +160,18 @@ class AppointmentController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');
         }
+    }
+
+    public function getAppointmentDetails($appointment_id)
+    {
+        $appointment_id = decrypt($appointment_id);
+
+        $appointment = Appointment::with(['patient', 'schedule'])
+            ->findOrFail($appointment_id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $appointment
+        ]);
     }
 }
