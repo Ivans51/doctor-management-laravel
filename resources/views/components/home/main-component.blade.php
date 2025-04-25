@@ -1,4 +1,4 @@
-<div class="bg-primary h-screen md:w-3/4 w-full">
+<div class="bg-primary h-screen w-full transition-all duration-300">
     <header class="flex justify-between px-4 py-2 items-center">
         <div class="flex items-center space-x-2">
             <button

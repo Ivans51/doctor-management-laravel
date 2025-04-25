@@ -1,129 +1,157 @@
-# Ecommerce with Laravel
+# Doctor Management System with Laravel
 
-_This project is a sample doctor management base solution using the framework Laravel v10._
+A comprehensive doctor appointment management system built with Laravel 10 that allows doctors, patients and admins to manage medical appointments, schedules, and more.
 
-## Start 🚀
+## Features
 
-_These instructions will allow you to get a working copy of the project on your local machine for development and
-testing purposes._
+- **Multi-user Authentication**: Separate login portals for doctors, patients, and administrators
+- **Doctor Management**: Create, update, view, and delete doctor profiles with specialties
+- **Patient Management**: Patient registration, profile management, and appointment history
+- **Appointment Scheduling**: Schedule, manage, and track appointments between doctors and patients
+- **Medical Specialties**: Categorize doctors by medical specialties
+- **Chat System**: Real-time messaging between doctors and patients using Pusher
+- **Payment Integration**: Process payments via Stripe and PayPal
+- **Dashboard Analytics**: Visualize appointment data and statistics using charts
+- **Responsive Design**: Built with Tailwind CSS for a mobile-friendly experience
 
-See [**Deployment**](#deployment-) to know how to deploy the project.
+## System Requirements
 
-### Pre-requirements 📋
+- PHP 8.1 or higher
+- Composer 2.x
+- Node.js 16.x or higher
+- MariaDB 10.x or MySQL
+- Web server (Nginx or Apache)
 
-_What things do you need to install the software and how to install them_
+## Installation
 
-- node v16 or major
-- composer v2
-- php v8
-- mariadb v10
-- IDE or editor of you preference.
-
-### Installation 🔧
-
-Copy the content of the file .env.example and create a file with the name .env and modify it your way.
-
-Commands used:
-
-```console
-git clone git@github.com:Ivans51/doctor-management.git 
+1. Clone the repository
+```bash
+git clone https://github.com/Ivans51/doctor-management-laravel.git
+cd doctor-management-laravel
 ```
 
-```console
-cd doctor-management
+2. Install PHP dependencies
+```bash
+composer install
 ```
 
-```console
-composer install 
+3. Install JavaScript dependencies
+```bash
+npm install
 ```
 
-```console
-npm install 
+4. Create a copy of the environment file and configure it
+```bash
+cp .env.example .env
+```
+   
+5. Generate an application key
+```bash
+php artisan key:generate
 ```
 
-To run the project:
-
-```console
-php artisan serve
+6. Configure your database in the `.env` file
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=doctor_management
+DB_USERNAME=root
+DB_PASSWORD=
 ```
 
-```console
-npm run dev
+7. Configure Pusher, Stripe, and PayPal credentials in the `.env` file for real-time features and payment processing
+
+8. Run migrations and seed the database
+```bash
+php artisan migrate --seed
 ```
 
-Complete PHPDocs, directly from the source:
-
-```console
+9. Generate IDE helper files (optional but recommended)
+```bash
 php artisan ide-helper:generate
-```
-
-```console
 php artisan ide-helper:models
 ```
 
-## Running the tests ⚙️
-
-_The steps to run the tests described below._
-
-### Analyze end-to-end tests 🔩
-
-```
-In developing
+10. Start the development server
+```bash
+php artisan serve
 ```
 
-### Coding style tests ⌨️
-
+11. Compile assets
+```bash
+npm run dev
 ```
-In developing
+
+## Docker Setup
+
+The project includes Docker configuration for easy deployment:
+
+```bash
+# Build and start the containers
+docker-compose up -d
 ```
 
-## Deployment 📦
+## Directory Structure
 
-_Deploy with Heroku_
+- `app/` - Contains the core code of the application
+  - `Models/` - Eloquent models (Doctor, Patient, User, etc.)
+  - `Http/Controllers/` - Request handlers for each section
+  - `Http/Middleware/` - Custom middleware for authorization
+- `database/` - Migrations and seeders
+- `resources/views/` - Blade templates for the frontend
+- `routes/` - Application routes definition
+  - `web.php` - Main web routes for doctors, patients, and admin
+- `public/` - Publicly accessible files
+- `config/` - Configuration files
+- `tests/` - Testing suite
 
-Complete guide in [appdividend](https://appdividend.com/2022/03/01/how-to-deploy-laravel-project-on-heroku/)
+## User Roles
 
-## Built with 🛠️
+- **Doctors**: Can manage their schedule, view appointments, chat with patients
+- **Patients**: Can book appointments, make payments, chat with doctors
+- **Administrators**: Can manage doctors, patients, medical specialties, and review system analytics
 
-* [Laravel](https://laravel.com/docs/10.x) - Framework PHP
-* [Tailwind](https://tailwindcss.com/docs/installation) - Framework CSS
-* [Jenkins](https://www.jenkins.io) - Used for testing
+## Testing
 
-## Libraries
-* [blade-icons](https://blade-ui-kit.com/blade-icons) - Icons Remix - Line-awesome
-* [charts](https://charts.erik.cat/) - Charts Erik
-* [sweet-alert](https://realrashid.github.io/sweet-alert/) - Sweet Alert
-* [input-tel](https://github.com/jackocnr/intl-tel-input#demo-and-examples) - Input tel
-* [emojis](https://github.com/mervick/emojionearea) - Emoji area
+Run tests using PHPUnit:
 
-## Contributing 🖇️
+```bash
+php artisan test
+```
 
-Please read the [CONTRIBUTING.md](https://github.com/Ivans51/octor-management/blob/main/CONTRIBUTING.md) for details of
-our code of conduct, and the process for sending us pull requests.
+## Deployment
 
-## Wiki 📖
+For production deployment, follow these steps:
 
-You can find much more about how to use this project in our [Wiki](https://github.com/Ivans51/octor-management/wiki)
+1. Set up your production environment
+2. Configure your web server (Nginx/Apache)
+3. Set appropriate environment variables for production
+4. Optimize Laravel for production
+```bash
+php artisan optimize
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
 
-## Versioned 📌
+## Contributing
 
-For all available versions, see the [tags en este repositorio](https://github.com/Ivans51/octor-management/tags).
+Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
-## Authors ✒️
+## License
 
-* **Ivans Del Pino** - *Initial Work* - [Ivans](https://github.com/Ivans51)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-You can also look at the list of all [contributors](https://github.com/Ivans51/octor-management/contributors) who have
-participated in this project.
+## Acknowledgements
 
-## License 📄
-
-This project licensed under its MIT License, look at the
-file [LICENSE.md](https://github.com/Ivans51/octor-management/blob/main/LICENSE.md) for details.
-
-## Thanks for all 🎁
-
-* You can buy me a coffee ☕ in [ko-fi](https://ko-fi.com/ivans511).
+- [Laravel](https://laravel.com) - The PHP framework used
+- [Tailwind CSS](https://tailwindcss.com) - For styling
+- [Blade Icons](https://blade-ui-kit.com/blade-icons) - For UI icons
+- [Charts](https://charts.erik.cat/) - For data visualization
+- [Stripe](https://stripe.com) - Payment processing
+- [PayPal](https://www.paypal.com) - Payment processing
 
 ---
-⌨️ with ❤️ by [Ivans](https://github.com/Ivans51/octor-management/graphs/contributors) 😊
+
+Created by [Ivans Del Pino](https://github.com/Ivans51) ❤️
