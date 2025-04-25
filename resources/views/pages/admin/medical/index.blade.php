@@ -3,51 +3,66 @@
 @section('content')
     <x-utils.loading-component/>
 
-    <section class="mt-10">
-        <div class="flex justify-between items-center">
-            <h3 class="my-2 font-bold text-lg">Medical Specialty list</h3>
+    <section class="max-w-7xl mx-auto px-4 mt-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="font-bold text-2xl text-gray-800">Medical Specialty List</h1>
             <a
                 href="{{ route('admin.medical.create') }}"
-                class="rounded text-white bg-blue-500 px-4 py-1 text-sm ml-2 flex items-center flex-row"
+                class="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out"
             >
                 <span>Add</span>
             </a>
         </div>
 
-        <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
-            <label>Show
-                <select class="bg-white p-1 border ml-2" name="show" id="select-show">
-                    <option value="10">10</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-            </label>
-        </div>
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div class="flex items-center">
+                    <label class="flex items-center">
+                        <span class="text-sm font-medium text-gray-700 mr-2">Show</span>
+                        <select class="rounded-md border-gray-300 py-2 pl-3 pr-8 text-sm focus:border-blue-500 focus:ring-blue-500" name="show" id="select-show">
+                            <option value="10">10</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span class="text-sm font-medium text-gray-700 ml-2">entries</span>
+                    </label>
+                </div>
+                <div class="flex flex-1 md:flex-row flex-col gap-3">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input class="pl-10 w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500" type="search" placeholder="Name, description" id="search_field" name="search_field">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="my-4 flex flex-col lg:flex-row space-x-0 lg:space-x-4 space-y-2 lg:space-y-0 w-full">
-            <label class="w-full lg:w-2/3">
-                Search
-                <input class="w-full" type="search" placeholder="Name, description">
-            </label>
-        </div>
+            <div class="rounded-lg border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Currency</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
 
-        <div class="overflow-x-auto">
-            <table class="table-auto border-separate w-full border-spacing-x-0 border-spacing-y-2">
-                <tr class="bg-secondary">
-                    <th class="px-4 py-1 text-left">Name</th>
-                    <th class="px-4 py-1">Description</th>
-                    <th class="px-4 py-1">Price</th>
-                    <th class="px-4 py-1">Currency</th>
-                    <th class="px-4 py-1">Date</th>
-                    <th class="px-4 py-1">Actions</th>
-                </tr>
-                <tbody id="tbody">
-            </table>
+            <div class="mt-4">
+                <x-utils.pagination-component/>
+            </div>
         </div>
-
-        <x-utils.pagination-component/>
     </section>
-
 @endsection
 
 @push('scripts-bottom')

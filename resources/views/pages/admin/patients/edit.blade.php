@@ -2,133 +2,102 @@
 @extends('layouts.admin')
 
 @section('content')
-    <x-utils.message-component/>
+    <section class="max-w-3xl mx-auto mt-10 px-4">
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Edit Patient</h1>
+            <a href="{{ route('admin.patients.index') }}" class="flex items-center text-gray-600 hover:text-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back
+            </a>
+        </div>
 
-    <section class="mt-10">
-        <form action="{{ route('admin.patients.update', $patient->user->id) }}" method="post">
-            @csrf
-            @method('PUT')
+        <x-utils.message-component />
 
-            <div class="space-y-6">
-                <div class="w-full">
-                    <label for="name">First Name</label>
-                    <input
-                        class="border w-full"
-                        type="text"
-                        name="name"
-                        id="name"
-                        value="{{ $patient->name }}"
-                    >
-                </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <form action="{{ route('admin.patients.update', $patient->user->id) }}" method="post">
+                @csrf
+                @method('PUT')
 
-                <div class="w-full">
-                    <label for="doctors">Doctors</label>
-                    <select name="doctors[]" id="doctors" class="border w-full">\
-                        @foreach($doctors as $doctor)
-                            <option
-                                value="{{ $doctor->id }}"
-                                {{ $patient->doctors && $patient->doctors->contains($doctor->id) ? 'selected' : '' }}
-                            >
-                                {{ $doctor->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="w-full">
-                    <label for="location">Location</label>
-                    <input
-                        class="border w-full"
-                        name="location"
-                        type="text"
-                        autocomplete="shipping address-line1"
-                        id="location"
-                        value="{{ $patient->address }}"
-                    >
-                </div>
-
-                <div class="grid grid-cols-2 gap-x-4">
-                    <div>
-                        <label for="email">Email</label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="w-full md:col-span-2">
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                         <input
-                            class="border w-full"
-                            type="email"
-                            name="email"
-                            id="email"
-                            value="{{ $patient->user->email }}"
-                        >
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="text" name="name" id="name" value="{{ $patient->name }}" required>
                     </div>
-
-                    <div>
-                        <label for="phone_number">Phone Number</label>
-                        <input
-                            class="border w-full"
-                            type="tel"
-                            name="phone_number"
-                            id="phone_number"
-                            value="{{ $patient->phone }}"
-                        >
+                    <div class="w-full md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Doctors</label>
+                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                            @foreach ($doctors as $doctor)
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="doctors[]" id="doctor-{{ $doctor->id }}"
+                                        value="{{ $doctor->id }}"
+                                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                        {{ $patient->doctors && $patient->doctors->contains($doctor->id) ? 'checked' : '' }}>
+                                    <label for="doctor-{{ $doctor->id }}" class="ml-2 text-sm text-gray-700">
+                                        {{ $doctor->name }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-
-                <div class="w-full">
-                    <label for="status">Status</label>
-                    <select name="status" id="status" class="border w-full">
-                        <option value="">Selection</option>
-                        <option
-                            value="{{ Constants::$ACTIVE }}"
-                            {{ $patient->status == Constants::$ACTIVE ? 'selected' : '' }}
-                        >
-                            Active
-                        </option>
-                        <option
-                            value="{{ Constants::$INACTIVE }}"
-                            {{ $patient->status == Constants::$INACTIVE ? 'selected' : '' }}
-                        >
-                            Inactive
-                        </option>
-                    </select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-x-4">
-                    <div>
-                        <label for="password">Password</label>
+                    <div class="w-full md:col-span-2">
+                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
                         <input
-                            class="border w-full"
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder="*********"
-                        >
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            name="location" type="text" autocomplete="shipping address-line1" id="location"
+                            value="{{ $patient->address }}">
                     </div>
-                    <div>
-                        <label for="confirm_password">Confirm Password</label>
+                    <div class="w-full">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                         <input
-                            class="border w-full"
-                            type="password"
-                            name="confirm_password"
-                            id="confirm_password"
-                            placeholder="*********"
-                        >
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="email" name="email" id="email" value="{{ $patient->user->email }}" required>
+                    </div>
+                    <div class="w-full">
+                        <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="tel" name="phone_number" id="phone_number" value="{{ $patient->phone }}">
+                    </div>
+                    <div class="w-full md:col-span-2">
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select name="status" id="status"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Selection</option>
+                            <option value="{{ Constants::$ACTIVE }}"
+                                {{ $patient->status == Constants::$ACTIVE ? 'selected' : '' }}>Active</option>
+                            <option value="{{ Constants::$INACTIVE }}"
+                                {{ $patient->status == Constants::$INACTIVE ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="w-full">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="password" name="password" id="password" placeholder="*********">
+                    </div>
+                    <div class="w-full">
+                        <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm
+                            Password</label>
+                        <input
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="password" name="confirm_password" id="confirm_password" placeholder="*********">
                     </div>
                 </div>
-            </div>
 
-            <div class="flex items-center space-x-2 mt-10">
-                <button
-                    type="submit"
-                    class="rounded text-white bg-blue-500 px-4 py-1 w-full"
-                >
-                    Save
-                </button>
-                <a
-                    href="{{ url()->previous() }}"
-                    class="rounded bg-white-500 px-4 py-1 w-full border modal-close text-center"
-                >
-                    Cancel
-                </a>
-            </div>
-        </form>
+                <div class="mt-8">
+                    <button type="submit"
+                        class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
     </section>
 @endsection
 
@@ -137,10 +106,9 @@
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
     <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
-
     <script>
         const script = document.getElementById('search-js');
-        script.onload = function () {
+        script.onload = function() {
             mapboxsearch.autofill({
                 accessToken: '{{ config('services.mapbox.token') }}',
                 options: {
@@ -148,8 +116,6 @@
                 },
             })
         };
-
-        document.querySelector('input[name="location"]').addEventListener('input', event => {
-        });
+        document.querySelector('input[name="location"]').addEventListener('input', event => {});
     </script>
 @endpush
