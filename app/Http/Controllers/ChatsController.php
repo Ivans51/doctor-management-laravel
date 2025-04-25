@@ -52,6 +52,12 @@ class ChatsController extends Controller
     public function sendMessage(Request $request): JsonResponse
     {
         try {
+            $request->validate([
+                'chat_id' => 'required|exists:chats,id',
+                'message' => 'required|string',
+                'user_id2' => 'required|exists:users,id',
+            ]);
+
             $user = Auth::user();
             $chatId = $request->input('chat_id');
             $message = $request->input('message');
@@ -69,6 +75,10 @@ class ChatsController extends Controller
             return response()->json([
                 'message' => $message,
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),

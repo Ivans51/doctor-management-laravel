@@ -99,6 +99,9 @@ class DoctorsController extends Controller
                 'name' => 'required|min:3',
                 'email' => 'required|unique:users,email',
                 'password' => 'required|min:8|max:20|confirmed',
+                'speciality' => 'required',
+                'phone_number' => 'required',
+                'location_address-search' => 'required',
             ]);
 
             $user = User::create([
@@ -121,9 +124,12 @@ class DoctorsController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'User created successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong');
         }
     }
 
@@ -154,14 +160,17 @@ class DoctorsController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        // validate fields
-        $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|unique:users,email,' . $id,
-            'password' => 'nullable|min:8|max:20',
-        ]);
-
         try {
+            $request->validate([
+                'name' => 'required|min:3',
+                'email' => 'required|unique:users,email,' . $id,
+                'password' => 'nullable|min:8|max:20',
+                'speciality' => 'required',
+                'phone_number' => 'required',
+                'location_address-search' => 'required',
+                'status' => 'required',
+            ]);
+
             DB::beginTransaction();
             $user = User::find($id);
             $user->update([
@@ -187,7 +196,9 @@ class DoctorsController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Updated successfully');
-
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');

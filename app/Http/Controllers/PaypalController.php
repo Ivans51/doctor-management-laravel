@@ -22,15 +22,14 @@ class PaypalController extends Controller
      */
     public function checkout(Request $request): RedirectResponse
     {
-
         try {
+            $request->validate([
+                'appointment_id' => 'required|exists:appointments,id',
+            ]);
+
             $appointmentId = $request->appointment_id;
             $currency = config('paypal.currency');
             $items = [];
-
-            if (!$appointmentId) {
-                abort(404, 'Page not found');
-            }
 
             $provider = new PayPalClient;
             $provider->setApiCredentials(config('paypal'));
@@ -41,7 +40,7 @@ class PaypalController extends Controller
                     'medicalSpecialty',
                 ])
                 ->where('id', $appointmentId)
-                ->first();
+                ->firstOrFail();
 
             $amount = $appointment->medicalSpecialty->price;
 
@@ -93,9 +92,13 @@ class PaypalController extends Controller
                     ->route('patient.checkout', ['appointment_id' => $appointmentId ?? ''])
                     ->with('error', $response['message'] ?? 'Something went wrong');
             }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()
+                ->route('patient.checkout')
+                ->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             return redirect()
-                ->route('patient.checkout', ['appointment_id' => $appointmentId ?? ''])
+                ->route('patient.checkout', ['appointment_id' => $request->appointment_id ?? ''])
                 ->with('error', $e->getMessage());
         }
     }
@@ -136,7 +139,7 @@ class PaypalController extends Controller
                     'medicalSpecialty',
                 ])
                 ->where('id', $appointmentId)
-                ->first();
+                ->firstOrFail();
 
             Payment::query()
                 ->create([

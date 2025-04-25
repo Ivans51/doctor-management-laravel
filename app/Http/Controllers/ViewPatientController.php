@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class ViewPatientController extends Controller
 {
@@ -58,44 +59,48 @@ class ViewPatientController extends Controller
      */
     public function getMonitoringForm(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $patientId = Auth::user()->patient->id;
+        try {
+            $patientId = Auth::user()->patient->id;
 
-        if (!$patientId) {
-            abort('404', 'The post you are looking for was not found');
+            if (!$patientId) {
+                abort(404, 'Patient not found');
+            }
+
+            $patient = Patient::query()
+                ->with([
+                    'user',
+                    'doctorPatient',
+                    'doctorPatient.doctor',
+                ])
+                ->where('id', $patientId)
+                ->firstOrFail();
+
+            $medicalSpecialties = MedicalSpecialty::query()
+                ->orderBy('name')
+                ->get();
+
+            if ($patient && $patient->date_of_birth) {
+                $patient->years_old = date_diff(date_create($patient->date_of_birth), date_create())->y;
+            }
+
+            return view('pages/patient/checkout/monitoring-form', compact([
+                'patient', 'medicalSpecialties'
+            ]));
+        } catch (\Exception $e) {
+            return redirect()->route('patient.dashboard')->with('error', 'Something went wrong');
         }
-
-        $patient = Patient::query()
-            ->with([
-                'user',
-                'doctorPatient',
-                'doctorPatient.doctor',
-            ])
-            ->where('id', $patientId)
-            ->first();
-
-        $medicalSpecialties = MedicalSpecialty::query()
-            ->orderBy('name')
-            ->get();
-
-        if ($patient && $patient->date_of_birth) {
-            $patient->years_old = date_diff(date_create($patient->date_of_birth), date_create())->y;
-        }
-
-        return view('pages/patient/checkout/monitoring-form', compact([
-            'patient', 'medicalSpecialties'
-        ]));
     }
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application|\Illuminate\Http\RedirectResponse
      */
-    public function getCheckoutForm()
+    public function getCheckoutForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
         try {
             $appointmentId = 'fa9c798f-564c-4a9a-8efe-97558616b76d';
 
             if (!$appointmentId) {
-                abort('404', 'The post you are looking for was not found');
+                abort(404, 'Appointment not found');
             }
 
             $appointment = Appointment::query()
@@ -106,13 +111,11 @@ class ViewPatientController extends Controller
                 ])
                 ->where('id', $appointmentId)
                 ->orderBy('created_at', 'desc')
-                ->first();
+                ->firstOrFail();
 
             return view('pages/patient/checkout/checkout-form', compact('appointment'));
         } catch (\Exception $e) {
-            return redirect()->route('patient.appointments')->with([
-                'error' => 'Error: ' . $e->getMessage(),
-            ]);
+            return redirect()->route('patient.appointments')->with('error', 'Error: ' . $e->getMessage());
         }
     }
 

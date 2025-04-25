@@ -92,18 +92,26 @@ UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|unique:users,email',
-            'password' => 'required|min:8|max:20|confirmed',
-        ]);
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role_id' => Role::query()->where('name', Constants::$ADMIN)->first()->id,
-            'password' => bcrypt($request->password),
-        ]);
-        return redirect()->back()->with('success', 'User created successfully');
+        try {
+            $request->validate([
+                'name' => 'required|min:3',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:8|max:20|confirmed',
+            ]);
+
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'role_id' => Role::query()->where('name', Constants::$ADMIN)->first()->id,
+                'password' => bcrypt($request->password),
+            ]);
+
+            return redirect()->back()->with('success', 'User created successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     /**
@@ -114,24 +122,31 @@ UserController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        // validate fields
-        $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|unique:users,email,' . $id,
-            'password' => 'nullable|min:8|max:20',
-        ]);
-
-        $user = User::find($id);
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-        if ($request->password) {
-            $user->update([
-                'password' => bcrypt($request->password),
+        try {
+            $request->validate([
+                'name' => 'required|min:3',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'password' => 'nullable|min:8|max:20',
             ]);
+
+            $user = User::findOrFail($id);
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+
+            if ($request->password) {
+                $user->update([
+                    'password' => bcrypt($request->password),
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'User updated successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
         }
-        return redirect()->back()->with('success', 'User updated successfully');
     }
 
     /**

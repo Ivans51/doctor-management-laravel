@@ -24,12 +24,11 @@ class StripeController extends Controller
     public function checkout(Request $request): RedirectResponse
     {
         try {
+            $request->validate([
+                'appointment_id' => 'required|exists:appointments,id',
+            ]);
+
             $appointmentId = $request->appointment_id;
-
-            if (!$appointmentId) {
-                abort(404, 'Page not found');
-            }
-
             $apiKey = config('environment.stripe.STRIPE_SECRET_KEY');
             $currency = config('environment.stripe.CURRENCY');
             Stripe::setApiKey($apiKey);
@@ -39,7 +38,7 @@ class StripeController extends Controller
                     'medicalSpecialty',
                 ])
                 ->where('id', $appointmentId)
-                ->first();
+                ->firstOrFail();
 
             $amount = $appointment->medicalSpecialty->price * 100;
 
@@ -65,9 +64,13 @@ class StripeController extends Controller
             $request->session()->put('transaction_id', $session->id);
 
             return redirect()->away($session->url);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()
+                ->route('patient.checkout')
+                ->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             return redirect()
-                ->route('patient.checkout', ['appointment_id' => $appointmentId ?? ''])
+                ->route('patient.checkout', ['appointment_id' => $request->appointment_id ?? ''])
                 ->with('error', $e->getMessage());
         }
     }
@@ -99,7 +102,7 @@ class StripeController extends Controller
                     'medicalSpecialty',
                 ])
                 ->where('id', $appointmentId)
-                ->first();
+                ->firstOrFail();
 
             Payment::query()
                 ->create([

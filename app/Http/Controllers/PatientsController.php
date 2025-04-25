@@ -156,6 +156,9 @@ class PatientsController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'User created successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');
@@ -190,7 +193,6 @@ class PatientsController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         try {
-            // validate fields
             $request->validate([
                 'name' => 'required|min:3',
                 'email' => 'required|unique:users,email,' . $id,
@@ -225,6 +227,9 @@ class PatientsController extends Controller
 
             return redirect()->back()->with('success', 'Updated successfully');
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');

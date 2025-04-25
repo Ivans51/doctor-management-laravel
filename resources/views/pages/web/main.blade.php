@@ -87,11 +87,10 @@
         </div>
     </section>
 
-    <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-start">
-
-        <div class="lg:w-3/6 w-full">
+    <section class="space-x-0 lg:space-x-4 flex lg:flex-row flex-col items-stretch mb-3">
+        <div class="lg:w-3/6 w-full flex flex-col">
             <h3 class="my-2 font-bold text-lg">Today Appointments</h3>
-            <div class="px-4 py-2 bg-white rounded">
+            <div class="px-4 py-2 bg-white rounded flex flex-col justify-center items-center min-h-[250px]">
                 @if(sizeof($appointmentsToday) == 0)
                     <x-utils.not-data
                         title="No Appointments"
@@ -118,9 +117,9 @@
             </div>
         </div>
 
-        <div class="lg:w-3/6 w-full">
+        <div class="lg:w-3/6 w-full flex flex-col">
             <h3 class="my-2 font-bold text-lg">Gender</h3>
-            <div class="px-4 py-2 bg-white rounded">
+            <div class="px-4 py-2 bg-white rounded min-h-[250px] flex justify-center items-center">
                 <div class="h-44">
                     {!! $chart->container() !!}
                 </div>

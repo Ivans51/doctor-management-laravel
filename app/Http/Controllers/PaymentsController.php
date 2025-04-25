@@ -123,13 +123,13 @@ class PaymentsController extends Controller
             DB::beginTransaction();
 
             $request->validate([
-                'appointment_id' => 'required',
-                'patient_id' => 'required',
-                'doctor_id' => 'required',
-                'amount' => 'required',
-                'payment_method' => 'required',
-                'payment_status' => 'required',
-                'payment_date' => 'required',
+                'appointment_id' => 'required|exists:appointments,id',
+                'patient_id' => 'required|exists:patients,id',
+                'doctor_id' => 'required|exists:doctors,id',
+                'amount' => 'required|numeric|min:0',
+                'payment_method' => 'required|string',
+                'payment_status' => 'required|string',
+                'payment_date' => 'required|date',
             ]);
 
             Payment::query()
@@ -146,6 +146,9 @@ class PaymentsController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Created successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');
@@ -169,6 +172,41 @@ class PaymentsController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
+        try {
+            $request->validate([
+                'appointment_id' => 'required|exists:appointments,id',
+                'patient_id' => 'required|exists:patients,id',
+                'doctor_id' => 'required|exists:doctors,id',
+                'amount' => 'required|numeric|min:0',
+                'payment_method' => 'required|string',
+                'payment_status' => 'required|string',
+                'payment_date' => 'required|date',
+            ]);
+
+            DB::beginTransaction();
+
+            Payment::query()
+                ->where('id', $id)
+                ->update([
+                    'appointment_id' => $request->appointment_id,
+                    'patient_id' => $request->patient_id,
+                    'doctor_id' => $request->doctor_id,
+                    'amount' => $request->amount,
+                    'payment_method' => $request->payment_method,
+                    'payment_status' => $request->payment_status,
+                    'payment_date' => $request->payment_date,
+                ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Updated successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     /**

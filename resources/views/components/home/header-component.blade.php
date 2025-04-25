@@ -39,12 +39,6 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('doctor.blog') }}">
-                <x-lineawesome-blog-solid/>
-                Blog
-            </a>
-        </li>
-        <li>
             <a href="{{ route('doctor.settings') }}">
                 <x-ri-settings-5-line/>
                 Settings
@@ -74,11 +68,8 @@
         if (siteBaseURL === 'messages') {
             $($('#menu-vertical li a')[5]).addClass('active')
         }
-        if (siteBaseURL === 'blog') {
-            $($('#menu-vertical li a')[6]).addClass('active')
-        }
         if (siteBaseURL === 'settings') {
-            $($('#menu-vertical li a')[7]).addClass('active')
+            $($('#menu-vertical li a')[6]).addClass('active')
         }
     </script>
 @endpush

@@ -41,7 +41,7 @@ class SettingsAdminController extends Controller
     {
         try {
             $request->validate([
-                'email' => 'required',
+                'email' => 'required|email|unique:users,email,' . Auth::id(),
             ]);
 
             DB::beginTransaction();
@@ -54,8 +54,10 @@ class SettingsAdminController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Profile updated successfully');
-
-        } catch (\Exception $exception) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');
         }
@@ -69,16 +71,24 @@ class SettingsAdminController extends Controller
     {
         try {
             $request->validate([
-                'password' => 'required|min:8|max:20|confirmed',
+                'current_password' => 'required',
+                'password' => 'required|min:8|max:20|confirmed|different:current_password',
             ]);
 
-            $user = User::query()->find(Auth::user()->id);
+            $user = Auth::user();
+
+            if (!Hash::check($request->current_password, $user->password)) {
+                return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect'])->withInput();
+            }
+
             $user->update([
                 'password' => Hash::make($request->password),
             ]);
 
             return redirect()->back()->with('success', 'Password changed successfully');
-        } catch (\Exception $exception) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Something went wrong');
         }
     }

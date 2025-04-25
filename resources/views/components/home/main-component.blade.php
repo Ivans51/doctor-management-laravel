@@ -8,9 +8,6 @@
             >
                 <x-ri-menu-line class="h-8"/>
             </button>
-            <label>
-                <input class="bg-primary" type="search" placeholder="Search Appointment, Patient or etc">
-            </label>
         </div>
         <div class="flex items-center h-8">
             <div class="relative">

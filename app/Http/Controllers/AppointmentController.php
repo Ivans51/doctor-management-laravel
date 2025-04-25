@@ -97,17 +97,17 @@ class AppointmentController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'patient_id' => 'required',
-            'doctor_id' => 'required',
-            'description' => 'required',
-            'date_consulting' => 'required|after:today',
-            'start_time' => 'required|before:end_time',
-            'end_time' => 'required',
-        ]);
-
         try {
             DB::beginTransaction();
+
+            $request->validate([
+                'patient_id' => 'required',
+                'doctor_id' => 'required',
+                'description' => 'required',
+                'date_consulting' => 'required|after:today',
+                'start_time' => 'required|before:end_time',
+                'end_time' => 'required',
+            ]);
 
             // upload file if exist
             if ($request->hasFile('file')) {
@@ -146,6 +146,9 @@ class AppointmentController extends Controller
                 'appointment_id' => $appointment->id,
             ]);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Something went wrong');

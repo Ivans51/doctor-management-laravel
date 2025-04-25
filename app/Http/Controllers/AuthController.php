@@ -50,6 +50,8 @@ class AuthController extends Controller
             } else {
                 return back()->withErrors(['captcha' => 'ReCaptcha Error']);
             }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             return back()->withErrors(['login' => 'User or password Incorrect']);
         }
@@ -85,6 +87,9 @@ class AuthController extends Controller
                 \DB::rollBack();
                 return response()->json(['message' => 'ReCaptcha Error'], 401);
             }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \DB::rollBack();
+            return response()->json(['message' => $e->errors()], 401);
         } catch (\Exception $e) {
             \DB::rollBack();
             return response()->json(['message' => 'User or password Incorrect'], 401);
@@ -110,6 +115,8 @@ class AuthController extends Controller
             } else {
                 return redirect()->back()->withErrors(['captcha' => 'ReCaptcha Error']);
             }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['login' => 'User or password Incorrect']);
         }
