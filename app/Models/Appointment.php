@@ -56,4 +56,10 @@ class Appointment extends Model
     {
         return $this->belongsTo(MedicalSpecialty::class);
     }
+
+    // relation with payment
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }

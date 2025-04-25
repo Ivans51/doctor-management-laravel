@@ -76,12 +76,20 @@ class ScheduleController extends Controller
                 ->with([
                     'appointment',
                     'appointment.patient',
+                    'appointment.payment',
                 ])
                 ->whereHas('appointment', function ($query) use ($patientId) {
                     $query->where('patient_id', $patientId);
                 })
                 ->whereBetween('date', [$start_date, $end_date])
                 ->get();
+
+            // Add encrypted_id to each appointment
+            $schedule->each(function ($sched) {
+                if ($sched->appointment) {
+                    $sched->appointment->encrypted_id = encrypt($sched->appointment->id);
+                }
+            });
 
             return response()->json([
                 'status' => 'success',

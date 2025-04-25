@@ -97,8 +97,6 @@ class ViewPatientController extends Controller
     public function getCheckoutForm($encrypted_id, Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
         try {
-            \Log::info($encrypted_id);
-            \Log::info(decrypt($encrypted_id));
             $appointmentId = decrypt($encrypted_id);
 
             if (!$appointmentId) {
@@ -110,6 +108,7 @@ class ViewPatientController extends Controller
                     'patient',
                     'schedule',
                     'medicalSpecialty',
+                    'payment',
                 ])
                 ->where('id', $appointmentId)
                 ->orderBy('created_at', 'desc')

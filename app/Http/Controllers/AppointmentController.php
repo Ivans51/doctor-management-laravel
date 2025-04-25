@@ -21,7 +21,7 @@ class AppointmentController extends Controller
      */
     public function changeStatusAppointment(Request $request): JsonResponse
     {
-        $appointmentId = $request->input('appointment_id');
+        $appointmentId = decrypt($request->input('appointment_id'));
         $status = $request->input('status');
         $appointment = Appointment::query()->find($appointmentId);
 
@@ -80,6 +80,7 @@ class AppointmentController extends Controller
             ->with([
                 'patient',
                 'schedule',
+                'payment',
             ])
             ->where('patient_id', $patientId)
             ->orderBy('created_at', 'desc')
