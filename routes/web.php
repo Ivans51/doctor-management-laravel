@@ -98,6 +98,7 @@ Route::prefix('patient')->name('patient.')->group(function () {
         /* Payments */
         Route::get('/monitoring', [ViewPatientController::class, 'getMonitoringForm'])->name('monitoring');
         Route::get('/checkout', [ViewPatientController::class, 'getCheckoutForm'])->name('checkout');
+        Route::get('/payment/success', [ViewPatientController::class, 'getPaymentSuccess'])->name('payment-success');
         /* STRIPE */
         Route::post('/payment/stripe', [StripeController::class, 'checkout'])->name('payment-stripe');
         Route::get('/payment/stripe/success', [StripeController::class, 'success'])->name('payment-stripe-success');

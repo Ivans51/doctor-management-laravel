@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PaymentSuccess;
 use App\Models\Appointment;
 use App\Models\Payment;
 use App\Utils\Constants;
 use Carbon\Carbon;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
@@ -77,9 +73,9 @@ class StripeController extends Controller
 
     /**
      * @param Request $request
-     * @return View|Application|Factory|RedirectResponse|\Illuminate\Contracts\Foundation\Application
+     * @return RedirectResponse
      */
-    public function success(Request $request): View|Application|Factory|RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    public function success(Request $request): RedirectResponse
     {
         try {
             $appointmentId = $request->session()->get('appointment_id');
@@ -88,9 +84,6 @@ class StripeController extends Controller
             if (!$appointmentId || !$transactionId) {
                 abort(404, 'Page not found');
             }
-
-            $request->session()->forget('appointment_id');
-            $request->session()->forget('transaction_id');
 
             $appointment = Appointment::query()
                 ->with([
@@ -120,14 +113,7 @@ class StripeController extends Controller
                 'is_paid' => true,
             ]);
 
-            // TODO: send email
-            /*$email = '';*/
-            /*$email = $appointment->patient->user->email;
-            \Mail::to($email)->send(new PaymentSuccess($appointment));*/
-
-            return view('pages/patient/checkout/detail')->with([
-                'appointment' => $appointment,
-            ]);
+            return redirect()->route('patient.payment-success');
         } catch (\Exception $e) {
             return redirect()
                 ->route('patient.checkout', ['appointment_id' => $appointmentId ?? ''])

@@ -133,4 +133,33 @@ class ViewPatientController extends Controller
     {
         return view('pages/patient/messages/index');
     }
+
+    /**
+     * @param Request $request
+     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     */
+    public function getPaymentSuccess(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $appointmentId = $request->session()->get('appointment_id');
+
+        if (!$appointmentId) {
+            abort(404, 'Page not found');
+        }
+
+        $appointment = Appointment::query()
+            ->with([
+                'schedule',
+                'doctor',
+                'doctor.user',
+                'patient',
+                'patient.user',
+                'medicalSpecialty',
+            ])
+            ->where('id', $appointmentId)
+            ->firstOrFail();
+
+        return view('pages/patient/checkout/detail')->with([
+            'appointment' => $appointment,
+        ]);
+    }
 }
