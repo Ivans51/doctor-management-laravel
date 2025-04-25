@@ -30,6 +30,7 @@
                     // get the start and end dates of the current month
                     const start = info.startStr;
                     const end = info.endStr;
+                    console.log(start, end)
 
                     $.ajax({
                         url: '{{ route('patient.api.schedule.timing') }}',

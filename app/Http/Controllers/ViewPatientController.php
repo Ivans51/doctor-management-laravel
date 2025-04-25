@@ -94,10 +94,12 @@ class ViewPatientController extends Controller
     /**
      * @return \Illuminate\Contracts\Foundation\Application|Factory|View|Application|\Illuminate\Http\RedirectResponse
      */
-    public function getCheckoutForm(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application|RedirectResponse
+    public function getCheckoutForm($encrypted_id, Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
         try {
-            $appointmentId = decrypt($request->encrypted_id);
+            \Log::info($encrypted_id);
+            \Log::info(decrypt($encrypted_id));
+            $appointmentId = decrypt($encrypted_id);
 
             if (!$appointmentId) {
                 abort(404, 'Appointment not found');

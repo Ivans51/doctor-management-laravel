@@ -126,7 +126,7 @@ class AppointmentController extends Controller
                 $request->request->add(['file' => $request->file('file')->getClientOriginalName()]);
             }
 
-            Schedule::query()
+            $schedule = Schedule::query()
                 ->create([
                     'patient_id' => $request->patient_id,
                     'doctor_id' => $request->doctor_id,
@@ -139,7 +139,7 @@ class AppointmentController extends Controller
                 ->create([
                     'patient_id' => $request->patient_id,
                     'doctor_id' => $request->doctor_id,
-                    'schedule_id' => '3405a216-8655-4854-9552-e1ab96291adb',
+                    'schedule_id' => $schedule->valueUuid,
                     'medical_specialty_id' => $request->medical_specialty_id,
                     'healthcare_provider' => $request->healthcare_provider,
                     'description' => $request->description,
@@ -150,7 +150,7 @@ class AppointmentController extends Controller
             DB::commit();
 
             return redirect()->route('patient.checkout', [
-                'appointment_id' => $appointment->id,
+                'encrypted_id' => encrypt($appointment->valueUuid),
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
