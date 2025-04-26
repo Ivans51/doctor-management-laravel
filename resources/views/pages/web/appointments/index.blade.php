@@ -60,6 +60,9 @@
                 const image = getPatientImage(item);
                 const status = getStatusBadge(item.status);
                 const btnActions = getActionButtons(item);
+                const paymentStatus = item.payment ?
+                    `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Paid</span>` :
+                    `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Unpaid</span>`;
 
                 html += `
                     <div class="flex justify-between items-center my-4">
@@ -70,8 +73,9 @@
                                 <p class="text-xs text-gray-500 mt-1">
                                     ${item.patient.gender}, ${formatDate(item.schedule.date)}
                                 </p>
-                                <div class="mt-2">
+                                <div class="flex items-center space-x-2 mt-2">
                                     ${status}
+                                    ${paymentStatus}
                                 </div>
                             </div>
                         </div>

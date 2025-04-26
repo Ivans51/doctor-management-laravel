@@ -7,14 +7,7 @@
 
         <button id="btn-hide" class="hidden">Hide</button>
 
-        <x-modal.modal-component
-            title="Appointment details"
-            modalClass="modal"
-        >
-            <x-slot name="content">
-                <div id="modal-detail" class="p-4"></div>
-            </x-slot>
-        </x-modal.modal-component>
+        <x-modal.appointment-detail />
     </div>
 @endsection
 
@@ -43,11 +36,11 @@
                         dataType: 'json',
                         success: function (data) {
                             const schedules = data.data.map(function (schedule) {
-                                configModal('modal', `btn-hide`)
+                                // No need for configModal here anymore
                                 return {
                                     title: `${schedule.appointment.patient.name} - ${schedule.start_time} - ${schedule.end_time}`,
                                     start: schedule.date,
-                                    id: JSON.stringify(schedule),
+                                    id: JSON.stringify(schedule), // Keep stringifying the whole schedule object
                                     backgroundColor: schedule.appointment.status === CONST_APPROVED ?
                                         '#90cdf4'
                                         : schedule.appointment.status === CONST_PENDING
@@ -72,145 +65,162 @@
                 eventClick: function (info) {
                     info.jsEvent.preventDefault();
                     if (info.event.id) {
-                        // force click btn-hide
-                        $(`#btn-hide`).click()
+                        // No need to force click btn-hide anymore
                         const item = JSON.parse(info.event.id);
-                        setDataModal(item)
+                        // Call the new modal function
+                        openAppointmentDetailModal(item);
                     }
                 },
             });
             calendar.render();
 
-            function setDataModal(item) {
-                let image = ''
-                let status
-                let btnActions = ''
+            function openAppointmentDetailModal(item) {
+                const appointment = item.appointment;
+                const patient = appointment.patient;
+                const schedule = item;
 
-                const patient = item.appointment.patient
-                const statusData = item.appointment.status
-                const linkDownloadFileAppointment = `${window.location.origin}/storage/files/${item.appointment.file}`
+                // Profile image logic (remains the same)
+                const profileImage = patient.profile ?
+                    `<img src="/storage/${patient.profile}" class="h-10 w-10 rounded-full mr-3" alt="Profile">` :
+                    `<img src="{{ Vite::asset('resources/img/icons8-male-user.png') }}" class="h-10 w-10 rounded-full mr-3" alt="Default Profile">`;
 
-                if (patient.profile == null) {
-                    const urlImage = '{{ Vite::asset('resources/img/icons8-male-user.png') }}'
-                    image = `<img
-                        class="h-10 mr-3"
-                        src="${urlImage}"
-                        alt="profile patient"
-                        style="border-radius: 50%"
-                    >`
-                }
+                const status = getStatusBadge(appointment.status);
+                const paymentStatus = getPaymentBadge(appointment.payment);
+                const actionButtons = getActionButtons(appointment);
 
-                if (isMayorDate(item.date)) {
-                    const acceptImg = '{{ Vite::asset('resources/img/utils/icons8-accept-96.png') }}'
-                    const cancelImg = '{{ Vite::asset('resources/img/utils/icons8-reject-96.png') }}'
-
-                    if (statusData === CONST_PENDING) {
-                        btnActions = `
-                            <div class="flex items-center">
-                                <img
-                                    class="h-6 mr-2 cursor-pointer"
-                                    alt="btn cancel"
-                                    title="Accept"
-                                    src="${acceptImg}"
-                                    onclick="changeStatus(${item.appointment.id}, '${CONST_APPROVED}')"
-                                >
-                                <img
-                                    class="h-6 cursor-pointer"
-                                    alt="btn cancel"
-                                    title="Cancel"
-                                    src="${cancelImg}"
-                                    onclick="changeStatus(${item.appointment.id}, '${CONST_REJECTED}')"
-                                >
-                            </div>`
-                    }
-
-                    if (statusData === CONST_APPROVED) {
-                        btnActions = `
-                                <div class="flex items-center">
-                                    <img
-                                        class="h-6 cursor-pointer"
-                                        alt="btn cancel"
-                                        title="Cancel"
-                                        src="${cancelImg}"
-                                        onclick="changeStatus(${item.appointment.id}, '${CONST_REJECTED}')"
-                                    >
-                                </div>`
-                    }
-                }
-
-                if (statusData === CONST_APPROVED) {
-                    status = `<span class="rounded text-blue-900 bg-blue-100 px-4 py-1 text-sm">
-                    Confirmed
-                    </span>`
-                } else if (statusData === CONST_PENDING) {
-                    status = `<span class="rounded text-yellow-900 bg-yellow-100 px-4 py-1 text-sm">
-                        Pending
-                    </span>`
-                } else if (statusData === CONST_REJECTED) {
-                    status = `<span class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm">
-                        Cancelled
-                    </span>`
-                }
-
-                $('#modal-detail').html(`
-                    <ul class="space-y-2">
-                        <li class="border-b-2"><strong>ID: </strong> ${item.id}</li>
-                        <li>
-                        <div class="flex justify-between items-center my-4">
+                // Modal content structure (copied from patient view)
+                const modalContent = `
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start pb-4 border-b border-gray-200">
                             <div class="flex items-start">
-                                        ${image}
-                                        <div class="flex flex-col">
-                                            <p>${patient.name}</p>
-                                            <p class="text-xs mt-1">
-                                                ${patient.gender}, ${formatDate(item.date)}
-                                            </p>
-                                        <div>
-                                    </div>
+                                ${profileImage}
+                                <div class="flex flex-col">
+                                    <p class="font-medium">${patient.name}</p>
+                                    <p class="text-xs mt-1">${patient.gender || 'N/A'}, ${patient.years_old || 'N/A'} years</p>
                                 </div>
                             </div>
-                            <div class="flex flex-col items-center">
-                                ${btnActions}
-                                ${status}
+                            <div class="flex flex-col items-end space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    ${status}
+                                    ${paymentStatus}
+                                </div>
                             </div>
                         </div>
-                    </li>
-                    <li class="border-b-2">
-                        <strong>Start time: </strong> ${item.start_time}
-                    </li>
-                    <li class="border-b-2">
-                        <strong>End time: </strong> ${item.end_time}
-                    </li>
-                    <li class="border-b-2">
-                        <strong>Healthcare Provider: </strong> ${item.appointment.healthcare_provider}
-                    </li>
-                    <li class="border-b-2">
-                        <strong>Reason for Consulting: </strong> ${item.appointment.description}
-                    </li>
-                    <li>
-                        <strong>Review Notes: </strong> ${item.appointment.notes}
-                    </li>
-                    ${item.appointment.file ? `
-                        <li>
-                            <strong>File: </strong>
-                            <a
-                                href="${linkDownloadFileAppointment}"
-                                target="_blank"
-                                class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm"
+                        <div class="grid grid-cols-2 gap-4 pb-4 border-b border-gray-200">
+                            <div>
+                                <p class="font-medium text-gray-500">Date:</p>
+                                <p>${formatDate(schedule.date)}</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-500">Healthcare Provider:</p>
+                                <p>${appointment.healthcare_provider || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-500">Start Time:</p>
+                                <p>${schedule.start_time}</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-500">End Time:</p>
+                                <p>${schedule.end_time}</p>
+                            </div>
+                        </div>
+                        <div class="pb-4 border-b border-gray-200">
+                            <p class="font-medium text-gray-500">Reason for Consulting:</p>
+                            <p>${appointment.description || 'N/A'}</p>
+                        </div>
+                        <div class="pb-4 border-b border-gray-200">
+                            <p class="font-medium text-gray-500">Notes:</p>
+                            <p>${appointment.notes || 'N/A'}</p>
+                        </div>
+                        ${appointment.file ? `
+                                    <div>
+                                        <p class="font-medium text-gray-500">File:</p>
+                                        <a href="/storage/files/${appointment.file}"
+                                           target="_blank"
+                                           class="inline-flex items-center text-blue-500 hover:text-blue-700">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                            </svg>
+                                            Download
+                                        </a>
+                                    </div>
+                                ` : ''}
+                        ${actionButtons}
+                    </div>
+                `;
+                // Populate the modal content area (assuming the component has an ID 'modalContent')
+                $('#modalContent').html(modalContent);
+                // Show the modal (assuming the component has an ID 'appointmentDetailModal')
+                $('#appointmentDetailModal').removeClass('hidden');
+            }
+
+            // Helper function to get status badge (copied)
+            function getStatusBadge(status) {
+                if (status === CONST_APPROVED) {
+                    return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Confirmed</span>`;
+                } else if (status === CONST_PENDING) {
+                    return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span>`;
+                } else if (status === CONST_REJECTED) {
+                    return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Cancelled</span>`;
+                }
+                return '';
+            }
+
+            // Helper function to get payment badge (copied)
+            function getPaymentBadge(isPaid) {
+                // Assuming isPaid is a boolean or similar truthy/falsy value
+                return isPaid ?
+                    `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Paid</span>` :
+                    `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Unpaid</span>`;
+            }
+
+            // Helper function to get action buttons (adapted for doctor)
+            function getActionButtons(appointment) {
+                let buttons = '';
+                 if (isMayorDate(appointment.schedule.date)) {
+                    console.log(appointment.id)
+                    if (appointment.status === CONST_PENDING) {
+                        buttons += `
+                            <button
+                                onclick="changeStatus('${appointment.encrypted_id}', '${CONST_APPROVED}')"
+                                class="rounded text-white bg-green-500 px-3 py-1.5 text-sm hover:bg-green-600 mr-2"
                             >
-                                Download
-                            </a>
-                        </li>
-                    ` : ''}
-                </ul>
-            `)
+                                Accept
+                            </button>
+                            <button
+                                onclick="changeStatus('${appointment.encrypted_id}', '${CONST_REJECTED}')"
+                                class="rounded text-white bg-red-500 px-3 py-1.5 text-sm hover:bg-red-600"
+                            >
+                                Reject
+                            </button>
+                        `;
+                    } else if (appointment.status === CONST_APPROVED) {
+                         buttons += `
+                            <button
+                                onclick="changeStatus('${appointment.encrypted_id}', '${CONST_REJECTED}')"
+                                class="rounded text-white bg-red-500 px-3 py-1.5 text-sm hover:bg-red-600"
+                            >
+                                Reject
+                            </button>
+                        `;
+                     }
+                 }
+
+                return buttons ? `
+                    <div class="flex justify-end pt-4">
+                        ${buttons}
+                    </div>
+                ` : '';
             }
         });
 
         function changeStatus(id, status) {
             const route = '{{ route('doctor.appointment.status') }}';
             changeStatusAppointment(id, status, route).then(() => {
+                 $('#appointmentDetailModal').addClass('hidden');
                 location.reload()
             })
         }
+
     </script>
 @endpush

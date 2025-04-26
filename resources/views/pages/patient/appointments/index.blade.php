@@ -125,9 +125,12 @@
                                 <div class="flex items-start">
                                     ${image}
                                     <div class="flex flex-col">
-                                        <p>${item.patient.name}</p>
+                                        <p>${item.doctor.name}</p>
                                         <p class="text-xs mt-1">
-                                            ${item.patient.gender}, ${formatDate(item.schedule.date)}
+                                            Speciality: ${item.doctor.speciality}
+                                        </p>
+                                        <p class="text-xs mt-1">
+                                            ${formatDate(item.schedule.date)}
                                         </p>
                                         <div class="flex items-center space-x-2 mt-2">
                                             ${status}
@@ -168,6 +171,7 @@
                 success: function(response) {
                     const appointment = response.data;
                     const patient = appointment.patient;
+                    const doctor = appointment.doctor;
                     const schedule = appointment.schedule;
 
                     // Profile icon logic
@@ -198,8 +202,8 @@
                                 <div class="flex items-center">
                                     ${profileImage}
                                     <div>
-                                        <p class="font-medium">${patient.name}</p>
-                                        <p class="text-sm text-gray-500">${patient.gender}</p>
+                                        <p class="font-medium">${doctor.name}</p>
+                                        <p class="text-sm text-gray-500">${doctor.speciality}</p>
                                     </div>
                                 </div>
                                 <div class="flex space-x-2">

@@ -55,6 +55,7 @@ class AppointmentController extends Controller
             ->with([
                 'patient',
                 'schedule',
+                'payment',
             ])
             ->where('doctor_id', $doctorId)
             ->orderBy('created_at', 'desc')
@@ -86,6 +87,7 @@ class AppointmentController extends Controller
                 'patient',
                 'schedule',
                 'payment',
+                'doctor'
             ])
             ->where('patient_id', $patientId)
             ->orderBy('created_at', 'desc')
@@ -172,7 +174,7 @@ class AppointmentController extends Controller
     {
         $appointment_id = decrypt($appointment_id);
 
-        $appointment = Appointment::with(['patient', 'schedule'])
+        $appointment = Appointment::with(['patient', 'schedule', 'doctor', 'payment'])
             ->findOrFail($appointment_id);
 
         return response()->json([

@@ -29,10 +29,19 @@ class ScheduleController extends Controller
                 ->with([
                     'appointment',
                     'appointment.patient',
+                    'appointment.payment',
+                    'appointment.schedule',
                 ])
                 ->where('doctor_id', $doctorId)
                 ->whereBetween('date', [$start_date, $end_date])
                 ->get();
+
+            // Add encrypted_id to each appointment
+            $schedule->each(function ($sched) {
+                if ($sched->appointment) {
+                    $sched->appointment->encrypted_id = encrypt($sched->appointment->id);
+                }
+            });
 
             return response()->json([
                 'status' => 'success',
