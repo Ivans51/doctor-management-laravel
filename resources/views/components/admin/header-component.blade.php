@@ -4,31 +4,31 @@
     <ul id="menu-vertical">
         <li>
             <a href="{{ route('admin.admins.index') }}">
-                <x-ri-dashboard-line/>
+                <x-ri-user-line/>
                 Admins
             </a>
         </li>
         <li>
             <a href="{{ route('admin.medical.index') }}">
-                <x-ri-dashboard-line/>
+                <x-ri-heart-line/>
                 Medical Specialty
             </a>
         </li>
         <li>
             <a href="{{ route('admin.doctors.index') }}">
-                <x-ri-dashboard-line/>
+                <x-ri-stethoscope-line/>
                 Doctors
             </a>
         </li>
         <li>
             <a href="{{ route('admin.patients.index') }}">
-                <x-ri-dashboard-line/>
+                <x-ri-user-heart-line/>
                 Patients
             </a>
         </li>
         <li>
             <a href="{{ route('admin.payments.index') }}">
-                <x-ri-dashboard-line/>
+                <x-ri-money-dollar-circle-line/>
                 Payments
             </a>
         </li>

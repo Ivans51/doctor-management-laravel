@@ -99,21 +99,24 @@ class PatientsController extends Controller
 
         // Add chat_id to each patient
         $patients->getCollection()->transform(function ($patient) use ($doctorId) {
-            $user1 = Doctor::query()->with('user')->where('id', $doctorId)->first()->user;
-            $user2 = Patient::query()->with('user')->where('id', $patient->id)->first()->user;
+            $user1 = Doctor::query()->with('user')->where('id', $doctorId)->first()?->user;
+            $user2 = Patient::query()->with('user')->where('id', $patient->id)->first()?->user;
 
-            $chat = Chat::query()
-                ->where(function ($query) use ($user1, $user2) {
-                    $query->where('user1_id', $user1->id)
-                        ->where('user2_id', $user2->id);
-                })
-                ->orWhere(function ($query) use ($user1, $user2) {
-                    $query->where('user1_id', $user2->id)
-                        ->where('user2_id', $user1->id);
-                })
-                ->first();
+            if ($user1 && $user2) {
+                $chat = Chat::query()
+                    ->where(function ($query) use ($user1, $user2) {
+                        $query->where('user1_id', $user1->id)
+                            ->where('user2_id', $user2->id);
+                    })
+                    ->orWhere(function ($query) use ($user1, $user2) {
+                        $query->where('user1_id', $user2->id)
+                            ->where('user2_id', $user1->id);
+                    })
+                    ->first();
 
-            $patient->chat_id = $chat ? $chat->id : null;
+                $patient->chat_id = $chat ? $chat->id : null;
+            }
+
             return $patient;
         });
 
@@ -186,10 +189,7 @@ class PatientsController extends Controller
         }
     }
 
-    public function show($id)
-    {
-
-    }
+    public function show($id) {}
 
     /**
      * @param $id
@@ -247,7 +247,6 @@ class PatientsController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Updated successfully');
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             return redirect()->back()->withErrors($e->errors())->withInput();

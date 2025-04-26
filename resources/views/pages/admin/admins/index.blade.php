@@ -117,7 +117,7 @@
             response.data.data.forEach(function (item) {
                 let btnDelete
 
-                if (item.id !== {{ auth()->user()->id }}) {
+                if (item.id !== '{{ auth()->user()->id }}') {
                     btnDelete = `<button
                                     onclick="deleteUser('${item.id}')"
                                     class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2 cursor-pointer"
