@@ -15,7 +15,7 @@ window.formatDate = function formatDate(date) {
 
 // format number point to decimal and add $ symbol and dot for a thousand
 window.formatNumber = function formatNumber(number) {
-    return new Intl.NumberFormat('es-ES', {style: 'currency', currency: 'USD'}).format(number)
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD' }).format(number)
 }
 
 // limit text to 50 characters in description and add three dots
@@ -59,12 +59,12 @@ window.changeStatusAppointment = function changeStatusAppointment(id, status, ur
                         resolve()
                     },
                     error: function (xhr) {
-                        let errorMessage = 'Failed to update appointment status.';
+                        let errorMessage = 'Failed to update appointment status.'
                         if (xhr.responseJSON && xhr.responseJSON.message) {
-                            errorMessage = xhr.responseJSON.message;
+                            errorMessage = xhr.responseJSON.message
                         }
                         errorSwal(xhr, errorMessage)
-                        reject(xhr);
+                        reject(xhr)
                     }
                 })
             })

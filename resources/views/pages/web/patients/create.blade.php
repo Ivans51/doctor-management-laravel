@@ -4,8 +4,7 @@
     <section class="max-w-4xl mx-auto mt-10 px-4">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Add New Patient</h1>
-            <a href="{{ route('doctor.my-patients') }}"
-                class="flex items-center text-gray-600 hover:text-gray-800">
+            <a href="{{ route('doctor.my-patients') }}" class="flex items-center text-gray-600 hover:text-gray-800">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
@@ -48,6 +47,7 @@
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                             type="tel" name="phone_number" id="phone_number" required>
+                        <input type="hidden" name="full_phone_number" id="full_phone_number">
                     </div>
 
                     <div class="w-full">
@@ -81,8 +81,8 @@
 @endsection
 
 @push('scripts-bottom')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
 
@@ -99,5 +99,7 @@
         };
 
         document.querySelector('input[name="location"]').addEventListener('input', event => {});
+
+        initPhoneInput();
     </script>
 @endpush

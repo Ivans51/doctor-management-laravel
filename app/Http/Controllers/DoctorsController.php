@@ -100,7 +100,7 @@ class DoctorsController extends Controller
                 'email' => 'required|unique:users,email',
                 'password' => 'required|min:8|max:20|confirmed',
                 'speciality' => 'required',
-                'phone_number' => 'required',
+                'full_phone_number' => 'required',
                 'location_address-search' => 'required',
             ]);
 
@@ -115,10 +115,10 @@ class DoctorsController extends Controller
                 ->create([
                     'name' => $request->name,
                     'speciality' => $request->speciality,
-                    'phone' => $request->phone_number,
+                    'phone' => $request->full_phone_number,
                     'address' => $request->input('location_address-search'),
                     'status' => Constants::$ACTIVE,
-                    'user_id' => $user->id,
+                    'user_id' => $user->valueUuid,
                 ]);
 
             DB::commit();
@@ -166,7 +166,7 @@ class DoctorsController extends Controller
                 'email' => 'required|unique:users,email,' . $id,
                 'password' => 'nullable|min:8|max:20',
                 'speciality' => 'required',
-                'phone_number' => 'required',
+                'full_phone_number' => 'required',
                 'location_address-search' => 'required',
                 'status' => 'required',
             ]);
@@ -188,7 +188,7 @@ class DoctorsController extends Controller
                 ->update([
                     'name' => $request->name,
                     'speciality' => $request->speciality,
-                    'phone' => $request->phone_number,
+                    'phone' => $request->full_phone_number,
                     'address' => $request->input('location_address-search'),
                     'status' => $request->status,
                 ]);

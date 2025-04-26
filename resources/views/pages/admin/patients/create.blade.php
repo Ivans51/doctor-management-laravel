@@ -32,10 +32,7 @@
                         <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                             @foreach ($doctors as $doctor)
                                 <div class="flex items-center">
-                                    <input
-                                        type="checkbox"
-                                        name="doctors[]"
-                                        id="doctor-{{ $doctor->id }}"
+                                    <input type="checkbox" name="doctors[]" id="doctor-{{ $doctor->id }}"
                                         value="{{ $doctor->id }}"
                                         class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <label for="doctor-{{ $doctor->id }}" class="ml-2 text-sm text-gray-700">
@@ -62,6 +59,7 @@
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                             type="tel" name="phone_number" id="phone_number">
+                        <input type="hidden" name="full_phone_number" id="full_phone_number">
                     </div>
                     <div class="w-full">
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
@@ -91,8 +89,8 @@
 @endsection
 
 @push('scripts-bottom')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
     <script>
@@ -106,5 +104,7 @@
             })
         };
         document.querySelector('input[name="location"]').addEventListener('input', event => {});
+
+        initPhoneInput();
     </script>
 @endpush

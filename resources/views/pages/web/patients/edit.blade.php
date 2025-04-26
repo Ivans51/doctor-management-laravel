@@ -7,7 +7,9 @@
             <h1 class="text-2xl font-bold text-gray-800">Edit Patient</h1>
             <a href="{{ route('doctor.my-patients') }}" class="flex items-center text-gray-600 hover:text-gray-800">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd"
+                        d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
                 </svg>
                 Back
             </a>
@@ -25,88 +27,63 @@
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            type="text"
-                            name="name"
-                            id="name"
-                            value="{{ $patient->name }}"
-                            required
-                        >
+                            type="text" name="name" id="name" value="{{ $patient->name }}" required>
                     </div>
 
                     <div class="w-full">
                         <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            name="location"
-                            type="text"
-                            autocomplete="shipping address-line1"
-                            id="location"
-                            value="{{ $patient->address }}"
-                            required
-                        >
+                            name="location" type="text" autocomplete="shipping address-line1" id="location"
+                            value="{{ $patient->address }}" required>
                     </div>
 
                     <div class="w-full">
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            type="email"
-                            name="email"
-                            id="email"
-                            value="{{ $patient->user->email }}"
-                            required
-                        >
+                            type="email" name="email" id="email" value="{{ $patient->user->email }}" required>
                     </div>
 
                     <div class="w-full">
                         <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input
-                            type="tel"
-                            id="phone_number"
-                            name="phone_number"
+                        <input type="tel" id="phone_number" name="phone_number"
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            value="{{ old('phone_number', $patient->phone ?? '') }}"
-                        >
-                        <input type="hidden" id="full_phone_number" name="full_phone_number">
+                            value="{{ old('phone_number', $patient->phone ?? '') }}">
+                        <input type="hidden" name="full_phone_number" id="full_phone_number" value="{{ $patient->phone }}">
                     </div>
 
                     <div class="w-full">
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder="*********"
-                        >
+                            type="password" name="password" id="password" placeholder="*********">
                     </div>
 
                     <div class="w-full">
-                        <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                        <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm
+                            Password</label>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            type="password"
-                            name="confirm_password"
-                            id="confirm_password"
-                            placeholder="*********"
-                        >
+                            type="password" name="confirm_password" id="confirm_password" placeholder="*********">
                     </div>
 
                     <div class="w-full">
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <select name="status" id="status"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Selection</option>
-                            <option value="{{ Constants::$ACTIVE }}" {{ $patient->status == Constants::$ACTIVE ? 'selected' : '' }}>Active</option>
-                            <option value="{{ Constants::$INACTIVE }}" {{ $patient->status == Constants::$INACTIVE ? 'selected' : '' }}>Inactive</option>
+                            <option value="{{ Constants::$ACTIVE }}"
+                                {{ $patient->status == Constants::$ACTIVE ? 'selected' : '' }}>Active</option>
+                            <option value="{{ Constants::$INACTIVE }}"
+                                {{ $patient->status == Constants::$INACTIVE ? 'selected' : '' }}>Inactive</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="mt-8">
-                    <button
-                        type="submit"
-                        class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out"
-                    >
+                    <button type="submit"
+                        class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out">
                         Save Changes
                     </button>
                 </div>
@@ -116,8 +93,8 @@
 @endsection
 
 @push('scripts-bottom')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
 
@@ -133,23 +110,6 @@
         };
         document.querySelector('input[name="location"]').addEventListener('input', event => {});
 
-        const phoneInput = document.getElementById('phone_number');
-        const iti = window.intlTelInput(phoneInput, {
-            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/utils.js",
-            separateDialCode: false,
-            preferredCountries: ['us', 'gb', 'es'],
-            initialCountry: "auto",
-            geoIpLookup: function(callback) {
-                fetch('https://ipapi.co/json/')
-                    .then(res => res.json())
-                    .then(data => callback(data.country_code))
-                    .catch(() => callback('us'));
-            }
-        });
-
-        document.querySelector('form').addEventListener('submit', function() {
-            const fullNumber = iti.getNumber();
-            document.getElementById('full_phone_number').value = fullNumber;
-        });
+        initPhoneInput();
     </script>
 @endpush

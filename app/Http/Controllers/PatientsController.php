@@ -150,7 +150,7 @@ class PatientsController extends Controller
                 'name' => 'required|min:3',
                 'email' => 'required|unique:users,email',
                 'password' => 'required|min:8|max:20|confirmed',
-                'phone_number' => 'required',
+                'full_phone_number' => 'required',
                 'location_address-search' => 'required',
                 'doctor_id' => 'required',
             ]);
@@ -165,7 +165,7 @@ class PatientsController extends Controller
             $patient = Patient::query()
                 ->create([
                     'name' => $request->name,
-                    'phone' => $request->phone_number,
+                    'phone' => $request->full_phone_number,
                     'address' => $request->input('location_address-search'),
                     'status' => Constants::$ACTIVE,
                     'user_id' => $user->valueUuid,
@@ -218,7 +218,7 @@ class PatientsController extends Controller
                 'name' => 'required|min:3',
                 'email' => 'required|unique:users,email,' . $id,
                 'password' => 'nullable|min:8|max:20',
-                'phone_number' => 'required',
+                'full_phone_number' => 'required',
                 'location_address-search' => 'required',
                 'status' => 'required',
             ]);

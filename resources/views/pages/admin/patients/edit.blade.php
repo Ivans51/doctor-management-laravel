@@ -63,6 +63,7 @@
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                             type="tel" name="phone_number" id="phone_number" value="{{ $patient->phone }}">
+                        <input type="hidden" name="full_phone_number" id="full_phone_number" value="{{ $patient->phone }}">
                     </div>
                     <div class="w-full md:col-span-2">
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
@@ -102,8 +103,8 @@
 @endsection
 
 @push('scripts-bottom')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/css/intlTelInput.css">
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
     <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
     <script>
@@ -117,5 +118,7 @@
             })
         };
         document.querySelector('input[name="location"]').addEventListener('input', event => {});
+
+        initPhoneInput();
     </script>
 @endpush
