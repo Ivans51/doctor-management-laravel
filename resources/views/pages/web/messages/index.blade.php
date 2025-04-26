@@ -110,6 +110,15 @@
         showLoading()
         searchData()
 
+        // Extract chat_id from URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatIdQuery = urlParams.get('chat_id');
+
+        // If chat_id exists, call loadChat
+        if (chatIdQuery) {
+            loadChat(chatIdQuery);
+        }
+
         // search user with ajax when after 5 seconds
         let timeout = null;
         $('#search_field').on('keyup', function () {
@@ -159,7 +168,7 @@
             return `
                     <div
                         class="flex justify-between items-start bg-white px-2 py-2 cursor-pointer"
-                        onclick='openChat(${JSON.stringify(item)})'
+                        onclick="loadChat('${item.lastMessage.id}')"
                     >
                         <div class="flex items-center">
                             <x-utils.image-profile-component/>
@@ -179,22 +188,18 @@
                         </div>`
         }
 
-        /* request with ajax chat according user id*/
-        function openChat(user) {
-            $('#name-user').html(user.name)
-            userId2 = user.id
-            chatId = user.lastMessage.id
-            loadChat()
-        }
-
         /* load chat */
-        function loadChat() {
+        function loadChat(id) {
             const url = '{{ route('doctor.chats.list') }}';
 
             $.ajax({
-                url: `${url}?chat=${chatId}`,
+                url: `${url}?chat=${id}`,
                 type: 'GET',
                 success: function (response) {
+                    $('#name-user').html(response.user.name)
+                    chatId = response.id
+                    userId2 = response.user.id
+
                     const grid = $('#grid-main');
                     grid.empty()
 

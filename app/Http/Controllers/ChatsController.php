@@ -21,7 +21,7 @@ class ChatsController extends Controller
     {
         try {
             $chatId = $request->query('chat');
-            $userId = Auth::user()->id;
+            $user = Auth::user();
 
             $messages = Message::query()
                 ->where('chat_id', $chatId)
@@ -30,13 +30,15 @@ class ChatsController extends Controller
 
             foreach ($messages as $message) {
                 $message->diffForHumans = $message->created_at->diffForHumans();
-                if ($message->user_id == $userId) {
+                if ($message->user_id == $user->id) {
                     $message->right = true;
                 }
             }
 
             return response()->json([
                 'messages' => $messages,
+                'user' => $user,
+                'id' => $chatId,
             ]);
         } catch (\Exception $e) {
             return response()->json([

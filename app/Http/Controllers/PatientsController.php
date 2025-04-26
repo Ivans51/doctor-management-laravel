@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\PatientDoctor;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Chat;
 use App\Utils\Constants;
 use Auth;
 use DB;
@@ -95,6 +96,26 @@ class PatientsController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate($limit);
         }
+
+        // Add chat_id to each patient
+        $patients->getCollection()->transform(function ($patient) use ($doctorId) {
+            $user1 = Doctor::query()->with('user')->where('id', $doctorId)->first()->user;
+            $user2 = Patient::query()->with('user')->where('id', $patient->id)->first()->user;
+
+            $chat = Chat::query()
+                ->where(function ($query) use ($user1, $user2) {
+                    $query->where('user1_id', $user1->id)
+                        ->where('user2_id', $user2->id);
+                })
+                ->orWhere(function ($query) use ($user1, $user2) {
+                    $query->where('user1_id', $user2->id)
+                        ->where('user2_id', $user1->id);
+                })
+                ->first();
+
+            $patient->chat_id = $chat ? $chat->id : null;
+            return $patient;
+        });
 
         return response()->json([
             'status' => 'success',

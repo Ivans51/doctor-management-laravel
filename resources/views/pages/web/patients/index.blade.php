@@ -179,14 +179,14 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center space-x-3">
                                     <a
-                                        href="/messages?patient_id=${item.id}"
+                                        href="/messages?chat_id=${item.chat_id}"
                                         class="text-blue-600 hover:text-blue-900 transition-colors duration-200"
                                         title="Message"
                                     >
                                         ${iconMessage}
                                     </a>
                                     <a
-                                        href="/my-patients-doctor/${item.id}/edit?doctor_id=${item.doctorPatient}"
+                                        href="/my-patients-doctor/${item.id}/edit"
                                         class="text-blue-600 hover:text-blue-900 transition-colors duration-200"
                                         title="Edit"
                                     >
