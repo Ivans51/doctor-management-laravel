@@ -129,14 +129,14 @@
                                         <p class="text-xs mt-1">
                                             ${item.patient.gender}, ${formatDate(item.schedule.date)}
                                         </p>
+                                        <div class="flex items-center space-x-2 mt-2">
+                                            ${status}
+                                            ${paymentStatus}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-end space-y-2">
                                     ${btnActions}
-                                    <div class="flex items-center space-x-2">
-                                        ${status}
-                                        ${paymentStatus}
-                                    </div>
                                 </div>
                             </div>
                             ${index < response.data.data.length - 1 ? '<hr class="my-2 border-gray-200">' : ''}`
@@ -238,18 +238,18 @@
                             </div>
 
                             ${appointment.file ? `
-                                        <div>
-                                            <p class="font-medium text-gray-500">File:</p>
-                                            <a href="{{ storage_path('app/public/files/${appointment.file}') }}"
-                                               target="_blank"
-                                               class="inline-flex items-center text-blue-500 hover:text-blue-700">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                                                </svg>
-                                                Download
-                                            </a>
-                                        </div>
-                                    ` : ''}
+                                                <div>
+                                                    <p class="font-medium text-gray-500">File:</p>
+                                                    <a href="{{ storage_path('app/public/files/${appointment.file}') }}"
+                                                       target="_blank"
+                                                       class="inline-flex items-center text-blue-500 hover:text-blue-700">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                                        </svg>
+                                                        Download
+                                                    </a>
+                                                </div>
+                                            ` : ''}
                         </div>
                     `;
                     $('#modalContent').html(modalContent);
@@ -265,8 +265,6 @@
 
         // Helper function to generate action buttons based on appointment status
         function getAppointmentActions(item) {
-            if (!isMayorDate(item.schedule.date)) return '';
-
             let actions = `
                 <div class="flex items-center space-x-2">
                     <button
@@ -275,13 +273,31 @@
                     >
                         Detail
                     </button>
-                    <button
-                        onclick="changeStatus('${item.encrypted_id}', '${CONST_REJECTED}')"
-                        class="rounded text-white bg-red-500 px-2 py-1 text-xs"
-                    >
-                        Cancel
-                    </button>
             `;
+
+            // Add Cancel/Accept buttons if the appointment date is in the future
+            if (isMayorDate(item.schedule.date)) {
+                if (item.status === CONST_PENDING) {
+                    actions += `
+                        <button
+                            onclick="changeStatus('${item.encrypted_id}', '${CONST_APPROVED}')"
+                            class="rounded text-white bg-green-500 px-2 py-1 text-xs"
+                        >
+                            Accept
+                        </button>
+                    `;
+                }
+                if (item.status !== CONST_REJECTED) {
+                    actions += `
+                        <button
+                            onclick="changeStatus('${item.encrypted_id}', '${CONST_REJECTED}')"
+                            class="rounded text-white bg-red-500 px-2 py-1 text-xs"
+                        >
+                            Cancel
+                        </button>
+                    `;
+                }
+            }
 
             // Add Pay button for pending, unpaid appointments
             if (item.status !== CONST_REJECTED && !item.payment) {

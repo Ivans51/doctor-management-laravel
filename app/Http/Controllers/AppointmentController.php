@@ -10,7 +10,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Throwable;
-use Illuminate\Support\Facades\Crypt;
 
 class AppointmentController extends Controller
 {
@@ -60,6 +59,12 @@ class AppointmentController extends Controller
             ->where('doctor_id', $doctorId)
             ->orderBy('created_at', 'desc')
             ->paginate($limit);
+
+        // Encrypt each appointment ID
+        $appointments->getCollection()->transform(function ($appointment) {
+            $appointment->encrypted_id = encrypt($appointment->id);
+            return $appointment;
+        });
 
         return response()->json([
             'success' => true,

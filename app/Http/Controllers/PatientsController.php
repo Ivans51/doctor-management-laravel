@@ -144,12 +144,12 @@ class PatientsController extends Controller
                     'phone' => $request->phone_number,
                     'address' => $request->input('location_address-search'),
                     'status' => Constants::$ACTIVE,
-                    'user_id' => $user->id,
+                    'user_id' => $user->valueUuid,
                 ]);
 
             PatientDoctor::query()
                 ->create([
-                    'patient_id' => $patient->id,
+                    'patient_id' => $patient->valueUuid,
                     'doctor_id' => $request->doctor_id,
                 ]);
 
@@ -218,7 +218,7 @@ class PatientsController extends Controller
                 ->where('user_id', $id)
                 ->update([
                     'name' => $request->name,
-                    'phone' => $request->phone_number,
+                    'phone' => $request->full_phone_number,
                     'address' => $request->input('location_address-search'),
                     'status' => $request->status,
                 ]);

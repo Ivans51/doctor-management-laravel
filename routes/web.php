@@ -60,6 +60,7 @@ Route::name('doctor.')->group(function () {
 
         /* JSON */
         Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByDoctor'])->name('appointments.doctor');
+        Route::get('/api/appointments/{appointment_id}', [AppointmentController::class, 'getAppointmentDetails'])->name('appointment.details');
         Route::get('/api/chat', [ChatsController::class, 'show'])->name('chats.list');
         Route::post('/chat/search', [ChatsController::class, 'searchChatByDoctor'])->name('search.chat');
         Route::post('/chat/send/message', [ChatsController::class, 'sendMessage'])->name('send.message');
@@ -117,8 +118,8 @@ Route::prefix('patient')->name('patient.')->group(function () {
 
         /* JSON */
         Route::get('/api/doctor/list', [DoctorsController::class, 'doctorList'])->name('doctor.list');
-        Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByPatient'])->name('appointments.patient');
         Route::get('/api/chat', [ChatsController::class, 'show'])->name('chats.list');
+        Route::get('/api/appointments', [AppointmentController::class, 'getAppointmentsByPatient'])->name('appointments.patient');
         Route::get('/api/appointments/{appointment_id}', [AppointmentController::class, 'getAppointmentDetails'])->name('patient.appointment.details');
         Route::post('/schedule/timing', [ScheduleController::class, 'getScheduleByPatientId'])->name('api.schedule.timing');
         Route::put('/api/appointments/status', [AppointmentController::class, 'changeStatusAppointment'])->name('appointment.status');

@@ -61,22 +61,13 @@
                     <div class="w-full">
                         <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                         <input
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                             type="tel"
-                            name="phone_number"
                             id="phone_number"
-                            value="{{ $patient->phone }}"
-                            required
+                            name="phone_number"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            value="{{ old('phone_number', $patient->phone ?? '') }}"
                         >
-                    </div>
-
-                    <div class="w-full">
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Selection</option>
-                            <option value="{{ Constants::$ACTIVE }}" {{ $patient->status == Constants::$ACTIVE ? 'selected' : '' }}>Active</option>
-                            <option value="{{ Constants::$INACTIVE }}" {{ $patient->status == Constants::$INACTIVE ? 'selected' : '' }}>Inactive</option>
-                        </select>
+                        <input type="hidden" id="full_phone_number" name="full_phone_number">
                     </div>
 
                     <div class="w-full">
@@ -99,6 +90,15 @@
                             id="confirm_password"
                             placeholder="*********"
                         >
+                    </div>
+
+                    <div class="w-full">
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Selection</option>
+                            <option value="{{ Constants::$ACTIVE }}" {{ $patient->status == Constants::$ACTIVE ? 'selected' : '' }}>Active</option>
+                            <option value="{{ Constants::$INACTIVE }}" {{ $patient->status == Constants::$INACTIVE ? 'selected' : '' }}>Inactive</option>
+                        </select>
                     </div>
                 </div>
 
@@ -132,5 +132,24 @@
             })
         };
         document.querySelector('input[name="location"]').addEventListener('input', event => {});
+
+        const phoneInput = document.getElementById('phone_number');
+        const iti = window.intlTelInput(phoneInput, {
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/utils.js",
+            separateDialCode: false,
+            preferredCountries: ['us', 'gb', 'es'],
+            initialCountry: "auto",
+            geoIpLookup: function(callback) {
+                fetch('https://ipapi.co/json/')
+                    .then(res => res.json())
+                    .then(data => callback(data.country_code))
+                    .catch(() => callback('us'));
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            const fullNumber = iti.getNumber();
+            document.getElementById('full_phone_number').value = fullNumber;
+        });
     </script>
 @endpush

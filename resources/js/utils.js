@@ -59,7 +59,12 @@ window.changeStatusAppointment = function changeStatusAppointment(id, status, ur
                         resolve()
                     },
                     error: function (xhr) {
-                        reject()
+                        let errorMessage = 'Failed to update appointment status.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        errorSwal(xhr, errorMessage)
+                        reject(xhr);
                     }
                 })
             })

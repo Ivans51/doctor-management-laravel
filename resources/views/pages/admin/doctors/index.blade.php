@@ -24,7 +24,6 @@
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
-                        <span class="text-sm font-medium text-gray-700 ml-2">entries</span>
                     </label>
                 </div>
                 <div class="flex flex-1 md:flex-row flex-col gap-3">
