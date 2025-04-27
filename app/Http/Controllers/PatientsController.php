@@ -127,13 +127,22 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $doctors = Doctor::query()->get();
+        $doctor = null;
 
-        return Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN
-            ? view('pages/admin/patients/create')->with('doctors', $doctors)
-            : view('pages/web/patients/create');
+        if ($request->query('doctorId')) {
+            $doctor = Doctor::query()->find($request->query('doctorId'));
+        }
+
+        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
+            return view('pages/admin/patients/create')
+                ->with('doctors', $doctors)
+                ->with('doctor', $doctor);
+        }
+
+        return view('pages/web/patients/create');
     }
 
     /**
@@ -199,12 +208,17 @@ class PatientsController extends Controller
     {
         $doctors = Doctor::query()->get();
         $patient = Patient::query()
-            ->with(['user'])
+            ->with(['user', 'doctorPatient'])
             ->where('id', $id)
             ->first();
 
+        $doctor = null;
+        if (request()->query('doctorId')) {
+            $doctor = Doctor::query()->find(request()->query('doctorId'));
+        }
+
         return Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN
-            ? view('pages/admin/patients/edit', compact('patient', 'doctors'))
+            ? view('pages/admin/patients/edit', compact('patient', 'doctors', 'doctor'))
             : view('pages/web/patients/edit', compact('patient'));
     }
 
@@ -224,11 +238,13 @@ class PatientsController extends Controller
             ]);
 
             DB::beginTransaction();
+
             $user = User::query()->where('id', $id)->first();
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
             ]);
+
             if ($request->password) {
                 $user->update([
                     'password' => bcrypt($request->password),
@@ -244,6 +260,29 @@ class PatientsController extends Controller
                     'status' => $request->status,
                 ]);
 
+            $patient = Patient::query()->where('user_id', $id)->first();
+
+            // Handle doctor assignments
+            if ($request->has('doctor_id')) {
+                // Single doctor case (from hidden input)
+                PatientDoctor::updateOrCreate(
+                    ['patient_id' => $patient->id],
+                    ['doctor_id' => $request->doctor_id]
+                );
+            } elseif ($request->has('doctors')) {
+                // Multiple doctors case (from checkboxes)
+                // First, delete existing associations
+                PatientDoctor::where('patient_id', $patient->id)->delete();
+
+                // Create new associations for each selected doctor
+                foreach ($request->doctors as $doctorId) {
+                    PatientDoctor::create([
+                        'patient_id' => $patient->id,
+                        'doctor_id' => $doctorId
+                    ]);
+                }
+            }
+
             DB::commit();
 
             return redirect()->back()->with('success', 'Updated successfully');
@@ -252,7 +291,7 @@ class PatientsController extends Controller
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Something went wrong');
+            return redirect()->back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
 

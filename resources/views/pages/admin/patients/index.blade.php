@@ -7,7 +7,7 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="font-bold text-2xl text-gray-800">Patient List</h1>
             <a
-                href="{{ route('admin.patients.create') }}"
+                href="{{ route('admin.patients.create', ['doctorId' => $doctorId]) }}"
                 class="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out"
             >
                 <span>Add</span>
@@ -68,6 +68,7 @@
         const selectShow = $('#select-show');
         let limit = selectShow.val();
         let search = '';
+        let doctorId = '';
 
         searchData();
 
@@ -82,7 +83,7 @@
             showLoading()
             // get query doctorId from url
             const urlData = new URL(window.location.href);
-            const doctorId = urlData.searchParams.get("doctorId");
+            doctorId = urlData.searchParams.get("doctorId");
             const doctorIdQuery = doctorId ? `doctorId=${doctorId}` : '';
             const url = `/admin/patients/search?search=${search}&limit=${limit}&page=${page}&${doctorIdQuery}`
             const token = $('meta[name="csrf-token"]').attr('content')
@@ -119,7 +120,7 @@
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <a
-                                    href="/admin/patients/${item.id}/edit"
+                                    href="/admin/patients/${item.id}/edit?doctorId=${doctorId}"
                                     class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
                                 >
                                     Edit
