@@ -96,14 +96,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src="{{ Vite::asset('resources/js/phone-input.js') }}"></script>
-    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
     <script>
         const script = document.getElementById('search-js');
         script.onload = function() {
             mapboxsearch.autofill({
                 accessToken: '{{ config('services.mapbox.token') }}',
                 options: {
-                    language: 'es',
+                    language: 'en',
                 },
             })
         };

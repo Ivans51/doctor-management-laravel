@@ -82,7 +82,7 @@
 
 @push('scripts-bottom')
     <script src="{{ Vite::asset('resources/js/settings-menu.js') }}"></script>
-    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.16/web.js"></script>
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
     <script>
         setMenuSetting(3)
     </script>
