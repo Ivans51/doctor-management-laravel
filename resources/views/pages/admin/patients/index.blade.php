@@ -110,31 +110,39 @@
 
             setPagination(response)
 
-            response.data.data.forEach(function (item) {
-                html += `<tr class="bg-white rounded">
-                            <td class="px-4 py-2 text-center">${item.name}</td>
-                            <td class="px-4 py-2 text-center">${item.phone}</td>
-                            <td class="px-4 py-2 text-center">${item.address}</td>
-                            <td class="px-4 py-2 text-center">
-                                ${item.status === 'active' ? 'Activo' : 'Inactivo'}
-                            </td>
-                            <td class="px-4 py-2 text-center">
-                                <a
-                                    href="/admin/patients/${item.id}/edit?doctorId=${doctorId}"
-                                    class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
-                                >
-                                    Edit
-                                </a>
-                                <button
-                                    onclick="deletePatient('${item.id}')"
-                                    class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
-                                    data-confirm-delete="true"
-                                >
-                                    Delete
-                                </button>
+            if (response.data.data.length === 0) {
+                html += `<tr>
+                            <td colspan="5" class="px-4 py-4 text-center text-gray-500">
+                                No patients found.
                             </td>
                         </tr>`
-            })
+            } else {
+                response.data.data.forEach(function (item) {
+                    html += `<tr class="bg-white rounded">
+                                <td class="px-4 py-2 text-center">${item.name}</td>
+                                <td class="px-4 py-2 text-center">${item.phone}</td>
+                                <td class="px-4 py-2 text-center">${item.address}</td>
+                                <td class="px-4 py-2 text-center">
+                                    ${item.status === 'active' ? 'Activo' : 'Inactivo'}
+                                </td>
+                                <td class="px-4 py-2 text-center">
+                                    <a
+                                        href="/admin/patients/${item.id}/edit?doctorId=${doctorId}"
+                                        class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
+                                    >
+                                        Edit
+                                    </a>
+                                    <button
+                                        onclick="deletePatient('${item.id}')"
+                                        class="rounded text-red-900 bg-red-100 px-4 py-1 text-sm ml-2"
+                                        data-confirm-delete="true"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>`
+                })
+            }
 
             $('#tbody').html(html)
         }
@@ -156,6 +164,7 @@
                         if (response.status === 'success') {
                             hideLoading()
                             successSwal()
+                            searchData()
                         }
                     },
                     error: function (response) {

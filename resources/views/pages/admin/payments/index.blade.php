@@ -72,6 +72,7 @@
         const selectShow = $('#select-show');
         let limit = selectShow.val();
         let search = '';
+        let doctorId = '';
 
         searchData();
 
@@ -94,8 +95,12 @@
         // search data
         function searchData(page = 1) {
             showLoading()
-            let url = `/admin/payments/search?search=${search}&limit=${limit}&page=${page}`
-            let token = $('meta[name="csrf-token"]').attr('content')
+            // get query doctorId from url
+            const urlData = new URL(window.location.href);
+            doctorId = urlData.searchParams.get("doctorId");
+            const doctorIdQuery = doctorId ? `doctorId=${doctorId}` : '';
+            const url = `/admin/payments/search?search=${search}&limit=${limit}&page=${page}&${doctorIdQuery}`
+            const token = $('meta[name="csrf-token"]').attr('content')
 
             $.ajax({
                 url: url,
@@ -119,30 +124,40 @@
 
             setPagination(response)
 
-            response.data.data.forEach(function (item) {
-                html += `<tr class="bg-white rounded">
-                            <td class="px-4 py-2 text-center">${item.id}</td>
-                            <td class="px-4 py-2 text-center">${item.amount}</td>
-                            <td class="px-4 py-2 text-center capitalize">${item.payment_method}</td>
-                            <td class="px-4 py-2 text-center capitalize">${item.payment_status}</td>
-                            <td class="px-4 py-2 text-center">${formatDate(item.payment_date)}</td>
-                            <td class="px-4 py-2 text-center">
-                                <button
-                                    id="modal-open-${item.id}"
-                                    onclick='setDataModal(${JSON.stringify(item)})'
-                                    class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
-                                >
-                                    Detalles
-                                </but>
+            if (response.data.data.length === 0) {
+                html += `<tr>
+                            <td colspan="6" class="px-4 py-4 text-center text-gray-500">
+                                No payments found.
                             </td>
                         </tr>`
-            })
+            } else {
+                response.data.data.forEach(function (item) {
+                    html += `<tr class="bg-white rounded">
+                                <td class="px-4 py-2 text-center">${item.id}</td>
+                                <td class="px-4 py-2 text-center">${item.amount}</td>
+                                <td class="px-4 py-2 text-center capitalize">${item.payment_method}</td>
+                                <td class="px-4 py-2 text-center capitalize">${item.payment_status}</td>
+                                <td class="px-4 py-2 text-center">${formatDate(item.payment_date)}</td>
+                                <td class="px-4 py-2 text-center">
+                                    <button
+                                        id="modal-open-${item.id}"
+                                        onclick='setDataModal(${JSON.stringify(item)})'
+                                        class="rounded text-green-900 bg-green-100 px-4 py-1 text-sm ml-2 cursor-pointer"
+                                    >
+                                        Detalles
+                                    </button>
+                                </td>
+                            </tr>`
+                })
+            }
 
             $('#tbody').html(html)
 
-            response.data.data.forEach(function (item) {
-                configModal('modal', `modal-open-${item.id}`)
-            })
+            if (response.data.data.length > 0) {
+                response.data.data.forEach(function (item) {
+                    configModal('modal', `modal-open-${item.id}`)
+                })
+            }
         }
 
         function setDataModal(item) {
