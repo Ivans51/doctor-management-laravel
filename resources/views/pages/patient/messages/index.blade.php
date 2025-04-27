@@ -3,89 +3,98 @@
 @section('content')
     <x-utils.loading-component/>
 
-    <section class="flex items-start">
-        <div class="w-2/5">
-            <div class="px-4 py-2">
-                <h1 class="text-lg font-bold">Message</h1>
+    <section class="flex h-full">
+        <div class="w-2/5 border-r bg-white">
+            <div class="px-6 py-4 border-b">
+                <h1 class="text-xl font-bold text-gray-800">Messages</h1>
 
-                <label>
+                <div class="relative mt-4">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
                     <input
-                        class="bg-transparent border w-full my-6 outline-0"
+                        class="bg-white border border-gray-300 rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
                         type="search"
                         id="search_field"
                         placeholder="Search user"
                     >
-                </label>
+                </div>
             </div>
 
-            <div id="content-list-chat" class="space-y-2 overflow-y-auto" style="height: calc(100vh - 262px)"></div>
+            <div id="content-list-chat" class="space-y-0 overflow-y-auto divide-y divide-gray-100" style="height: calc(100vh - 280px)"></div>
         </div>
 
         <div
             id="start-chat-main"
-            class="w-3/5 bg-white border grid"
+            class="w-3/5 bg-white grid rounded-r-lg"
             style="height: calc(100vh - 136px); grid-template-rows: 1fr"
         >
-            <div class="flex items-center justify-center h-full flex-col">
-                <x-ri-chat-3-line class="w-12 h-12"/>
-                <p class="text-gray-400">Select chat to start messaging</p>
+            <div class="flex items-center justify-center h-full flex-col text-center px-6">
+                <div class="w-20 h-20 bg-violet-100 rounded-full flex items-center justify-center mb-4">
+                    <x-ri-chat-3-line class="w-10 h-10 text-violet-500"/>
+                </div>
+                <p class="text-gray-500 font-medium">Select a conversation to start messaging</p>
+                <p class="text-gray-400 text-sm mt-2">Your messages are end-to-end encrypted</p>
             </div>
         </div>
 
         <div
             id="chat-main"
-            class="w-3/5 bg-white border grid hidden"
+            class="w-3/5 bg-white grid hidden rounded-r-lg"
             style="height: calc(100vh - 136px); grid-template-rows: 70px 1fr 70px"
         >
-            <div class="flex justify-between items-center bg-white p-4">
+            <div class="flex justify-between items-center bg-white p-4 px-6 border-b">
                 <div class="flex items-center">
                     <x-utils.image-profile-component/>
-                    <p id="name-user"></p>
+                    <p id="name-user" class="font-medium ml-3"></p>
                 </div>
                 <x-ri-information-line
                     id="modal-open"
-                    class="w-6 h-6 cursor-pointer"
+                    class="w-6 h-6 cursor-pointer text-gray-500 hover:text-gray-700 transition"
                 />
             </div>
 
-            <div id="grid-main" class="overflow-y-auto"></div>
+            <div id="grid-main" class="overflow-y-auto px-4 py-4 bg-gray-50"></div>
 
-            <div class="flex items-center p-4 space-x-2">
-                <div class="flex items-center justify-between p-2 w-full">
+            <div class="flex items-center p-4 px-6 bg-white border-t">
+                <div class="flex items-center justify-between p-2 w-full bg-gray-50 rounded-l-lg border border-gray-200">
                     <div class="flex items-center">
                         {{--<x-ri-clipboard-line class="w-6 h-6 cursor-pointer"/>
                         <x-lineawesome-microphone-solid class=" w-6 h-6 cursor-pointer"/>--}}
                     </div>
                     <textarea id="editor-text"></textarea>
                 </div>
-                <div
-                    class="bg-violet-500 p-1" style="border-radius: 50%"
+                <button
+                    class="bg-violet-500 hover:bg-violet-600 p-3 rounded-lg ml-2 transition-colors"
                     onclick="sendMessage()"
                 >
-                    <x-lineawesome-telegram class="w-6 h-6 cursor-pointer text-white"/>
-                </div>
+                    <x-lineawesome-telegram class="w-5 h-5 text-white"/>
+                </button>
             </div>
         </div>
     </section>
 
     <x-modal.modal-component
-        title="¿Desea reportar al usuario?"
+        title="Report User"
         modalClass="modal"
     >
         <x-slot name="content">
             <form action="" method="post">
-                <div class="flex items-center space-x-8 my-6">
+                <p class="mb-4 text-gray-600">Are you sure you want to report this user?</p>
+                <div class="flex items-center space-x-4 mt-6">
                     <button
                         type="submit"
-                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
+                        class="rounded-lg text-white bg-red-500 hover:bg-red-600 px-4 py-2 w-full font-medium transition-colors"
                     >
-                        Yes
+                        Yes, Report
                     </button>
                     <button
                         type="button"
-                        class="rounded bg-white-500 px-4 py-1 w-full border modal-close"
+                        class="rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 w-full font-medium modal-close transition-colors"
                     >
-                        No
+                        Cancel
                     </button>
                 </div>
             </form>
@@ -106,6 +115,7 @@
         let search = '';
         let contentText = '';
         let countChat = 0;
+        let chatData = [];
         showLoading()
         searchData()
 
@@ -136,13 +146,16 @@
                     let html = ''
                     $('#content-list-chat').empty()
 
-                    const data = response.data;
-                    if (data.length > 0) {
-                        data.forEach(item => {
-                            html += setContentUser(item)
+                    chatData = response.data;
+
+                    if (chatData.length > 0) {
+                        chatData.forEach((item, idx) => {
+                            html += setContentUser(item, idx)
                         })
                     } else {
-                        html = `<p class="text-center">No se encontraron resultados</p>`
+                        html = `<div class="py-8 text-center">
+                                    <p class="text-gray-500">No conversations found</p>
+                                </div>`
                     }
 
                     $('#content-list-chat').html(html)
@@ -154,28 +167,30 @@
             })
         }
 
-        function setContentUser(item) {
+        function setContentUser(item, idx) {
             return `
-                    <div
-                        class="flex justify-between items-start bg-white px-2 py-2 cursor-pointer"
-                        onclick='openChat(${JSON.stringify(item)})'
-                    >
-                        <div class="flex items-center">
+                <div
+                    class="hover:bg-gray-50 transition px-6 py-3 cursor-pointer"
+                    onclick='openChatByIndex(${idx})'
+                >
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-start">
                             <x-utils.image-profile-component/>
-                            <div>
-                                <p>${item.name}</p>
-                                <p class="text-xs mt-1">
+                            <div class="ml-3">
+                                <p class="font-medium text-gray-800">${item.name}</p>
+                                <p class="text-gray-500 text-sm mt-1 line-clamp-1">
                                     ${item.lastMessage.message}
                                 </p>
                             </div>
                         </div>
                         <div>
-                            <span class="flex items-center text-xs">
-                                <x-lineawesome-clock class="w-4 h-4"/>
+                            <span class="flex items-center text-xs text-gray-400 mt-1">
+                                <x-lineawesome-clock class="w-3 h-3"/>
                                 <span class="ml-1">${item.lastMessage.created_at_text}</span>
-                                </span>
-                            </div>
-                        </div>`
+                            </span>
+                        </div>
+                    </div>
+                </div>`
         }
 
         /* request with ajax chat according user id*/
@@ -225,8 +240,10 @@
                     } else {
                         grid.html(`
                             <div class="flex items-center justify-center h-full flex-col">
-                                <x-ri-chat-3-line class="w-12 h-12"/>
-                                <p class="text-gray-400">Start chat</p>
+                                <div class="w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mb-3">
+                                    <x-ri-chat-3-line class="w-8 h-8 text-violet-500"/>
+                                </div>
+                                <p class="text-gray-500">Start a new conversation</p>
                             </div>
                         `)
                     }
@@ -239,14 +256,16 @@
 
         function leftMessage(item, index) {
             return `
-                <div class="w-3/4">
-                    <div class="flex items-start bg-white px-2 py-2">
-                        <div>
+                <div class="w-3/4 mb-5">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-3">
                             <x-utils.image-profile-component/>
-                            <p class="border py-2 px-4 rounded">
+                        </div>
+                        <div>
+                            <div class="bg-white px-4 py-3 rounded-lg shadow-sm border border-gray-100">
                                 ${item.message}
-                            </p>
-                            <p class="text-xs mt-1 text-gray-400">
+                            </div>
+                            <p class="text-xs mt-1 text-gray-400 ml-1">
                                 ${item.diffForHumans}
                             </p>
                         </div>
@@ -256,13 +275,13 @@
 
         function rightMessage(item, index) {
             return `
-                <div class="flex justify-end">
-                    <div class="flex items-start justify-end bg-white px-2 py-2 text-right w-3/4">
+                <div class="flex justify-end mb-5">
+                    <div class="flex items-start justify-end text-right w-3/4">
                         <div>
-                            <p class="bg-blue-500 text-white py-2 px-4 rounded">
+                            <div class="bg-violet-500 text-white px-4 py-3 rounded-lg shadow-sm">
                                 ${item.message}
-                            </p>
-                            <p class="text-xs mt-1 text-gray-400">
+                            </div>
+                            <p class="text-xs mt-1 text-gray-400 text-right mr-1">
                                 ${item.diffForHumans}
                             </p>
                         </div>
@@ -310,6 +329,11 @@
             grid.append(html)
             grid.scrollTop(grid[0].scrollHeight);
         }
+
+        // New function to open chat by index
+        function openChatByIndex(idx) {
+            openChat(chatData[idx]);
+        }
     </script>
 
     <script type="module">
@@ -341,6 +365,8 @@
         $(document).ready(function () {
             var emoji = $("#editor-text").emojioneArea({
                 inline: true,
+                placeholder: "Type a message...",
+                buttonTitle: "Insert emoji",
             });
 
             emoji[0].emojioneArea.on("keydown", function (editor, event) {
@@ -355,9 +381,47 @@
 
     <style>
         .emojionearea .emojionearea-editor {
-            min-height: 32px;
+            min-height: 40px;
             height: 100%;
             overflow-y: auto;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: none;
+            background-color: transparent;
+        }
+
+        .emojionearea {
+            border: none !important;
+            box-shadow: none !important;
+            background-color: transparent !important;
+        }
+
+        .emojionearea .emojionearea-button {
+            right: 12px;
+            top: 8px;
+            opacity: 0.7;
+        }
+
+        .emojionearea .emojionearea-button:hover {
+            opacity: 1;
+        }
+
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Ensure proper heights with the layout */
+        @media (min-height: 768px) {
+            #content-list-chat {
+                height: calc(100vh - 280px);
+            }
+
+            #start-chat-main, #chat-main {
+                height: calc(100vh - 136px);
+            }
         }
     </style>
 @endpush
