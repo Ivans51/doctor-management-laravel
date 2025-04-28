@@ -3,39 +3,27 @@
 @section('content')
     <section class="flex flex-col justify-center h-screen items-center">
         <div class="bg-white p-8 rounded">
-            <img
-                class="mx-auto mb-5"
-                src="{{ Vite::asset('resources/img/home/logo.png') }}"
-                alt="doctor management logo"
-            >
+            <img class="mx-auto mb-5" src="{{ Vite::asset('resources/img/home/logo.png') }}" alt="doctor management logo">
             <h1 class="font-bold text-xl mb-4 mb-0">Forgot Password</h1>
             <p class="text-zinc-300 mb-8">Enter your email, and we will send you a reset link</p>
 
-            <x-utils.message-component/>
+            <x-utils.message-component />
 
             <form action="{{ route('patient.form.forgot') }}" method="post">
                 @csrf
 
-                <input type="hidden" name="recaptcha" id="recaptcha">
-
                 <div class="space-y-6">
                     <div class="w-full">
                         <label for="email">Email</label>
-                        <input
-                            class="border w-full rounded"
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder="josh@gmail.com"
-                        >
+                        <input class="border w-full rounded" type="email" name="email" id="email"
+                            placeholder="josh@gmail.com">
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-20 mt-10">
-                    <button
-                        type="submit"
-                        class="rounded text-white bg-blue-500 px-4 py-1 w-full"
-                    >
+                <div class="cf-turnstile mt-5" data-sitekey="{{ config('services.turnstile.sitekey') }}"></div>
+
+                <div class="flex items-center space-x-20 mt-5">
+                    <button type="submit" class="rounded text-white bg-blue-500 px-4 py-1 w-full">
                         Send me link
                     </button>
                 </div>
@@ -51,14 +39,5 @@
 @endsection
 
 @push('scripts-bottom')
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script>
-    <script>
-        grecaptcha.ready(function () {
-            grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function (token) {
-                if (token) {
-                    document.getElementById('recaptcha').value = token;
-                }
-            });
-        });
-    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 @endpush

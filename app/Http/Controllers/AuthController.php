@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
 use App\Mail\MailClass;
+use App\Models\Doctor;
 use App\Models\Role;
 use App\Models\User;
 use App\Utils\Constants;
 use App\Utils\TurnstileHelper;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -38,29 +38,11 @@ class AuthController extends Controller
             $credentials = $request->only('email', 'password');
             $isSuccess = Auth::attempt($credentials);
 
-            // Check if the user exists
             if (!$isSuccess) {
                 return back()->withErrors(['login' => 'User or password Incorrect']);
             }
 
-            $isSuccessCaptcha = $this->validateRecaptcha($request);
-
-            if ($isSuccessCaptcha) {
-                $routeTo = 'login';
-                if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
-                    $routeTo = 'admin';
-                }
-                if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
-                    $routeTo = 'patient';
-                }
-                if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
-                    $routeTo = '';
-                }
-
-                return redirect($routeTo)->with('success', 'You are logged in!');
-            } else {
-                return back()->withErrors(['captcha' => 'ReCaptcha Error']);
-            }
+            return redirect($this->getRedirectRoute())->with('success', 'You are logged in!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
@@ -70,66 +52,79 @@ class AuthController extends Controller
 
     /**
      * @param AuthRequest $request
-     * @return JsonResponse
+     * @return RedirectResponse
      * @throws \Throwable
      */
-    public function register(AuthRequest $request): JsonResponse
+    public function register(AuthRequest $request): RedirectResponse
     {
         try {
+            $request->validate([
+                'cf-turnstile-response' => 'required|string',
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:8|confirmed',
+            ]);
+
             \DB::beginTransaction();
+
+            // Validate Turnstile
+            if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+                return response()->json(['message' => 'Turnstile verification failed.'], 401);
+            }
+
             $user = new User();
             $user->name = $request->get('name');
             $user->email = $request->get('email');
-
-            // Hash password
             $user->password = bcrypt($request->get('password'));
-            $user->role_id = Role::query()->where('name', Constants::$ADMIN)->first()->id;
+            $user->role_id = Role::query()->where('name', Constants::$DOCTOR)->first()->id;
             $user->save();
 
-            // Login user
+            // create doctor
+            $doctor = new Doctor();
+            $doctor->user_id = $user->valueUuid;
+            $doctor->name = $request->get('name');
+            $doctor->speciality = 'default';
+            $doctor->phone = 'default';
+            $doctor->save();
+
             Auth::login($user);
-
-            $isSuccessCaptcha = $this->validateRecaptcha($request);
-
-            if ($isSuccessCaptcha) {
-                \DB::commit();
-                return response()->json(['message' => 'Thanks for your registration!']);
-            } else {
-                \DB::rollBack();
-                return response()->json(['message' => 'ReCaptcha Error'], 401);
-            }
+            \DB::commit();
+            return redirect($this->getRedirectRoute())->with('success', 'Thanks for your registration!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             \DB::rollBack();
             return response()->json(['message' => $e->errors()], 401);
         } catch (\Exception $e) {
             \DB::rollBack();
-            return response()->json(['message' => 'User or password Incorrect'], 401);
+            return response()->json(['message' => 'Registration failed.'], 401);
         }
     }
 
     public function forgot(AuthRequest $request): RedirectResponse
     {
         try {
-            // check email exists
+            $request->validate([
+                'cf-turnstile-response' => 'required|string',
+                'email' => 'required|email',
+            ]);
+
+            // Validate Turnstile
+            if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+                return back()->withErrors(['turnstile' => 'Turnstile verification failed.']);
+            }
+
             $user = User::query()->where('email', $request->get('email'))->first();
-
             if (!$user) {
-                return redirect()->back()->withErrors(['login' => 'Email not found']);
+                return back()->withErrors(['email' => 'Email not found.']);
             }
 
-            $isSuccessCaptcha = $this->validateRecaptcha($request);
+            // Optional: Send recovery email
+            // $this->sendEmail($request->get('email'));
 
-            if ($isSuccessCaptcha) {
-                /*$this->sendEmail($request->get('email'));*/
-
-                return redirect()->back()->with('success', 'Thanks for your message!');
-            } else {
-                return redirect()->back()->withErrors(['captcha' => 'ReCaptcha Error']);
-            }
+            return back()->with('success', 'Password reset link sent!');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['login' => 'User or password Incorrect']);
+            return back()->withErrors(['error' => 'An error occurred.']);
         }
     }
 
@@ -159,17 +154,7 @@ class AuthController extends Controller
     public function logout(Request $request): Application|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         try {
-            $routeTo = 'login';
-            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$ADMIN) {
-                $routeTo = 'admin/login';
-            }
-            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$PATIENT) {
-                $routeTo = 'patient/login';
-            }
-            if (Auth::check() && Auth::user()->roles && Auth::user()->roles->name == Constants::$DOCTOR) {
-                $routeTo = 'login';
-            }
-
+            $routeTo = $this->getRedirectRoute();
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -177,5 +162,24 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return redirect('login');
         }
+    }
+
+    /**
+     * Determine the redirect route based on the authenticated user's role.
+     *
+     * @return string
+     */
+    private function getRedirectRoute(): string
+    {
+        if (!Auth::check() || !Auth::user()->roles) {
+            return 'login';
+        }
+
+        return match (Auth::user()->roles->name) {
+            Constants::$ADMIN  => 'admin',
+            Constants::$PATIENT => 'patient',
+            Constants::$DOCTOR => '',
+            default => 'login',
+        };
     }
 }
