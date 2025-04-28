@@ -11,6 +11,9 @@ use Auth;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
 
 class ViewController extends Controller
 {
@@ -150,5 +153,31 @@ class ViewController extends Controller
     public function getBlog(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('pages/web/blog/index');
+    }
+
+    public function getDoctorResetPassword(Request $request):
+        \Illuminate\Contracts\View\View|
+        \Illuminate\Foundation\Application|
+        \Illuminate\Contracts\View\Factory|
+        \Illuminate\Contracts\Foundation\Application|
+        \Illuminate\Http\RedirectResponse
+    {
+        $token = $request->query('token');
+        $email = $request->query('email');
+
+        if (!$token || !$email) {
+            return redirect()->route('doctor.forgot')->withErrors(['error' => 'Invalid or missing password reset token.']);
+        }
+
+        $reset = \DB::table('password_reset_tokens')
+            ->where('email', $email)
+            ->where('token', $token)
+            ->first();
+
+        if (!$reset) {
+            return redirect()->route('doctor.forgot')->withErrors(['error' => 'Invalid or expired password reset token.']);
+        }
+
+        return view('pages.web.auth.reset', compact('token', 'email'));
     }
 }

@@ -29,7 +29,7 @@ class MailClass extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mail Class',
+            subject: 'Password Reset Request',
         );
     }
 

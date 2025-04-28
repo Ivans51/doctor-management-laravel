@@ -78,6 +78,9 @@ Route::name('doctor.')->group(function () {
         Route::post('/login', [AuthController::class, 'login'])->name('form.login');
         Route::post('/register', [AuthController::class, 'register'])->name('form.register');
         Route::post('/forgot', [AuthController::class, 'forgot'])->name('form.forgot');
+
+        Route::get('/password/reset', [ViewController::class, 'getDoctorResetPassword'])->name('password.reset');
+        Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('form.password.reset');
     });
 });
 

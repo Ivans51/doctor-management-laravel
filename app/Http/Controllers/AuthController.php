@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
-use App\Mail\MailClass;
 use App\Models\Doctor;
 use App\Models\Role;
 use App\Models\User;
@@ -14,6 +13,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Mail\MailClass;
 
 class AuthController extends Controller
 {
@@ -107,7 +110,6 @@ class AuthController extends Controller
                 'email' => 'required|email',
             ]);
 
-            // Validate Turnstile
             if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
                 return back()->withErrors(['turnstile' => 'Turnstile verification failed.']);
             }
@@ -117,10 +119,21 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'Email not found.']);
             }
 
-            // Optional: Send recovery email
-            // $this->sendEmail($request->get('email'));
+            // Generate and store token
+            $token = Str::random(60);
+            DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $user->email],
+                [
+                    'email' => $user->email,
+                    'token' => $token,
+                    'created_at' => Carbon::now(),
+                ]
+            );
 
-            return back()->with('success', 'Password reset link sent!');
+            // Send recovery email using Resend.com
+            $resetLink = route('doctor.password.reset', ['token' => $token, 'email' => $user->email]);
+
+            return redirect($resetLink);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
@@ -133,12 +146,14 @@ class AuthController extends Controller
      * @return void
      * @throws \Exception
      */
-    private function sendEmail($email): void
+    private function sendEmail($email, $link): void
     {
         try {
             $data = [
-                'name' => 'Recovery Password',
-                'message' => 'This is a test email from Laravel 10.'
+                'name' => 'Password Recovery',
+                'message' => 'You requested a password reset. Click the button below to reset your password.',
+                'action_url' => $link,
+                'action_text' => 'Reset Password',
             ];
 
             \Mail::to($email)->send(new MailClass($data));
@@ -181,5 +196,49 @@ class AuthController extends Controller
             Constants::$DOCTOR => '',
             default => 'login',
         };
+    }
+
+    /**
+     * Handle doctor password reset
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function resetPassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+            'cf-turnstile-response' => 'required|string',
+            'token' => 'required|string',
+        ]);
+
+        if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+            return back()->withErrors(['turnstile' => 'Turnstile verification failed.']);
+        }
+
+        // Validate token and email
+        $reset = \DB::table('password_reset_tokens')
+            ->where('email', $request->get('email'))
+            ->where('token', $request->get('token'))
+            ->first();
+
+        if (!$reset) {
+            return back()->withErrors(['error' => 'Invalid or expired password reset token.']);
+        }
+
+        $user = User::query()->where('email', $request->get('email'))->first();
+        if (!$user) {
+            return back()->withErrors(['email' => 'Email not found.']);
+        }
+
+        $user->password = bcrypt($request->get('password'));
+        $user->save();
+
+        // Delete the token after successful reset
+        \DB::table('password_reset_tokens')
+            ->where('email', $request->get('email'))
+            ->delete();
+
+        return redirect()->route('doctor.login')->with('success', 'Password reset successfully. You can now log in.');
     }
 }
