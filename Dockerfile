@@ -19,4 +19,7 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN apk add --update nodejs npm
 
+# Copy Uuidable.php to the vendor directory
+RUN cp vendor_files/Uuidable.php vendor/your-app-rocks/eloquent-uuid/src/Traits/Uuidable.php
+
 CMD ["/start.sh"]
