@@ -29,13 +29,19 @@ class AuthRequest extends FormRequest
             'forgot' => [
                 'email' => 'required|email',
             ],
+            'cf-turnstile-response' => 'required|string',
         };
     }
 
     public function messages(): array
     {
         return [
-            /*'email.required' => __('The :attribute field is required and must be at least :min characters.', ['min' => 5]),*/
+            'email.required' => 'Email is required.',
+            'email.email' => 'Email is invalid.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.confirmed' => 'Passwords must match.',
+            'cf-turnstile-response.required' => 'ReCaptcha is required.',
         ];
     }
 }

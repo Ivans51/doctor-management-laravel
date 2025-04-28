@@ -50,4 +50,9 @@ return [
         'app_secret' => env('PUSHER_APP_SECRET'),
     ],
 
+    'turnstile' => [
+        'sitekey' => env('TURNSTILE_SITE_KEY'),
+        'secret' => env('TURNSTILE_SECRET_KEY'),
+    ],
+
 ];

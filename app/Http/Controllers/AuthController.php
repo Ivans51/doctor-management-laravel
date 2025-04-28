@@ -7,6 +7,7 @@ use App\Mail\MailClass;
 use App\Models\Role;
 use App\Models\User;
 use App\Utils\Constants;
+use App\Utils\TurnstileHelper;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +25,16 @@ class AuthController extends Controller
     public function login(AuthRequest $request): RedirectResponse
     {
         try {
+            $request->validate([
+                'cf-turnstile-response' => 'required|string',
+                'email' => 'required|email',
+                'password' => 'required|min:8',
+            ]);
+
+            if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+                return back()->withErrors(['turnstile' => 'Turnstile verification failed. Please try again.']);
+            }
+
             $credentials = $request->only('email', 'password');
             $isSuccess = Auth::attempt($credentials);
 
@@ -138,50 +149,6 @@ class AuthController extends Controller
             \Mail::to($email)->send(new MailClass($data));
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
-        }
-    }
-
-    /**
-     * @param AuthRequest $request
-     * @return true
-     */
-    private function validateRecaptcha(AuthRequest $request): bool
-    {
-        $recaptcha = $request->get('recaptcha');
-        if ($recaptcha == Constants::$CSRF_TOKEN) {
-            return true;
-        }
-
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $remoteip = $_SERVER['REMOTE_ADDR'];
-
-        if (empty($recaptcha)) {
-            return false;
-        }
-
-        $data = [
-            'secret' => config('services.recaptcha.secret'),
-            'response' => $recaptcha,
-            'remoteip' => $remoteip
-        ];
-        $options = [
-            'http' => [
-                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method' => 'POST',
-                'content' => http_build_query($data)
-            ]
-        ];
-        $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        $resultJson = json_decode($result);
-        if (!$resultJson->success) {
-            return false;
-        }
-        if ($resultJson->score >= 0.3) {
-            //Validation was successful, add your form submission logic here
-            return true;
-        } else {
-            return false;
         }
     }
 

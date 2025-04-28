@@ -15,8 +15,6 @@
             <form action="{{ route('doctor.form.login') }}" method="post">
                 @csrf
 
-                <input type="hidden" name="recaptcha" id="recaptcha">
-
                 <div class="space-y-6">
                     <div class="w-full">
                         <label for="email">Email</label>
@@ -42,7 +40,9 @@
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-20 mt-10">
+                <div class="cf-turnstile mt-5" data-sitekey="{{ config('services.turnstile.sitekey') }}"></div>
+
+                <div class="flex items-center space-x-20 mt-5">
                     <button
                         type="submit"
                         class="rounded text-white bg-blue-500 px-4 py-1 w-full"
@@ -66,14 +66,5 @@
 @endsection
 
 @push('scripts-bottom')
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script>
-    <script>
-        grecaptcha.ready(function () {
-            grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function (token) {
-                if (token) {
-                    document.getElementById('recaptcha').value = token;
-                }
-            });
-        });
-    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 @endpush
