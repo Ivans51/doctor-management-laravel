@@ -150,7 +150,29 @@
 
                     if (chatData.length > 0) {
                         chatData.forEach((item, idx) => {
-                            html += setContentUser(item, idx)
+                            html += `
+                                <div
+                                    class="hover:bg-gray-50 transition px-6 py-3 cursor-pointer"
+                                    onclick="openChat(chatData[${idx}])"
+                                >
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex items-start">
+                                            <x-utils.image-profile-component/>
+                                            <div class="ml-3">
+                                                <p class="font-medium text-gray-800">${item.name}</p>
+                                                <p class="text-gray-500 text-sm mt-1 line-clamp-1">
+                                                    ${item.lastMessage.message}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="flex items-center text-xs text-gray-400 mt-1">
+                                                <x-lineawesome-clock class="w-3 h-3"/>
+                                                <span class="ml-1">${item.lastMessage.created_at_text}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>`
                         })
                     } else {
                         html = `<div class="py-8 text-center">
@@ -167,33 +189,6 @@
             })
         }
 
-        function setContentUser(item, idx) {
-            return `
-                <div
-                    class="hover:bg-gray-50 transition px-6 py-3 cursor-pointer"
-                    onclick='openChatByIndex(${idx})'
-                >
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-start">
-                            <x-utils.image-profile-component/>
-                            <div class="ml-3">
-                                <p class="font-medium text-gray-800">${item.name}</p>
-                                <p class="text-gray-500 text-sm mt-1 line-clamp-1">
-                                    ${item.lastMessage.message}
-                                </p>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="flex items-center text-xs text-gray-400 mt-1">
-                                <x-lineawesome-clock class="w-3 h-3"/>
-                                <span class="ml-1">${item.lastMessage.created_at_text}</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>`
-        }
-
-        /* request with ajax chat according user id*/
         function openChat(user) {
             $('#name-user').html(user.name)
             chatId = user.lastMessage.id
@@ -329,19 +324,16 @@
             grid.append(html)
             grid.scrollTop(grid[0].scrollHeight);
         }
-
-        // New function to open chat by index
-        function openChatByIndex(idx) {
-            openChat(chatData[idx]);
-        }
     </script>
 
     <script type="module">
-        const userId = '{{ auth()->user()->id }}';
-        const channel = `ChatChannel.${userId}`;
-        window.Echo.private(channel)
+        const channelName = '{{ App\Utils\Constants::$CHAT_CHANNEL }}.{{ auth()->user()->id }}';
+        window.Echo.private(channelName)
             .listen('ChatEvent', (e) => {
-                addMessage(e.message.message, false)
+                addMessage(e.message.message, false);
+            })
+            .error(function (e) {
+                console.log(e);
             });
     </script>
 

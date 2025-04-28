@@ -26,6 +26,7 @@ class ChatsController extends Controller
             $messages = Message::query()
                 ->where('chat_id', $chatId)
                 ->with('user')
+                ->orderBy('created_at')
                 ->get();
 
             foreach ($messages as $message) {
