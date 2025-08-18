@@ -32,5 +32,9 @@ php artisan migrate:fresh --seed
 echo "Link files"
 php artisan storage:link
 
+echo "Install front-end dependencies"
+npm install
+npm run build
+
 echo "Run test"
 #php artisan test --exclude-group ignore
