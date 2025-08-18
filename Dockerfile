@@ -1,6 +1,9 @@
-FROM richarvey/nginx-php-fpm:3.0.1
+FROM richarvey/nginx-php-fpm:3.1.6
 
 COPY . .
+
+# Install system dependencies for PHP extensions gd and xsl
+#RUN apk update && apk add --no-cache libpng libxslt libjpeg-turbo libjpeg-turbo-dev && rm -rf /var/cache/apk/*
 
 # Image config
 ENV SKIP_COMPOSER 1
@@ -16,7 +19,5 @@ ENV LOG_CHANNEL stderr
 
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
-
-RUN apk add --update nodejs npm
 
 CMD ["/start.sh"]
