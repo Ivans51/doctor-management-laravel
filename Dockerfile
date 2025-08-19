@@ -1,13 +1,8 @@
 # ---- Stage 1: Build PHP Dependencies ----
-# Use the official PHP image with composer
 FROM composer:2 as vendor
-
 WORKDIR /app
-# Copy only composer files to leverage Docker cache
 COPY database/ database/
 COPY composer.json composer.lock ./
-
-# Install dependencies for production
 RUN composer install \
     --ignore-platform-reqs \
     --no-interaction \
@@ -17,20 +12,15 @@ RUN composer install \
     --prefer-dist \
     --optimize-autoloader
 
-
 # ---- Stage 2: Build Frontend Assets ----
-# Use the official Node image
 FROM node:18 as frontend
-
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 
-
 # ---- Stage 3: Final Production Image ----
-# Use the richarvey image you started with
 FROM richarvey/nginx-php-fpm:3.1.6
 
 # Set Laravel-specific environment variables
@@ -40,7 +30,7 @@ ENV RUN_SCRIPTS 1
 ENV REAL_IP_HEADER 1
 ENV LOG_CHANNEL stderr
 
-# Copy the application code (without vendor or node_modules)
+# Copy the application code
 COPY . /var/www/html
 
 # Copy the built dependencies from the previous stages
@@ -51,5 +41,12 @@ COPY --from=frontend /app/public/build /var/www/html/public/build
 RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# ================================================
+# NEW LINES ADDED HERE
+# Copy the startup script and make it executable
+COPY run-migrations.sh /etc/cont-init.d/01-laravel-startup
+RUN chmod +x /etc/cont-init.d/01-laravel-startup
+# ================================================
+
 # The base image's default CMD will run /start.sh, which starts nginx and php-fpm.
-# We no longer need to override it.
+# It will automatically execute our script in /etc/cont-init.d/ before starting the services.
