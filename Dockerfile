@@ -1,6 +1,14 @@
 FROM richarvey/nginx-php-fpm:3.1.6
 
+# Build information
+RUN echo "🔧 Building Laravel API container..."
+
+# Copy application code
 COPY . .
+RUN echo "✅ Application code copied successfully"
+
+# Display environment info
+RUN echo "📦 Environment: ${APP_ENV:-development}"
 
 # Install system dependencies for PHP extensions gd and xsl
 #RUN apk update && apk add --no-cache libpng libxslt libjpeg-turbo libjpeg-turbo-dev && rm -rf /var/cache/apk/*
@@ -11,6 +19,9 @@ ENV WEBROOT /var/www/html/public
 ENV PHP_ERRORS_STDERR 1
 ENV RUN_SCRIPTS 1
 ENV REAL_IP_HEADER 1
+
+# Final setup message
+RUN echo "🚀 Container setup completed successfully!"
 
 # Laravel config
 ENV APP_ENV production
