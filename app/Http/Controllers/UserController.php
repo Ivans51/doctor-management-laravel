@@ -182,4 +182,13 @@ UserController extends Controller
         }
     }
 
+    /**
+     * @return JsonResponse
+     */
+    public function getAllUsers(): JsonResponse
+    {
+        $users = User::query()->get();
+        return response()->json($users);
+    }
+
 }
