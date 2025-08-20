@@ -27,30 +27,18 @@ class AuthController extends Controller
      */
     public function login(AuthRequest $request): RedirectResponse
     {
-        try {
-            $request->validate([
-                'cf-turnstile-response' => 'required|string',
-                'email' => 'required|email',
-                'password' => 'required|min:8',
-            ]);
+        if (config('app.env') !== 'local' && !TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+            return back()->withErrors(['turnstile' => 'Turnstile verification failed. Please try again.']);
+        }
 
-            if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
-                return back()->withErrors(['turnstile' => 'Turnstile verification failed. Please try again.']);
-            }
+        $credentials = $request->only('email', 'password');
+        $isSuccess = Auth::attempt($credentials);
 
-            $credentials = $request->only('email', 'password');
-            $isSuccess = Auth::attempt($credentials);
-
-            if (!$isSuccess) {
-                return back()->withErrors(['login' => 'User or password Incorrect']);
-            }
-
-            return redirect($this->getRedirectRoute())->with('success', 'You are logged in!');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) {
+        if (!$isSuccess) {
             return back()->withErrors(['login' => 'User or password Incorrect']);
         }
+
+        return redirect($this->getRedirectRoute())->with('success', 'You are logged in!');
     }
 
     /**
@@ -61,19 +49,11 @@ class AuthController extends Controller
     public function register(AuthRequest $request): RedirectResponse
     {
         try {
-            $request->validate([
-                'cf-turnstile-response' => 'required|string',
-                'name' => 'required|string',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:8|confirmed',
-            ]);
+            if (config('app.env') !== 'local' && !TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+                return back()->withErrors(['turnstile' => 'Turnstile verification failed. Please try again.']);
+            }
 
             \DB::beginTransaction();
-
-            // Validate Turnstile
-            if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
-                return response()->json(['message' => 'Turnstile verification failed.'], 401);
-            }
 
             $user = new User();
             $user->name = $request->get('name');
@@ -93,24 +73,16 @@ class AuthController extends Controller
             Auth::login($user);
             \DB::commit();
             return redirect($this->getRedirectRoute())->with('success', 'Thanks for your registration!');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \DB::rollBack();
-            return response()->json(['message' => $e->errors()], 401);
         } catch (\Exception $e) {
             \DB::rollBack();
-            return response()->json(['message' => 'Registration failed.'], 401);
+            return back()->withErrors(['register' => 'Registration failed.']);
         }
     }
 
     public function forgot(AuthRequest $request): RedirectResponse
     {
         try {
-            $request->validate([
-                'cf-turnstile-response' => 'required|string',
-                'email' => 'required|email',
-            ]);
-
-            if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+            if (config('app.env') !== 'local' && !TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
                 return back()->withErrors(['turnstile' => 'Turnstile verification failed.']);
             }
 
@@ -134,8 +106,6 @@ class AuthController extends Controller
             $resetLink = route('doctor.password.reset', ['token' => $token, 'email' => $user->email]);
 
             return redirect($resetLink);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'An error occurred.']);
         }
@@ -208,11 +178,10 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
-            'cf-turnstile-response' => 'required|string',
             'token' => 'required|string',
         ]);
 
-        if (!TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
+        if (config('app.env') !== 'local' && !TurnstileHelper::validateTurnstile($request->input('cf-turnstile-response'))) {
             return back()->withErrors(['turnstile' => 'Turnstile verification failed.']);
         }
 

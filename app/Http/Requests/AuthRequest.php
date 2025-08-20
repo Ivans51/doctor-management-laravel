@@ -17,19 +17,23 @@ class AuthRequest extends FormRequest
         $arr = explode('@', $this->route()->getActionName());
         $method = $arr[1];  // The controller method
 
+        $turnstileRule = config('app.env') === 'local' ? 'nullable' : 'required|string';
+
         return match ($method) {
             'loginApi', 'login' => [
                 'email' => 'required|email',
                 'password' => 'required|min:8',
+                'cf-turnstile-response' => $turnstileRule,
             ],
             'register' => [
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8|confirmed',
+                'cf-turnstile-response' => $turnstileRule,
             ],
             'forgot' => [
                 'email' => 'required|email',
+                'cf-turnstile-response' => $turnstileRule,
             ],
-            'cf-turnstile-response' => 'required|string',
         };
     }
 
