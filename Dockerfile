@@ -26,39 +26,28 @@ FROM richarvey/nginx-php-fpm:3.1.6
 # Install required packages
 RUN apk add --no-cache dos2unix sqlite
 
-# Set Laravel-specific environment variables
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
-ENV LOG_CHANNEL stderr
-
-# Copy the application code
-COPY . /var/www/html
-
 # Copy the built dependencies from the previous stages
 COPY --from=vendor /app/vendor /var/www/html/vendor
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
-# Set correct permissions for storage, cache, and database
-RUN touch /var/www/html/database/database.sqlite \
-    && chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+COPY . .
 
-# ================================================
-# NEW LINES ADDED HERE
-# Copy the startup script with proper line endings and permissions
-COPY --chmod=755 run-migrations.sh /etc/cont-init.d/01-laravel-startup
-RUN dos2unix /etc/cont-init.d/01-laravel-startup &&     chmod +x /etc/cont-init.d/01-laravel-startup &&     cat -v /etc/cont-init.d/01-laravel-startup
+# Install system dependencies for PHP extensions gd and xsl
+#RUN apk update && apk add --no-cache libpng libxslt libjpeg-turbo libjpeg-turbo-dev && rm -rf /var/cache/apk/*
 
-# Create .env file with SQLite configuration
-#ENV DB_CONNECTION=sqlite
-#ENV DB_DATABASE=/var/www/html/database/database.sqlite
-# ================================================
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
 
-# The base image's default CMD will run /start.sh, which starts nginx and php-fpm.
-# It will automatically execute our script in /etc/cont-init.d/ before starting the services.
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+CMD ["/start.sh"]
