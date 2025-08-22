@@ -52,8 +52,8 @@ COPY --chmod=755 run-migrations.sh /etc/cont-init.d/01-laravel-startup
 RUN dos2unix /etc/cont-init.d/01-laravel-startup &&     chmod +x /etc/cont-init.d/01-laravel-startup &&     cat -v /etc/cont-init.d/01-laravel-startup
 
 # Create .env file with SQLite configuration
-ENV DB_CONNECTION=sqlite
-ENV DB_DATABASE=/var/www/html/database/database.sqlite
+#ENV DB_CONNECTION=sqlite
+#ENV DB_DATABASE=/var/www/html/database/database.sqlite
 # ================================================
 
 # The base image's default CMD will run /start.sh, which starts nginx and php-fpm.
