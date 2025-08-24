@@ -1,43 +1,36 @@
-#!/bin/sh
+#!/usr/bin/env bash
+echo "Copy .env"
+php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-# Exit immediately if a command exits with a non-zero status.
+echo "Install Dependencies"
+composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-# Exit immediately if a command exits with a non-zero status.
-set -e
+echo "Generate key"
+php artisan key:generate
 
-# Change to Laravel project directory
-cd /var/www/html
+# Ensure the SQLite database file exists
+touch database/database.sqlite
+chown -R nginx:nginx database/
 
-# Debug information
-#echo "=== Starting Laravel startup script ==="
-#echo "Current directory: $(pwd)"
-#ls -la /var/www/html/
-#echo "Database file info:"
-#ls -la /var/www/html/database/
+echo "Directory Permissions"
+#chmod -R 777 storage bootstrap/cache
+chown -R nginx:nginx storage bootstrap/cache
 
-# Ensure the SQLite database exists
-touch /var/www/html/database/database.sqlite
-chmod 777 /var/www/html/database/database.sqlite
+# check permission
+#ls -la storage bootstrap/cache
 
-#echo "Running Laravel startup script..."
+echo "Caching config..."
+php artisan optimize:clear
+#php artisan cache:clear
+#php artisan config:clear
+#php artisan view:clear
+#php artisan route:clear
 
-#echo "Forcibly creating .env file and generating key..."
-#cp /var/www/html/.env.example /var/www/html/.env
-#php /var/www/html/artisan key:generate
+echo "Running migrations..."
+php artisan migrate:fresh --seed
 
-# Run database migrations
-echo "Running database migrations..."
-php artisan config:clear
-php artisan cache:clear
-php artisan migrate --force
-
-# Create storage link
+echo "Link files"
 php artisan storage:link
 
-# Cache configuration
-php artisan config:cache
-
-# Cache routes
-php artisan route:cache
-
-echo "Startup script finished."
+echo "Run test"
+#php artisan test --exclude-group ignore

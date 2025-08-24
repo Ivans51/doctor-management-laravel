@@ -1,16 +1,3 @@
-# ---- Stage 1: Build PHP Dependencies ----
-FROM composer:2 as vendor
-WORKDIR /app
-COPY database/ database/
-COPY composer.json composer.lock ./
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --prefer-dist \
-    --optimize-autoloader
-
 # ---- Stage 2: Build Frontend Assets ----
 FROM node:18 as frontend
 WORKDIR /app
@@ -26,15 +13,9 @@ FROM richarvey/nginx-php-fpm:3.1.6
 RUN apk add --no-cache dos2unix sqlite
 
 # Copy the built dependencies from the previous stages
-COPY --from=vendor /app/vendor /var/www/html/vendor
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
 COPY . .
-
-# Copy the script to the correct location and make it executable
-RUN mkdir -p /scripts
-COPY scripts/00-laravel-deploy.sh /scripts/00-laravel-deploy.sh
-RUN chmod +x /scripts/00-laravel-deploy.sh
 
 # Install system dependencies for PHP extensions gd and xsl
 #RUN apk update && apk add --no-cache libpng libxslt libjpeg-turbo libjpeg-turbo-dev && rm -rf /var/cache/apk/*
