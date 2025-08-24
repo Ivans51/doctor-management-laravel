@@ -1,8 +1,12 @@
 #!/bin/sh
-touch /tmp/script_was_run
+
+# Exit immediately if a command exits with a non-zero status.
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
+
+# Change to Laravel project directory
+cd /var/www/html
 
 # Debug information
 #echo "=== Starting Laravel startup script ==="
@@ -12,8 +16,8 @@ set -e
 #ls -la /var/www/html/database/
 
 # Ensure the SQLite database exists
-#touch /var/www/html/database/database.sqlite
-#chmod 777 /var/www/html/database/database.sqlite
+touch /var/www/html/database/database.sqlite
+chmod 777 /var/www/html/database/database.sqlite
 
 #echo "Running Laravel startup script..."
 

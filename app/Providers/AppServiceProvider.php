@@ -21,7 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') === 'production') {
+        // Only force HTTPS in production when not running locally
+        if (config('app.env') === 'production' && !app()->environment('local')) {
             \URL::forceScheme('https');
         }
         /*Vite::macro('image', fn ($asset) => $this->asset("storage/app/public/img/{$asset}"));*/

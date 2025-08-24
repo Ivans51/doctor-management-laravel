@@ -8,7 +8,6 @@ RUN composer install \
     --no-interaction \
     --no-plugins \
     --no-scripts \
-    --no-dev \
     --prefer-dist \
     --optimize-autoloader
 
@@ -32,6 +31,11 @@ COPY --from=frontend /app/public/build /var/www/html/public/build
 
 COPY . .
 
+# Copy the script to the correct location and make it executable
+RUN mkdir -p /scripts
+COPY scripts/00-laravel-deploy.sh /scripts/00-laravel-deploy.sh
+RUN chmod +x /scripts/00-laravel-deploy.sh
+
 # Install system dependencies for PHP extensions gd and xsl
 #RUN apk update && apk add --no-cache libpng libxslt libjpeg-turbo libjpeg-turbo-dev && rm -rf /var/cache/apk/*
 
@@ -49,5 +53,9 @@ ENV LOG_CHANNEL stderr
 
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
+
+# Set database to sqlite
+ENV DB_CONNECTION=sqlite
+ENV DB_DATABASE=/var/www/html/database/database.sqlite
 
 CMD ["/start.sh"]
