@@ -1,10 +1,14 @@
 # ---- Stage 2: Build Frontend Assets ----
 FROM node:18 as frontend
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
+# Install pnpm
+RUN npm install -g pnpm
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+# Install dependencies using pnpm
+RUN pnpm install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 # ---- Stage 3: Final Production Image ----
 FROM richarvey/nginx-php-fpm:3.1.6
