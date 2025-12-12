@@ -2,244 +2,171 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Patient;
+use App\Http\Requests\SavePaymentRequest;
 use App\Models\Payment;
-use App\Models\User;
-use DB;
-use Faker\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class PaymentsController extends Controller
 {
     /**
-     * @param Request $request
-     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     * Display a listing of the resource.
      */
-    public function index(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request): View
     {
-        $doctorId = $request->query('doctorId');
-        return view('pages/admin/payments/index', compact('doctorId'));
+        $doctorId = $request->query("doctorId");
+        return view("pages/admin/payments/index", compact("doctorId"));
     }
 
     /**
-     * Search user with parameter email and name
-     * @param Request $request
-     * @return JsonResponse
+     * Search payments for the authenticated doctor.
      */
     public function searchByDoctor(Request $request): JsonResponse
     {
-        $doctorId = \Auth::user()->doctor->id;
+        $doctorId = Auth::user()->doctor->id;
         return $this->getPayments($request, $doctorId);
     }
 
     /**
-     * Search user with parameter email and name
-     * @param Request $request
-     * @return JsonResponse
+     * Search payments for the authenticated patient.
      */
     public function searchByPatient(Request $request): JsonResponse
     {
-        $patientId = \Auth::user()->patient->id;
+        $patientId = Auth::user()->patient->id;
         return $this->getPayments($request, null, $patientId);
     }
 
     /**
-     * Search user with parameter email and name
-     * @param Request $request
-     * @return JsonResponse
+     * Search payments, optionally filtered by a doctor.
      */
     public function search(Request $request): JsonResponse
     {
-        $doctorId = $request->query('doctorId', '');
+        $doctorId = $request->query("doctorId");
         return $this->getPayments($request, $doctorId);
     }
 
     /**
-     * @param Request $request
-     * @param string $doctorId
-     * @param string|null $patientId
-     * @return JsonResponse
+     * Get payments with optional filtering.
      */
-    private function getPayments(Request $request, mixed $doctorId, string $patientId = null): JsonResponse
-    {
+    private function getPayments(
+        Request $request,
+        ?int $doctorId = null,
+        ?int $patientId = null
+    ): JsonResponse {
         $limit = $request->query('limit', 10);
+        $search = $request->query('search');
+        $cacheKey = "payments_{$doctorId}_{$patientId}_{$search}_{$limit}";
 
-        if ($request->query('search')) {
-            $payments = Payment::query()
-                ->with([
-                    'patient',
-                    'doctor',
-                ])
-                ->when($doctorId, function ($query, $doctorId) {
-                    return $query->where('doctor_id', $doctorId);
-                })
-                ->when($patientId, function ($query, $patientId) {
-                    return $query->where('patient_id', $patientId);
-                })
-                ->where('payment_method', 'LIKE', "%{$request->search}%")
-                ->orWhere('payment_status', 'LIKE', "%{$request->search}%")
-                ->orderBy('payment_date', 'desc')
-                ->paginate($limit);
-        } else {
-            $payments = Payment::query()
-                ->with([
-                    'patient',
-                    'doctor',
-                ])
-                ->when($doctorId, function ($query, $doctorId) {
-                    return $query->where('doctor_id', $doctorId);
-                })
-                ->when($patientId, function ($query, $patientId) {
-                    return $query->where('patient_id', $patientId);
-                })
-                ->orderBy('payment_date', 'desc')
-                ->paginate($limit);
-        }
+        // Cache for 5 minutes to improve performance
+        $payments = Cache::remember($cacheKey, 300, function () use ($request, $doctorId, $patientId, $limit, $search) {
+            $query = Payment::query()
+                ->with(['patient', 'doctor'])
+                ->when($doctorId, fn($q, $id) => $q->where('doctor_id', $id))
+                ->when($patientId, fn($q, $id) => $q->where('patient_id', $id))
+                ->when($search, fn($q, $term) => $q->where(function($subQ) use ($term) {
+                    $subQ->where('payment_method', 'ILIKE', "%{$term}%")
+                         ->orWhere('payment_status', 'ILIKE', "%{$term}%");
+                }))
+                ->orderBy('payment_date', 'desc');
+
+            return $query->paginate($limit);
+        });
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data retrieved successfully',
-            'data' => $payments
+            'message' => 'Payments retrieved successfully',
+            'data' => $payments,
+            'meta' => [
+                'current_page' => $payments->currentPage(),
+                'last_page' => $payments->lastPage(),
+                'per_page' => $payments->perPage(),
+                'total' => $payments->total()
+            ]
         ]);
     }
 
-    public function create()
-    {
-
-    }
-
     /**
-     * @param Request $request
-     * @return RedirectResponse
+     * Store a newly created payment in storage.
      * @throws \Throwable
      */
-    public function store(Request $request): RedirectResponse
+    public function store(SavePaymentRequest $request): RedirectResponse
     {
         try {
             DB::beginTransaction();
 
-            $request->validate([
-                'appointment_id' => 'required|exists:appointments,id',
-                'patient_id' => 'required|exists:patients,id',
-                'doctor_id' => 'required|exists:doctors,id',
-                'amount' => 'required|numeric|min:0',
-                'payment_method' => 'required|string',
-                'payment_status' => 'required|string',
-                'payment_date' => 'required|date',
-            ]);
-
-            Payment::query()
-                ->create([
-                    'appointment_id' => $request->appointment_id,
-                    'patient_id' => $request->patient_id,
-                    'doctor_id' => $request->doctor_id,
-                    'amount' => $request->amount,
-                    'payment_method' => $request->payment_method,
-                    'payment_status' => $request->payment_status,
-                    'payment_date' => $request->payment_date,
-                ]);
+            $validated = $request->validated();
+            Payment::create($validated);
 
             DB::commit();
-
-            return redirect()->back()->with('success', 'Created successfully');
-        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->with('success', 'Payment created successfully');
+        } catch (ValidationException $e) {
             DB::rollBack();
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Something went wrong');
+            Log::error('Payment creation failed: ' . $e->getMessage(), [
+                'data' => $request->all(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->with('error', 'Something went wrong.');
         }
     }
 
-    public function show($id)
-    {
-
-    }
-
     /**
-     * @param $id
-     */
-    public function edit($id)
-    {
-    }
-
-    /**
+     * Update the specified payment in storage.
      * @throws \Throwable
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(SavePaymentRequest $request, Payment $payment): RedirectResponse
     {
         try {
-            $request->validate([
-                'appointment_id' => 'required|exists:appointments,id',
-                'patient_id' => 'required|exists:patients,id',
-                'doctor_id' => 'required|exists:doctors,id',
-                'amount' => 'required|numeric|min:0',
-                'payment_method' => 'required|string',
-                'payment_status' => 'required|string',
-                'payment_date' => 'required|date',
-            ]);
-
             DB::beginTransaction();
-
-            Payment::query()
-                ->where('id', $id)
-                ->update([
-                    'appointment_id' => $request->appointment_id,
-                    'patient_id' => $request->patient_id,
-                    'doctor_id' => $request->doctor_id,
-                    'amount' => $request->amount,
-                    'payment_method' => $request->payment_method,
-                    'payment_status' => $request->payment_status,
-                    'payment_date' => $request->payment_date,
-                ]);
-
+            $payment->update($request->validated());
             DB::commit();
 
-            return redirect()->back()->with('success', 'Updated successfully');
-        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->with('success', 'Payment updated successfully');
+        } catch (ValidationException $e) {
             DB::rollBack();
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Something went wrong');
+            Log::error('Payment update failed: ' . $e->getMessage(), [
+                'payment_id' => $payment->getKey(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->with('error', 'Something went wrong.');
         }
     }
 
     /**
-     * @param $id
-     * @return JsonResponse
+     * Remove the specified payment from storage.
      * @throws \Throwable
      */
-    public function destroy($id): JsonResponse
+    public function destroy(Payment $payment): JsonResponse
     {
         try {
             DB::beginTransaction();
-
-            $patient = Patient::query()->where('id', $id);
-
-            User::query()
-                ->where('id', $patient->first()->user_id)
-                ->delete();
-
-            $patient->delete();
-
+            $payment->delete();
             DB::commit();
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Data deleted successfully',
+                "status" => "success",
+                "message" => "Payment deleted successfully"
             ]);
         } catch (\Throwable $e) {
             DB::rollBack();
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Data failed to delete',
-                'error' => $e->getMessage()
+            Log::error('Payment deletion failed: ' . $e->getMessage(), [
+                'payment_id' => $payment->getAttribute('id'),
+                'trace' => $e->getTraceAsString()
             ]);
+            return response()->json([
+                "status" => "error",
+                "message" => "Failed to delete payment"
+            ], 500);
         }
     }
 }

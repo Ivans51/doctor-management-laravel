@@ -127,6 +127,12 @@ class PatientsController extends Controller
         ]);
     }
 
+    /**
+     * Show the form for creating a new patient resource.
+     *
+     * @param Request $request The HTTP request
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+     */
     public function create(Request $request)
     {
         $doctors = Doctor::query()->get();
@@ -198,6 +204,11 @@ class PatientsController extends Controller
         }
     }
 
+    /**
+     * Display the specified patient resource.
+     *
+     * @param mixed $id The ID of the patient to show
+     */
     public function show($id) {}
 
     /**
@@ -223,7 +234,16 @@ class PatientsController extends Controller
     }
 
     /**
-     * @throws \Throwable
+     * Update the specified patient resource in storage.
+     *
+     * This method handles updating patient information including user credentials,
+     * patient details, and doctor assignments. It uses database transactions to
+     * ensure data integrity and provides appropriate error handling.
+     *
+     * @param Request $request The HTTP request containing update data
+     * @param mixed $id The ID of the patient to update
+     * @return RedirectResponse Redirects back with success or error messages
+     * @throws \Throwable If any error occurs during the update process
      */
     public function update(Request $request, $id): RedirectResponse
     {
