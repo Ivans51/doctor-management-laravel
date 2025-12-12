@@ -2,7 +2,7 @@
 
 A comprehensive doctor appointment management system built with Laravel 10 that allows doctors, patients and admins to manage medical appointments, schedules, and more.
 
-## Features
+## 🚀 Features
 
 - **Multi-user Authentication**: Separate login portals for doctors, patients, and administrators
 - **Doctor Management**: Create, update, view, and delete doctor profiles with specialties
@@ -14,7 +14,7 @@ A comprehensive doctor appointment management system built with Laravel 10 that 
 - **Dashboard Analytics**: Visualize appointment data and statistics using charts
 - **Responsive Design**: Built with Tailwind CSS for a mobile-friendly experience
 
-## System Requirements
+## 📋 System Requirements
 
 - PHP 8.1 or higher
 - Composer 2.x
@@ -22,35 +22,35 @@ A comprehensive doctor appointment management system built with Laravel 10 that 
 - MariaDB 10.x or MySQL
 - Web server (Nginx or Apache)
 
-## Installation
+## 🛠️ Installation
 
-1. Clone the repository
+### 1. Clone the repository
 ```bash
 git clone https://github.com/Ivans51/doctor-management-laravel.git
 cd doctor-management-laravel
 ```
 
-2. Install PHP dependencies
+### 2. Install PHP dependencies
 ```bash
 composer install
 ```
 
-3. Install JavaScript dependencies
+### 3. Install JavaScript dependencies
 ```bash
 npm install
 ```
 
-4. Create a copy of the environment file and configure it
+### 4. Create a copy of the environment file and configure it
 ```bash
 cp .env.example .env
 ```
-   
-5. Generate an application key
+
+### 5. Generate an application key
 ```bash
 php artisan key:generate
 ```
 
-6. Configure your database in the `.env` file
+### 6. Configure your database in the `.env` file
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -60,36 +60,36 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-7.  Apply Uuidable Trait Patch:**
-*(Note: This step manually replaces a file within the `vendor` directory.).*
+### 7. Apply Uuidable Trait Patch
+*(Note: This step manually replaces a file within the `vendor` directory.)*
 ```bash
 cp vendor_files/Uuidable.php vendor/your-app-rocks/eloquent-uuid/src/Traits/Uuidable.php
 ```
 
-8. Configure Pusher, Stripe, and PayPal credentials in the `.env` file for real-time features and payment processing
+### 8. Configure Pusher, Stripe, and PayPal credentials in the `.env` file for real-time features and payment processing
 
-9. Run migrations and seed the database
+### 9. Run migrations and seed the database
 ```bash
 php artisan migrate --seed
 ```
 
-10. Generate IDE helper files (optional but recommended)
+### 10. Generate IDE helper files (optional but recommended)
 ```bash
 php artisan ide-helper:generate
 php artisan ide-helper:models
 ```
 
-11. Start the development server
+### 11. Start the development server
 ```bash
 php artisan serve
 ```
 
-12. Compile assets
+### 12. Compile assets
 ```bash
 npm run dev
 ```
 
-## Docker Setup
+## 🐳 Docker Setup
 
 The project includes Docker configuration for easy deployment:
 
@@ -98,27 +98,47 @@ The project includes Docker configuration for easy deployment:
 docker-compose up -d
 ```
 
-## Directory Structure
+## 📁 Directory Structure
 
-- `app/` - Contains the core code of the application
-  - `Models/` - Eloquent models (Doctor, Patient, User, etc.)
-  - `Http/Controllers/` - Request handlers for each section
-  - `Http/Middleware/` - Custom middleware for authorization
-- `database/` - Migrations and seeders
-- `resources/views/` - Blade templates for the frontend
-- `routes/` - Application routes definition
-  - `web.php` - Main web routes for doctors, patients, and admin
-- `public/` - Publicly accessible files
-- `config/` - Configuration files
-- `tests/` - Testing suite
+```
+doctor-management-laravel/
+├── app/
+│   ├── Charts/                  # Chart components
+│   ├── Console/                 # Artisan commands
+│   ├── Events/                  # Event classes
+│   ├── Exceptions/              # Exception handlers
+│   ├── Http/
+│   │   ├── Controllers/         # Request handlers
+│   │   ├── Middleware/          # Custom middleware
+│   │   └── Requests/            # Form request validation
+│   ├── Mail/                    # Email templates
+│   ├── Models/                  # Eloquent models
+│   ├── Providers/               # Service providers
+│   ├── Utils/                   # Utility classes
+│   └── View/                    # View components
+├── bootstrap/                   # Framework bootstrap files
+├── config/                      # Configuration files
+├── database/
+│   ├── factories/               # Model factories
+│   ├── migrations/              # Database migrations
+│   └── seeders/                 # Database seeders
+├── public/                      # Publicly accessible files
+├── resources/
+│   ├── lang/                    # Language files
+│   ├── views/                   # Blade templates
+│   └── js/                      # JavaScript files
+├── routes/                      # Application routes
+├── tests/                       # Testing suite
+└── vendor/                      # Composer dependencies
+```
 
-## User Roles
+## 👥 User Roles
 
 - **Doctors**: Can manage their schedule, view appointments, chat with patients
 - **Patients**: Can book appointments, make payments, chat with doctors
 - **Administrators**: Can manage doctors, patients, medical specialties, and review system analytics
 
-## Testing
+## 🧪 Testing
 
 Run tests using PHPUnit:
 
@@ -126,7 +146,7 @@ Run tests using PHPUnit:
 php artisan test
 ```
 
-## Deployment
+## 🚀 Deployment
 
 For production deployment, follow these steps:
 
@@ -141,15 +161,27 @@ php artisan route:cache
 php artisan view:cache
 ```
 
-## Contributing
+## 📝 Environment Variables
+
+Key environment variables to configure:
+
+- `APP_NAME`: Application name
+- `APP_ENV`: Environment (local, production, etc.)
+- `APP_KEY`: Application key (generated by `php artisan key:generate`)
+- `DB_*`: Database configuration
+- `PUSHER_APP_ID`, `PUSHER_APP_KEY`, `PUSHER_APP_SECRET`: Pusher configuration
+- `STRIPE_KEY`, `STRIPE_SECRET`: Stripe payment configuration
+- `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`: PayPal payment configuration
+
+## 🤝 Contributing
 
 Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgements
+## 🙏 Acknowledgements
 
 - [Laravel](https://laravel.com) - The PHP framework used
 - [Tailwind CSS](https://tailwindcss.com) - For styling
